@@ -2,7 +2,7 @@ import os
 import unittest
 
 from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT
-from pyms.flask.app.utils import Microservice
+from pyms.flask.app import Microservice
 
 
 def home():
