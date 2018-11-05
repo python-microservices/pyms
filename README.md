@@ -3,16 +3,13 @@
 .. image:: https://badge.fury.io/py/Ardy.svg
     :target: https://badge.fury.io/py/Ardy
 
-.. image:: https://travis-ci.org/python-microservices/pyms.svg?branch=master
-    :target: https://travis-ci.org/python-microservices/pyms
+[![Build Status](https://travis-ci.org/python-microservices/pyms.svg?branch=master)](https://travis-ci.org/python-microservices/pyms)
+[![Coverage Status](https://coveralls.io/repos/github/python-microservices/pyms/badge.svg?branch=master)](https://coveralls.io/github/python-microservices/pyms?branch=master)
+[![Requirements Status](https://requires.io/github/python-microservices/pyms/requirements.svg?branch=master)](https://requires.io/github/python-microservices/pyms/requirements/?branch=master)
+[![Updates](https://pyup.io/repos/github/python-microservices/pyms/shield.svg)](https://pyup.io/repos/github/python-microservices/pyms/)
+[![Python 3](https://pyup.io/repos/github/python-microservices/pyms/python-3-shield.svg)](https://pyup.io/repos/github/python-microservices/pyms/)
 
-.. image:: https://coveralls.io/repos/github/python-microservices/pyms/badge.svg?branch=master
-  :target: https://coveralls.io/github/python-microservices/pyms?branch=master
-
-.. image:: https://readthedocs.org/projects/pyms/badge/?version=latest
-    :target: http://pyms.readthedocs.io/en/latest/?badge=latest
-    :alt: Documentation Status
-
-.. image:: https://requires.io/github/python-microservices/pyms/requirements.svg?branch=master
-     :target: https://requires.io/github/python-microservices/pyms/requirements/?branch=master
-     :alt: Requirements Status
+## Installation 
+```bash
+pip install py-ms
+```
