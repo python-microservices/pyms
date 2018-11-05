@@ -1,0 +1,16 @@
+language: python
+python:
+    - '3.6'
+install:
+  - pip install -U tox coveralls
+
+script:
+  - coverage erase
+  - tox
+after_success:
+  - coverage combine
+  - coveralls
+
+notifications:
+  email:
+    - a.vara.1986@gmail.com
