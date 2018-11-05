@@ -18,6 +18,9 @@ class Microservice:
         self.service = service
         self.path = os.path.dirname(path)
 
+    def init_libs(self, app):
+        return app
+
     def create_app(self):
         """Initialize the Flask app, register blueprints and initialize
         all libraries like Swagger, database,
@@ -35,7 +38,7 @@ class Microservice:
 
         # Initialize Blueprints
         application.register_blueprint(healthcheck_blueprint)
-
+        self.init_libs(application)
         # Inject Modules
         formatter = CustomJsonFormatter('(timestamp) (level) (name) (module) (funcName) (lineno) (message)')
         if not application.config["TESTING"]:
