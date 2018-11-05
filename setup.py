@@ -26,7 +26,7 @@ setup(
     description="",
     long_description=long_description,
     classifiers=[
-        'Development Status :: {} - In progress'.format(version),
+        'Development Status :: 6 - Mature',
         "Intended Audience :: Developers",
         "Natural Language :: English",
         "Programming Language :: Python :: 3.6",
