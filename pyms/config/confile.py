@@ -4,7 +4,7 @@ import os
 
 from typing import Text
 
-import yaml
+import anyconfig
 
 from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT, LOGGER_NAME
 from pyms.exceptions import AttrDoesNotExistException, ConfigDoesNotFoundException
@@ -19,7 +19,7 @@ class ConfFile(dict):
         environment with the constant `CONFIGMAP_FILE_ENVIRONMENT`
         """
 
-        config = kwargs.get("config") or self._get_conf_from_yaml_file(kwargs.get("path")) or self._get_conf_from_env()
+        config = kwargs.get("config") or self._get_conf_from_file(kwargs.get("path")) or self._get_conf_from_env()
 
         if not config:
             raise ConfigDoesNotFoundException("Configuration file not found")
@@ -56,19 +56,14 @@ class ConfFile(dict):
     def _get_conf_from_env(self):
         file = os.environ.get(CONFIGMAP_FILE_ENVIRONMENT)
         logger.info("[CONF] Searching file in ENV[{}]: {}...".format(CONFIGMAP_FILE_ENVIRONMENT, file))
-        return self._get_conf_from_yaml_file(os.environ.get(CONFIGMAP_FILE_ENVIRONMENT))
+        return self._get_conf_from_file(os.environ.get(CONFIGMAP_FILE_ENVIRONMENT))
 
-    def _get_conf_from_yaml_file(self, path: Text) -> dict:
+    def _get_conf_from_file(self, path: Text) -> dict:
         if not path or not os.path.isfile(path):
             return {}
         logger.info("[CONF] Configmap {} found".format(path))
-        f = open(path, "r")
-        conf = self._get_conf_from_yaml(f.read())
-        f.close()
+        conf = anyconfig.load(path)
         return conf
-
-    def _get_conf_from_yaml(self, config: Text) -> dict:
-        return yaml.safe_load(config)
 
     def __setattr__(self, name, value, *args, **kwargs):
         super(ConfFile, self).__setattr__(name, value)

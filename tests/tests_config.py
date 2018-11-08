@@ -24,6 +24,7 @@ class ConfFromFileEnvTests(unittest.TestCase):
 
 
 class ConfTests(unittest.TestCase):
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
     def test_dictionary_replace_key(self):
         config = ConfFile(config={"test-1": "a", "test_2": "b"})
@@ -57,3 +58,11 @@ class ConfTests(unittest.TestCase):
     def test_example_test_file_not_exists(self):
         with self.assertRaises(ConfigDoesNotFoundException):
             config = ConfFile(path="path/not/exist.yml")
+
+    def test_example_test_yaml_file(self):
+        config = ConfFile(path=os.path.join(self.BASE_DIR, "config-tests.yml"))
+        self.assertEqual(config.my_ms.test_var, "general")
+
+    def test_example_test_json_file(self):
+        config = ConfFile(path=os.path.join(self.BASE_DIR, "config-tests.json"))
+        self.assertEqual(config.my_ms.test_var, "general")
