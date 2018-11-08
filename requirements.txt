@@ -5,3 +5,4 @@ PyYAML==3.13
 connexion==2.0.0
 flask==1.0.2
 Flask-OpenTracing==0.2.0
+anyconfig==0.9.7
