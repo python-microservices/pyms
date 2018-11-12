@@ -6,3 +6,5 @@ connexion==2.0.1
 flask==1.0.2
 Flask-OpenTracing==0.2.0
 anyconfig==0.9.7
+Flask-Script==2.0.6
+connexion[swagger-ui]
