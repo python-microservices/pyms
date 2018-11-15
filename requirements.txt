@@ -2,7 +2,7 @@ jaeger-client==3.12.0
 python-json-logger==0.1.10
 PyYAML==3.13
 # Optionals:
-connexion==2.0.1
+connexion==2.0.2
 flask==1.0.2
 Flask-OpenTracing==0.2.0
 anyconfig==0.9.7
