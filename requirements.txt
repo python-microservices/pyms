@@ -9,3 +9,4 @@ connexion[swagger-ui]==2.0.1
 swagger-ui-bundle==0.0.2
 flask==1.0.2
 Flask-OpenTracing==0.2.0
+
