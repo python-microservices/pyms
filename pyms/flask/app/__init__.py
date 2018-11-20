@@ -37,6 +37,7 @@ class Microservice:
 
         application = app.app
         application.config.from_object(get_conf(service=self.service))
+        application.tracer = None
 
         # Initialize Blueprints
         application.register_blueprint(healthcheck_blueprint)
@@ -46,9 +47,9 @@ class Microservice:
         if not application.config["TESTING"]:
             log_handler = logging.StreamHandler()
 
-            tracer = FlaskTracer(init_jaeger_tracer(), True, application)
+            application.tracer = FlaskTracer(init_jaeger_tracer(), True, application)
             formatter.add_service_name(application.config["APP_NAME"])
-            formatter.add_trace_span(tracer)
+            formatter.add_trace_span(application.tracer)
             log_handler.setFormatter(formatter)
             application.logger.addHandler(log_handler)
             application.logger.setLevel(logging.INFO)
