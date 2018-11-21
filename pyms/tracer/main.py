@@ -14,3 +14,4 @@ def init_jaeger_tracer():
         'logging': True,
     }, service_name="data-connection")
     return config.initialize_tracer()
+

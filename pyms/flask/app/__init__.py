@@ -26,7 +26,7 @@ class Microservice:
         all libraries like Swagger, database,
         the trace system...
         return the app and the database objects.
-        :return:
+        :return: application
         """
         config = get_conf(service=self.service)
         app = connexion.App(__name__, specification_dir=os.path.join(self.path, 'swagger'))
@@ -43,8 +43,10 @@ class Microservice:
         application.register_blueprint(healthcheck_blueprint)
         self.init_libs(application)
         # Inject Modules
-        formatter = CustomJsonFormatter('(timestamp) (level) (name) (module) (funcName) (lineno) (message)')
+        formatter = CustomJsonFormatter('(timestamp) (level) (name) (module) (funcName) (lineno) (message) (traceback)')
+
         if not application.config["TESTING"]:
+
             log_handler = logging.StreamHandler()
 
             application.tracer = FlaskTracer(init_jaeger_tracer(), True, application)

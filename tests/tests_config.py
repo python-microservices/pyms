@@ -59,10 +59,6 @@ class ConfTests(unittest.TestCase):
         with self.assertRaises(ConfigDoesNotFoundException):
             config = ConfFile(path="path/not/exist.yml")
 
-    def test_example_test_yaml_file(self):
-        config = ConfFile(path=os.path.join(self.BASE_DIR, "config-tests.yml"))
-        self.assertEqual(config.my_ms.test_var, "general")
-
     def test_example_test_json_file(self):
         config = ConfFile(path=os.path.join(self.BASE_DIR, "config-tests.json"))
         self.assertEqual(config.my_ms.test_var, "general")
