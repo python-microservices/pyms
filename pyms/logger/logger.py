@@ -22,9 +22,16 @@ class CustomJsonFormatter(jsonlogger.JsonFormatter):
             log_record['severity'] = record.levelname
         log_record["service"] = self.service_name
         severity = log_record.get('severity')
-        if severity in ['ERROR', 'CRITICAL'] and log_record.get('exc_info'):
-            log_record['traceback'] = log_record.get('exc_info')
-            del log_record['exc_info']
+        if severity in ['ERROR', 'CRITICAL']:
+            if log_record.get('exc_info'):
+                log_record['traceback'] = log_record.get('exc_info')
+                del log_record['exc_info']
+            else:
+                log_record['traceback'] = {
+                    'Message': log_record.get('message'),
+                    'Module': log_record.get('module'),
+                    'Line': log_record.get('lineno')
+                }
 
         # Add traces
         if self.tracer:
