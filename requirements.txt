@@ -2,7 +2,7 @@ jaeger-client==3.12.0
 python-json-logger==0.1.10
 PyYAML==3.13
 anyconfig==0.9.7
-requests==2.20.0
+requests==2.20.1
 # Optionals:
 connexion[swagger-ui]==2.0.2
 # Necessary to deploy swagger ui files in projects that install this library,
