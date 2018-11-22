@@ -1,4 +1,4 @@
-"""Module to read yaml conf"""
+"""Module to read yaml or json conf"""
 import logging
 import os
 
