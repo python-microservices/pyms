@@ -38,7 +38,8 @@ class Microservice:
         application = app.app
         application.config.from_object(get_conf(service=self.service))
         application.tracer = None
-
+        application.config['PROPAGATE_EXCEPTIONS'] = True
+        application.config['PRESERVE_CONTEXT_ON_EXCEPTION'] = True
         # Initialize Blueprints
         application.register_blueprint(healthcheck_blueprint)
         self.init_libs(application)
