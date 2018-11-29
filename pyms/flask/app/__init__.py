@@ -19,8 +19,8 @@ class Microservice:
         self.service = service
         self.path = os.path.dirname(path)
 
-    def init_libs(self, app):
-        return app
+    def init_libs(self):
+        return self.application
 
     def create_app(self):
         """Initialize the Flask app, register blueprints and initialize
@@ -44,7 +44,7 @@ class Microservice:
         # Initialize Blueprints
         self.application.register_blueprint(healthcheck_blueprint)
 
-        self.init_libs(self.application)
+        self.init_libs()
         self.add_error_handlers()
 
         # Inject Modules
