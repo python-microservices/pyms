@@ -6,6 +6,7 @@ import connexion
 from flask_opentracing import FlaskTracer
 
 from pyms.config.conf import get_conf
+from pyms.flask.app.swagger import Swagger
 from pyms.flask.healthcheck import healthcheck_blueprint
 from pyms.logger import CustomJsonFormatter
 from pyms.tracer.main import init_jaeger_tracer
@@ -18,6 +19,8 @@ class Microservice:
     def __init__(self, service: Text, path=__file__):
         self.service = service
         self.path = os.path.dirname(path)
+        self.swagger = Swagger()
+        self.config = get_conf(service=self.service)
 
     def init_libs(self):
         return self.application
@@ -29,16 +32,16 @@ class Microservice:
         return the app and the database objects.
         :return:
         """
-        config = get_conf(service=self.service)
-        app = connexion.App(__name__, specification_dir=os.path.join(self.path, 'swagger'))
-        app.add_api('swagger.yaml',
-                    arguments={'title': config.APP_NAME},
-                    base_path=config.APPLICATION_ROOT
+
+        app = connexion.App(__name__, specification_dir=os.path.join(self.path, self.swagger.path))
+        app.add_api(self.swagger.file,
+                    arguments={'title': self.config.APP_NAME},
+                    base_path=self.config.APPLICATION_ROOT
                     )
 
         self.application = app.app
         self.application._connexion_app = app
-        self.application.config.from_object(config)
+        self.application.config.from_object(self.config)
         self.application.tracer = None
 
         # Initialize Blueprints
@@ -74,5 +77,4 @@ class Microservice:
         :param code_or_exception: HTTP error code or exception
         :param handler: callback for error handler
         """
-
         self.application._connexion_app.add_error_handler(code_or_exception, handler)

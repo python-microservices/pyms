@@ -1,3 +1,6 @@
 CONFIGMAP_FILE_ENVIRONMENT = "CONFIGMAP_FILE"
 
 LOGGER_NAME = "pyms"
+
+SWAGGER_PATH = "swagger"
+SWAGGER_FILE = "swagger.yaml"
