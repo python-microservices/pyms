@@ -32,7 +32,7 @@ class Microservice:
         config = get_conf(service=self.service)
         app = connexion.App(__name__, specification_dir=os.path.join(self.path, 'swagger'))
         app.add_api('swagger.yaml',
-                    arguments={'title': 'Swagger Example project'},
+                    arguments={'title': config.APP_NAME},
                     base_path=config.APPLICATION_ROOT
                     )
 
