@@ -13,7 +13,7 @@ class Swagger:
     @property
     def path(self):
         path = self.config.path
-        return path if path else SWAGGER_PATH
+        return path if path is not None else SWAGGER_PATH
 
     @property
     def file(self):
