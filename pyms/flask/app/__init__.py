@@ -57,6 +57,7 @@ class Microservice:
             formatter.add_trace_span(self.application.tracer)
             log_handler.setFormatter(formatter)
             self.application.logger.addHandler(log_handler)
+            self.application.logger.propagate = False
             self.application.logger.setLevel(logging.INFO)
 
         return self.application
