@@ -13,9 +13,9 @@ class Swagger:
     @property
     def path(self):
         path = self.config.path
-        return path if path is not None else SWAGGER_PATH
+        return path if path is "" or path != {} else SWAGGER_PATH
 
     @property
     def file(self):
         swagger_file = self.config.file
-        return swagger_file if swagger_file else SWAGGER_FILE
+        return swagger_file if swagger_file is "" or swagger_file != {} else SWAGGER_FILE
