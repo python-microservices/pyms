@@ -38,7 +38,7 @@ class Microservice:
 
         self.application = app.app
         self.application._connexion_app = app
-        self.application.config.from_object(get_conf(service=self.service))
+        self.application.config.from_object(config)
         self.application.tracer = None
 
         # Initialize Blueprints
