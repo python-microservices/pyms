@@ -1,10 +1,10 @@
 import logging
+import os
 import unittest
 
-import os
 from pyms.config.confile import ConfFile
-from pyms.exceptions import AttrDoesNotExistException, ConfigDoesNotFoundException
 from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT, LOGGER_NAME
+from pyms.exceptions import AttrDoesNotExistException, ConfigDoesNotFoundException
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -66,3 +66,17 @@ class ConfTests(unittest.TestCase):
     def test_example_test_json_file(self):
         config = ConfFile(path=os.path.join(self.BASE_DIR, "config-tests.json"))
         self.assertEqual(config.my_ms.test_var, "general")
+
+
+class ConfNotExistTests(unittest.TestCase):
+    def test_empty_conf(self):
+        config = ConfFile(empty_init=True)
+        self.assertEqual(config.my_ms, {})
+
+    def test_empty_conf_two_levels(self):
+        config = ConfFile(empty_init=True)
+        self.assertEqual(config.my_ms.level_two, {})
+
+    def test_empty_conf_three_levels(self):
+        config = ConfFile(empty_init=True)
+        self.assertEqual(config.my_ms.level_two.level_three, {})
