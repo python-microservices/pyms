@@ -1,4 +1,4 @@
-jaeger-client==3.12.0
+jaeger-client==3.13.0
 python-json-logger==0.1.10
 PyYAML==3.13
 anyconfig==0.9.7
