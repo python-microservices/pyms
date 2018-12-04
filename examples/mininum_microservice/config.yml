@@ -1,2 +1,2 @@
-my-ms:
+my-minimal-microservice:
   APP_NAME: "Python Microservice"
