@@ -1,6 +1,7 @@
-swagger:
-  path: ""
-  file: "swagger.yaml"
+pyms:
+  swagger:
+    path: ""
+    file: "swagger.yaml"
 my-ms:
   DEBUG: true
   TESTING: false

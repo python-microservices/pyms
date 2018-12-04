@@ -3,6 +3,6 @@ include=
     *pyms/*
     *tests/*
 omit =
-    *example/*
+    *examples/*
     .tox/*
     venv/*
