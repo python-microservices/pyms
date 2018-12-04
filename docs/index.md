@@ -1,20 +1,12 @@
-# Welcome to MkDocs
+# Welcome to PyMS
 
-For full documentation visit [mkdocs.org](https://mkdocs.org).
+PyMS, Python MicroService, is a collections of libraries, best practices and recommended ways to build 
+microservices with Python.
 
 ## Index:
-* [Structure](structure.md)
-
-
-
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs help` - Print this help message.
-
-## Project layout
-
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+* [Tutorials](structure.md)
+  * Quick start - minimum project
+  * Structure of a microservice project
+  * Swagger and connexion
+  * Tracing requests
+* [Services of Py](structure.md)
