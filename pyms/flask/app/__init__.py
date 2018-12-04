@@ -32,13 +32,13 @@ class Microservice:
         config = get_conf(service=self.service)
         app = connexion.App(__name__, specification_dir=os.path.join(self.path, 'swagger'))
         app.add_api('swagger.yaml',
-                    arguments={'title': 'Swagger Example project'},
+                    arguments={'title': config.APP_NAME},
                     base_path=config.APPLICATION_ROOT
                     )
 
         self.application = app.app
         self.application._connexion_app = app
-        self.application.config.from_object(get_conf(service=self.service))
+        self.application.config.from_object(config)
         self.application.tracer = None
 
         # Initialize Blueprints
@@ -57,6 +57,7 @@ class Microservice:
             formatter.add_trace_span(self.application.tracer)
             log_handler.setFormatter(formatter)
             self.application.logger.addHandler(log_handler)
+            self.application.logger.propagate = False
             self.application.logger.setLevel(logging.INFO)
 
         return self.application
