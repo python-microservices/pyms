@@ -1,7 +1,6 @@
 """Module to read yaml or json conf"""
 import logging
 import os
-
 from typing import Text
 
 import anyconfig
@@ -13,16 +12,23 @@ logger = logging.getLogger(LOGGER_NAME)
 
 
 class ConfFile(dict):
+    empty_init = False
+
     def __init__(self, *args, **kwargs):
         """
         Get configuration from a dictionary(variable `config`), from path (variable `path`) or from
         environment with the constant `CONFIGMAP_FILE_ENVIRONMENT`
         """
-
-        config = kwargs.get("config") or self._get_conf_from_file(kwargs.get("path")) or self._get_conf_from_env()
+        self.empty_init = kwargs.get("empty_init", False)
+        config = kwargs.get("config")
+        if config is None:
+            config = self._get_conf_from_file(kwargs.get("path")) or self._get_conf_from_env()
 
         if not config:
-            raise ConfigDoesNotFoundException("Configuration file not found")
+            if self.empty_init:
+                config = {}
+            else:
+                raise ConfigDoesNotFoundException("Configuration file not found")
 
         logger.debug("[CONF] INIT: Settings {kwargs}".format(
             kwargs=kwargs,
@@ -35,7 +41,7 @@ class ConfFile(dict):
     def normalize_config(self, config):
         for key, item in config.items():
             if isinstance(item, dict):
-                item = ConfFile(config=item)
+                item = ConfFile(config=item, empty_init=self.empty_init)
             yield self.normalize_keys(key), item
 
     def normalize_keys(self, key):
@@ -51,7 +57,10 @@ class ConfFile(dict):
                 aux_dict = aux_dict[k]
             return aux_dict
         except KeyError:
-            raise AttrDoesNotExistException("Variable {} not exist in the config file".format(name))
+            if self.empty_init:
+                return ConfFile(config={}, empty_init=self.empty_init)
+            else:
+                raise AttrDoesNotExistException("Variable {} not exist in the config file".format(name))
 
     def _get_conf_from_env(self):
         file = os.environ.get(CONFIGMAP_FILE_ENVIRONMENT)
