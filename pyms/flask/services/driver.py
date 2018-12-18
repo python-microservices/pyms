@@ -6,6 +6,7 @@ from pyms.utils.utils import import_from
 
 logger = logging.getLogger(LOGGER_NAME)
 
+
 class DriverService:
     service = ""
 
@@ -27,7 +28,7 @@ class ServicesManager:
         self.config = get_conf(service=self.service, empty_init=True)
 
     def get_services(self):
-        return ((k, self.get_service(k)) for k in self.config.__dict__.keys() if k not in ['empty_init',])
+        return ((k, self.get_service(k)) for k in self.config.__dict__.keys() if k not in ['empty_init', ])
 
     def get_service(self, service, *args, **kwargs):
         service_object = import_from("pyms.flask.services.{}".format(service), "Service")

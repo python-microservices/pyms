@@ -45,7 +45,7 @@ class Microservice:
         self.application.logger.propagate = False
         self.application.logger.setLevel(logging.INFO)
 
-    def init_app(self):
+    def init_app(self) -> Flask:
         if getattr(self, "swagger", False):
             app = connexion.App(__name__, specification_dir=os.path.join(self.path, self.swagger.path))
             app.add_api(self.swagger.file,
@@ -53,6 +53,7 @@ class Microservice:
                         base_path=self.config.APPLICATION_ROOT
                         )
 
+            # Invert the objects, instead connexion with a Flask object, a Flask object with
             application = app.app
             application._connexion_app = app
         else:

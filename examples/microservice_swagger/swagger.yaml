@@ -32,7 +32,7 @@ paths:
       - "test"
       summary: "Example endpoint"
       description: ""
-      operationId: "examples.mininum_microservice.views.example"
+      operationId: "examples.microservice_swagger.views.example"
       consumes:
       - "application/json"
       produces:
