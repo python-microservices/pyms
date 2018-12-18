@@ -13,6 +13,7 @@ logger = logging.getLogger(LOGGER_NAME)
 
 class ConfFile(dict):
     empty_init = False
+    default_file = "config.yml"
 
     def __init__(self, *args, **kwargs):
         """
@@ -63,9 +64,9 @@ class ConfFile(dict):
                 raise AttrDoesNotExistException("Variable {} not exist in the config file".format(name))
 
     def _get_conf_from_env(self):
-        file = os.environ.get(CONFIGMAP_FILE_ENVIRONMENT)
-        logger.info("[CONF] Searching file in ENV[{}]: {}...".format(CONFIGMAP_FILE_ENVIRONMENT, file))
-        return self._get_conf_from_file(os.environ.get(CONFIGMAP_FILE_ENVIRONMENT))
+        config_file = os.environ.get(CONFIGMAP_FILE_ENVIRONMENT, self.default_file)
+        logger.info("[CONF] Searching file in ENV[{}]: {}...".format(CONFIGMAP_FILE_ENVIRONMENT, config_file))
+        return self._get_conf_from_file(config_file)
 
     def _get_conf_from_file(self, path: Text) -> dict:
         if not path or not os.path.isfile(path):
