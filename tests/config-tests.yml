@@ -1,4 +1,6 @@
 pyms:
+  requests:
+    data: data
   swagger:
     path: ""
     file: "swagger.yaml"
