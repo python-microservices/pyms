@@ -4,7 +4,7 @@ PyYAML==3.13
 anyconfig==0.9.7
 requests==2.21.0
 # Optionals:
-connexion[swagger-ui]==2.0.2
+connexion[swagger-ui]==2.1.0
 # Necessary to deploy swagger ui files in projects that install this library,
 # connexion's extra it isn't working as expected in that case
 swagger-ui-bundle==0.0.2
