@@ -4,7 +4,10 @@ PyMS, Python MicroService, is a collections of libraries, best practices and rec
 microservices with Python.
 
 ## Index:
-* [Tutorials](structure.md)
+* [PyMS structure](structure.md)
+* [Configuration](configuration.md)
+* [Services](services.md)
+* [Microservice class](ms_class.md)
   * Quick start - minimum project
   * Structure of a microservice project
   * Swagger and connexion
