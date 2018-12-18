@@ -1,0 +1,10 @@
+pyms:
+  requests: true
+  swagger:
+    path: ""
+    file: "swagger.yaml"
+my-ms:
+  DEBUG: true
+  TESTING: false
+  APP_NAME: "Python Microservice"
+  APPLICATION_ROOT: ""
