@@ -12,4 +12,4 @@ microservices with Python.
   * Structure of a microservice project
   * Swagger and connexion
   * Tracing requests
-* [Services of Py](structure.md)
+* [Services of PyMS](structure.md)

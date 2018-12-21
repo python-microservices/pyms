@@ -13,8 +13,5 @@ This views is usually used by Kubernetes, Eureka and other systems to check if o
 ### pyms/logger
 Print logger in JSON format to send to server like Elasticsearch. Inject span traces in logger.
 
-### pyms/rest_template
-Encapsulate common rest operations between business services propagating trace headers if configured.
-
 ### pyms/tracer
 Create an injector `flask_opentracing.FlaskTracer` to use in our projects
