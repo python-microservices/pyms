@@ -1,0 +1,3 @@
+my-minimal-microservice:
+  APP_NAME: "Python Microservice"
+  environment: "I'm running in a local machine"
