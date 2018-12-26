@@ -1,0 +1,24 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "*"
+requests-mock = "*"
+jaeger-client = "*"
+python-json-logger = "*"
+pyyaml = "*"
+anyconfig = "*"
+swagger-ui-bundle = "*"
+connexion = "*"
+
+[dev-packages]
+coverage = "*"
+mock = "*"
+nose = "*"
+pylint = "*"
+tox = "*"
+
+[requires]
+python_version = "3.6"
