@@ -8,10 +8,9 @@ import requests_mock
 
 from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT
 from pyms.flask.app import Microservice
-from pyms.rest_template.rest_template import Request
 
 
-class RequestTests(unittest.TestCase):
+class RequestServiceTests(unittest.TestCase):
     """Test common rest operations wrapper.
     """
 
@@ -22,7 +21,7 @@ class RequestTests(unittest.TestCase):
         ms = Microservice(service="my-ms", path=__file__)
         self.app = ms.create_app()
         with self.app.app_context():
-            self.request = Request()
+            self.request = ms.requests
 
     @requests_mock.Mocker()
     def test_get(self, mock_request):

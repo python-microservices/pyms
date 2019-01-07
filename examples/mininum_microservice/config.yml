@@ -1,0 +1,2 @@
+my-minimal-microservice:
+  APP_NAME: "Python Microservice"

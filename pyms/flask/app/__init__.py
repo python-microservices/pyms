@@ -3,10 +3,12 @@ import os
 from typing import Text
 
 import connexion
+from flask import Flask
 from flask_opentracing import FlaskTracer
 
 from pyms.config.conf import get_conf
 from pyms.flask.healthcheck import healthcheck_blueprint
+from pyms.flask.services.driver import ServicesManager
 from pyms.logger import CustomJsonFormatter
 from pyms.tracer.main import init_jaeger_tracer
 
@@ -18,6 +20,13 @@ class Microservice:
     def __init__(self, service: Text, path=__file__):
         self.service = service
         self.path = os.path.dirname(path)
+        self.config = get_conf(service=self.service)
+        self.init_services()
+
+    def init_services(self):
+        service_manager = ServicesManager()
+        for service_name, service in service_manager.get_services():
+            setattr(self, service_name, service)
 
     def init_libs(self):
         return self.application
@@ -36,6 +45,22 @@ class Microservice:
         self.application.logger.propagate = False
         self.application.logger.setLevel(logging.INFO)
 
+    def init_app(self) -> Flask:
+        if getattr(self, "swagger", False):
+            app = connexion.App(__name__, specification_dir=os.path.join(self.path, self.swagger.path))
+            app.add_api(self.swagger.file,
+                        arguments={'title': self.config.APP_NAME},
+                        base_path=self.config.APPLICATION_ROOT
+                        )
+
+            # Invert the objects, instead connexion with a Flask object, a Flask object with
+            application = app.app
+            application._connexion_app = app
+        else:
+            application = Flask(__name__)
+
+        return application
+
     def create_app(self):
         """Initialize the Flask app, register blueprints and initialize
         all libraries like Swagger, database,
@@ -43,16 +68,8 @@ class Microservice:
         return the app and the database objects.
         :return:
         """
-        config = get_conf(service=self.service)
-        app = connexion.App(__name__, specification_dir=os.path.join(self.path, 'swagger'))
-        app.add_api('swagger.yaml',
-                    arguments={'title': config.APP_NAME},
-                    base_path=config.APPLICATION_ROOT
-                    )
-
-        self.application = app.app
-        self.application._connexion_app = app
-        self.application.config.from_object(config)
+        self.application = self.init_app()
+        self.application.config.from_object(self.config)
         self.application.tracer = None
 
         # Initialize Blueprints

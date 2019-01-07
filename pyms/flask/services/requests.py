@@ -4,14 +4,18 @@ import opentracing
 import requests
 from flask import current_app
 
-DATA = 'data'
+from pyms.flask.services.driver import DriverService
 
 
-class Request(object):
+class Service(DriverService):
+    service = "requests"
+    default_values = {
+        "data": ""
+    }
 
-    def __init__(self):
+    def __init__(self, service, *args, **kwargs):
         """Initialization for trace headers propagation"""
-        self._tracer = current_app.tracer
+        super().__init__(service, *args, **kwargs)
 
     def insert_trace_headers(self, headers):
         """Inject trace headers if enabled.
@@ -20,6 +24,7 @@ class Request(object):
 
         :rtype: dict
         """
+
         try:
             # FLASK https://github.com/opentracing-contrib/python-flask
             span = self._tracer.get_span()
@@ -39,6 +44,7 @@ class Request(object):
         if not headers:
             headers = {}
 
+        self._tracer = current_app.tracer
         if self._tracer:
             headers = self.insert_trace_headers(headers)
 
@@ -56,6 +62,23 @@ class Request(object):
 
         return url.format_map(path_params)
 
+    def parse_response(self, response):
+        """Parses response's json object. Checks configuration in order to parse a concrete node or the whole response.
+
+        :param response: request's response that contains a valid json
+
+        :rtype: dict
+        """
+
+        try:
+            data = response.json()
+            if self.config.data:
+                data = data.get(self.config.data, {})
+            return data
+        except ValueError:
+            current_app.logger.warning("Response.content is not a valid json {}".format(response.content))
+            return {}
+
     def get(self, url, path_params=None, params=None, headers=None, **kwargs):
         """Sends a GET request.
 
@@ -69,7 +92,7 @@ class Request(object):
         :rtype: requests.Response
         """
 
-        full_url = Request._build_url(url, path_params)
+        full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers)
         current_app.logger.info("Get with url {}, params {}, headers {}, kwargs {}".
                                 format(full_url, params, headers, kwargs))
@@ -92,12 +115,7 @@ class Request(object):
         """
 
         response = self.get(url, path_params=path_params, params=params, headers=headers, **kwargs)
-
-        try:
-            return response.json().get(DATA, {})
-        except ValueError:
-            current_app.logger.warning("Response.content is not a valid json {}".format(response.content))
-            return {}
+        return self.parse_response(response)
 
     def post(self, url, path_params=None, data=None, json=None, headers=None, **kwargs):
         """Sends a POST request.
@@ -113,7 +131,7 @@ class Request(object):
         :rtype: requests.Response
         """
 
-        full_url = Request._build_url(url, path_params)
+        full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers)
         current_app.logger.info("Post with url {}, data {}, json {}, headers {}, kwargs {}".format(full_url, data, json,
                                                                                                    headers, kwargs))
@@ -137,12 +155,7 @@ class Request(object):
         """
 
         response = self.post(url, path_params=path_params, data=data, json=json, headers=headers, **kwargs)
-
-        try:
-            return response.json().get(DATA, {})
-        except ValueError:
-            current_app.logger.warning("Response.content is not a valid json {}".format(response.content))
-            return {}
+        return self.parse_response(response)
 
     def put(self, url, path_params=None, data=None, headers=None, **kwargs):
         """Sends a PUT request.
@@ -158,7 +171,7 @@ class Request(object):
         :rtype: requests.Response
         """
 
-        full_url = Request._build_url(url, path_params)
+        full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers)
         current_app.logger.info("Put with url {}, data {}, headers {}, kwargs {}".format(full_url, data, headers,
                                                                                          kwargs))
@@ -182,12 +195,7 @@ class Request(object):
         """
 
         response = self.put(url, path_params=path_params, data=data, headers=headers, **kwargs)
-
-        try:
-            return response.json().get(DATA, {})
-        except ValueError:
-            current_app.logger.warning("Response.content is not a valid json {}".format(response.content))
-            return {}
+        return self.parse_response(response)
 
     def delete(self, url, path_params=None, headers=None, **kwargs):
         """Sends a DELETE request.
@@ -200,7 +208,7 @@ class Request(object):
         :rtype: requests.Response
         """
 
-        full_url = Request._build_url(url, path_params)
+        full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers)
         current_app.logger.info("Delete with url {}, headers {}, kwargs {}".format(full_url, headers, kwargs))
         response = requests.delete(full_url, headers=headers, **kwargs)
