@@ -3,6 +3,7 @@
 import codecs
 import os
 
+import json
 from setuptools import setup, find_packages
 
 author = __import__('pyms').__author__
@@ -14,9 +15,21 @@ if os.path.exists('README.md'):
 else:
     long_description = ''
 
-# parse_requirements() returns generator of pip.req.InstallRequirement objects
-with open('requirements.txt') as f:
-    required = [lib for lib in f.read().splitlines() if not lib.startswith("-e")]
+
+
+install_requires = []
+tests_require = []
+if os.path.exists('Pipfile.lock'):
+    with open('Pipfile.lock') as fd:
+        lock_data = json.load(fd)
+        install_requires = [
+            package_name + package_data['version']
+            for package_name, package_data in lock_data['default'].items()
+        ]
+        tests_require = [
+            package_name + package_data['version']
+            for package_name, package_data in lock_data['develop'].items()
+        ]
 
 setup(
     name="py-ms",
@@ -26,18 +39,21 @@ setup(
     description="",
     long_description=long_description,
     classifiers=[
-        'Development Status :: 6 - Mature',
+        'Development Status :: 3 - Alpha',
+        'Framework :: Flask',
         "Intended Audience :: Developers",
         "Natural Language :: English",
         "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
     ],
-    license="Proprietary",
+    license="License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     platforms=["any"],
     keywords="",
     url='',
     test_suite='nose.collector',
     packages=find_packages(),
-    install_requires=required,
+    install_requires=install_requires,
+    tests_require=tests_require,
     include_package_data=True,
     zip_safe=True,
 )
