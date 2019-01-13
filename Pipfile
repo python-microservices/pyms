@@ -5,15 +5,16 @@ name = "pypi"
 
 [packages]
 flask = "*"
-requests-mock = "*"
-jaeger-client = "*"
-python-json-logger = "*"
-pyyaml = "*"
-anyconfig = "*"
-swagger-ui-bundle = "*"
-connexion = "*"
+jaeger-client = "==3.12.0"
+python-json-logger = "==0.1.10"
+pyyaml = "==3.13"
+anyconfig = "==0.9.8"
+swagger-ui-bundle = "==0.0.2"
+connexion = {extras = ["swagger-ui"],version = "==2.1.0"}
+flask-opentracing = "==0.2.0"
 
 [dev-packages]
+requests-mock = "*"
 coverage = "*"
 mock = "*"
 nose = "*"
