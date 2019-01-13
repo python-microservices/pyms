@@ -10,7 +10,7 @@ from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT
 from pyms.flask.app import Microservice
 
 
-class RequestTests(unittest.TestCase):
+class RequestServiceTests(unittest.TestCase):
     """Test common rest operations wrapper.
     """
 

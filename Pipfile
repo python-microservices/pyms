@@ -1,0 +1,25 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "*"
+jaeger-client = "==3.12.0"
+python-json-logger = "==0.1.10"
+pyyaml = "==4.2b4"
+anyconfig = "==0.9.8"
+swagger-ui-bundle = "==0.0.2"
+connexion = {extras = ["swagger-ui"],version = "==2.1.0"}
+flask-opentracing = "==0.2.0"
+
+[dev-packages]
+requests-mock = "*"
+coverage = "*"
+mock = "*"
+nose = "*"
+pylint = "*"
+tox = "*"
+
+[requires]
+python_version = "3.6"
