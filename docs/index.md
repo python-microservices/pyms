@@ -8,8 +8,8 @@ microservices with Python.
 * [Configuration](configuration.md)
 * [Services](services.md)
 * [Microservice class](ms_class.md)
-  * Quick start - minimum project
-  * Structure of a microservice project
-  * Swagger and connexion
-  * Tracing requests
+* [Quick start and examples](examples.md)
+* [Structure of a microservice project](structure_project.md)
+* Swagger and connexion
+* Tracing requests
 * [Services of PyMS](structure.md)

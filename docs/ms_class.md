@@ -92,4 +92,4 @@ spec:
             name: my-microservice-configmap
 ```
 
-See more examples in TODO: add link
+See more examples in [this Github page](https://github.com/python-microservices/pyms/tree/master/examples)
