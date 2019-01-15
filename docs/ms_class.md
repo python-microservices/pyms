@@ -3,7 +3,7 @@
 The class Microservice is the core of all microservices built with PyMS. 
 
 
-You can create a simple microservices like:
+You can create a simple microservice such as:
 
 ```python
 from flask import jsonify
@@ -29,9 +29,9 @@ And a config file like this config.yml
 my-minimal-microservice:
   APP_NAME: "Python Microservice"
 ```
-See [Configuration](configuration.md) section to know how create a configuration file.
+Check [Configuration](configuration.md) section to know how to create a configuration file.
 
-Each keyworkd in our configuration block, could be accessed in our Microservice object througth the attribute `config`.
+Each keyword in our configuration block, can be accessed in our Microservice object through the attribute `config`.
 
 ```yaml
 # Config.yml
@@ -61,10 +61,10 @@ print(ms.config.multiplevars.config2)
 
 
 # Looking for Configuration file
-By default, Microservice class search a config.yml in the same path. You can set a diferent route or set a json file.
+By default, Microservice class search a config.yml in the same path. You can set a different route or set a json file.
 To change this path, define a environment variable `CONFIGMAP_FILE`.
 
-This way of search the configuration is useful when you work with Docker and Kubernetes. For example, you can integrate
+This way of looking for the configuration is useful when you work with Docker and Kubernetes. For example, you can integrate
 a configmap of Kubernetes, with this microservice and a deployment with:
 
 ```yaml
@@ -92,4 +92,4 @@ spec:
             name: my-microservice-configmap
 ```
 
-See more examples in [this Github page](https://github.com/python-microservices/pyms/tree/master/examples)
+Check more examples in [this Github page](https://github.com/python-microservices/pyms/tree/master/examples)

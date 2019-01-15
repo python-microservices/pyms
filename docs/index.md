@@ -1,6 +1,6 @@
 # Welcome to PyMS
 
-PyMS, Python MicroService, is a collections of libraries, best practices and recommended ways to build 
+PyMS, Python MicroService, is a collection of libraries, best practices and recommended ways to build 
 microservices with Python.
 
 ## Index:
