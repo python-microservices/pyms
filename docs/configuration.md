@@ -1,7 +1,7 @@
 # Configuration
 
-Each microservice needs a config file in yaml or json format to work with it. This configuration contain
-the Flask configuration of your project and the [Services](services.md).
+Each microservice needs a config file in yaml or json format to work with it. This configuration contains
+the Flask settings of your project and the [Services](services.md).
 
 a simple configuration file could be a config.yaml:
 
@@ -43,7 +43,7 @@ This file could contains this keywords:
 
 ## pyms block
 
-```pyms```: all subset inside this keywords is the configuration of this library. Each keyword will be a service of our
+```pyms```: all subsets inside this keyword are the settings of this library. Each keyword will be a service of our
 [Microservice class](ms_class.md). For example, we declare our microservice class as:
 
 ```python
@@ -57,14 +57,14 @@ pyms:
   requests: true
 ```
 
-our object `ms` has got a attribute `requests` that is a instance of our service [requests](services.md). 
+our object `ms` has an attribute `requests` that is a instance of our service [requests](services.md). 
 
 ## Our microservice block
 This part contains all keywords of a [Flask Configuration Handling](http://flask.pocoo.org/docs/1.0/config/) and our 
-constants of the enviroments (local configuration, staging configuration...). Take care that a Flask configuration needs
-the keywords are declared as upper case.
+constants of the enviroments (local configuration, staging configuration...). Keep in mind that a Flask configuration needs
+the keywords to be declared as uppercase.
 
-The name of this block is defined when you create the object of [Microservice class](ms_class.md). For example, 
+The name of this block is defined when you create the object of [Microservice class](ms_class.md):
 
 ### Example 1
 ```python
