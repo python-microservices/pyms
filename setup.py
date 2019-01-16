@@ -38,7 +38,7 @@ setup(
     author_email=author_email,
     description="Library of utils to create REST Python Microservices",
     long_description=long_description,
-    long_description_content_type='text/markdown'
+    long_description_content_type='text/markdown',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Framework :: Flask',
