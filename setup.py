@@ -36,8 +36,9 @@ setup(
     version=version,
     author=author,
     author_email=author_email,
-    description="",
+    description="Library of utils to create REST Python Microservices",
     long_description=long_description,
+    long_description_content_type='text/markdown'
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Framework :: Flask',
@@ -49,7 +50,7 @@ setup(
     license="License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     platforms=["any"],
     keywords="",
-    url='',
+    url='https://github.com/python-microservices/pyms/',
     test_suite='nose.collector',
     packages=find_packages(),
     install_requires=install_requires,
