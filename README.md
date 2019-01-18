@@ -9,6 +9,10 @@
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/python-microservices/pyms.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/python-microservices/pyms/alerts/)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/python-microservices/pyms.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/python-microservices/pyms/context:python)
 
+PyMS, Python MicroService, is a collections of libraries, best practices and recommended ways to build 
+microservices with Python.
+
+To know how use, install or build a porject see the docs (TODO: add url to readthedocs)
 
 ## Installation 
 ```bash
@@ -81,3 +85,20 @@ pipenv install --deploy
 ```bash
 pipenv shell
 ```
+
+## Documentation
+
+This project use MkDocs
+
+* `mkdocs new [dir-name]` - Create a new project.
+* `mkdocs serve` - Start the live-reloading docs server.
+* `mkdocs build` - Build the documentation site.
+* `mkdocs help` - Print this help message.
+
+### Project layout
+
+    mkdocs.yml    # The configuration file.
+    docs/
+        index.md  # The documentation homepage.
+        ...       # Other markdown pages, images and other files.
+
