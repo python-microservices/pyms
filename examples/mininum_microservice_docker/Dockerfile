@@ -10,9 +10,9 @@ RUN mkdir $APP_HOME && adduser -S -D -H python
 RUN chown -R python $APP_HOME
 WORKDIR $APP_HOME
 
-ADD requirement*.txt $APP_HOME
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install -r py-ms gunicorn gevent
+
 
 ADD . $APP_HOME
 
