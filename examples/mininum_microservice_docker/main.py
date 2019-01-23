@@ -1,5 +1,5 @@
-import os
 from flask import jsonify
+
 from pyms.flask.app import Microservice
 
 ms = Microservice(service="my-minimal-microservice", path=__file__)

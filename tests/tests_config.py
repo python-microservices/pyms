@@ -3,7 +3,6 @@ import os
 import unittest
 
 from pyms.config.conf import Config
-
 from pyms.config.confile import ConfFile
 from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT, LOGGER_NAME
 from pyms.exceptions import AttrDoesNotExistException, ConfigDoesNotFoundException, ServiceDoesNotExistException
@@ -118,6 +117,7 @@ class ConfNotExistTests(unittest.TestCase):
     def test_empty_conf_three_levels(self):
         config = ConfFile(empty_init=True)
         self.assertEqual(config.my_ms.level_two.level_three, {})
+
 
 if __name__ == '__main__':
     unittest.main()
