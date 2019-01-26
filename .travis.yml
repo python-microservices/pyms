@@ -5,14 +5,10 @@ python:
     - '3.6'
 install:
   - pip install pipenv
-  - pip install -U tox coveralls coverage PyYAML
+  - pip install -U tox
 
 script:
-  - coverage erase
   - tox
-after_success:
-  - coverage combine
-  - coveralls
 
 notifications:
   email:
