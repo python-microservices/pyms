@@ -5,7 +5,7 @@ python:
     - '3.6'
 install:
   - pip install pipenv
-  - pip install -U tox coveralls
+  - pip install -U tox coveralls coverage
 
 script:
   - coverage erase
