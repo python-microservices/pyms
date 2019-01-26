@@ -1,11 +1,14 @@
 import os
 import unittest
 
+from flask import current_app
+
 from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT
 from pyms.flask.app import Microservice
 
 
 def home():
+    current_app.logger.info("start request")
     return "OK"
 
 
