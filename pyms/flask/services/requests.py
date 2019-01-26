@@ -1,10 +1,15 @@
 """Encapsulate common rest operations between business services propagating trace headers if configured.
 """
+import logging
+
 import opentracing
 import requests
-from flask import current_app
+from flask import current_app, request
 
+from pyms.constants import LOGGER_NAME
 from pyms.flask.services.driver import DriverService
+
+logger = logging.getLogger(LOGGER_NAME)
 
 
 class Service(DriverService):
@@ -27,10 +32,10 @@ class Service(DriverService):
 
         try:
             # FLASK https://github.com/opentracing-contrib/python-flask
-            span = self._tracer.get_span()
-            self._tracer._tracer.inject(span, opentracing.Format.HTTP_HEADERS, headers)
+            span = self._tracer.get_span(request)
+            self._tracer.tracer.inject(span.context, opentracing.Format.HTTP_HEADERS, headers)
         except Exception as ex:
-            current_app.logger.warning("Tracer error {}".format(ex))
+            logger.debug("Tracer error {}".format(ex))
         return headers
 
     def _get_headers(self, headers):
@@ -87,7 +92,7 @@ class Service(DriverService):
         :param params: (optional) Dictionary, list of tuples or bytes to send in the body of the :class:`Request` (as query
                     string parameters)
         :param headers: (optional) Dictionary of HTTP Headers to send with the :class:`Request`.
-        :param \*\*kwargs: Optional arguments that ``request`` takes.
+        :param kwargs: Optional arguments that ``request`` takes.
         :return: :class:`Response <Response>` object
         :rtype: requests.Response
         """
@@ -109,7 +114,7 @@ class Service(DriverService):
         :param params: (optional) Dictionary, list of tuples or bytes to send in the body of the :class:`Request` (as query
                     string parameters)
         :param headers: (optional) Dictionary of HTTP Headers to send with the :class:`Request`.
-        :param \*\*kwargs: Optional arguments that ``request`` takes.
+        :param kwargs: Optional arguments that ``request`` takes.
         :return: :class:`Response <Response>` object
         :rtype: requests.Response
         """
@@ -126,7 +131,7 @@ class Service(DriverService):
                     :class:`Request`.
         :param json: (optional) json data to send in the body of the :class:`Request`.
         :param headers: (optional) Dictionary of HTTP Headers to send with the :class:`Request`.
-        :param \*\*kwargs: Optional arguments that ``request`` takes.
+        :param kwargs: Optional arguments that ``request`` takes.
         :return: :class:`Response <Response>` object
         :rtype: requests.Response
         """
@@ -149,7 +154,7 @@ class Service(DriverService):
                     :class:`Request`.
         :param json: (optional) json data to send in the body of the :class:`Request`.
         :param headers: (optional) Dictionary of HTTP Headers to send with the :class:`Request`.
-        :param \*\*kwargs: Optional arguments that ``request`` takes.
+        :param kwargs: Optional arguments that ``request`` takes.
         :return: :class:`Response <Response>` object
         :rtype: requests.Response
         """
@@ -166,7 +171,7 @@ class Service(DriverService):
             object to send in the body of the :class:`Request`.
         :param json: (optional) json data to send in the body of the :class:`Request`.
         :param headers: (optional) Dictionary of HTTP Headers to send with the :class:`Request`.
-        :param \*\*kwargs: Optional arguments that ``request`` takes.
+        :param kwargs: Optional arguments that ``request`` takes.
         :return: :class:`Response <Response>` object
         :rtype: requests.Response
         """
@@ -189,7 +194,7 @@ class Service(DriverService):
             object to send in the body of the :class:`Request`.
         :param json: (optional) json data to send in the body of the :class:`Request`.
         :param headers: (optional) Dictionary of HTTP Headers to send with the :class:`Request`.
-        :param \*\*kwargs: Optional arguments that ``request`` takes.
+        :param kwargs: Optional arguments that ``request`` takes.
         :return: :class:`Response <Response>` object
         :rtype: requests.Response
         """
@@ -203,7 +208,7 @@ class Service(DriverService):
         :param url: URL for the new :class:`Request` object. Could contain path parameters
         :param path_params: (optional) Dictionary, list of tuples with path parameters values to compose url
         :param headers: (optional) Dictionary of HTTP Headers to send with the :class:`Request`.
-        :param \*\*kwargs: Optional arguments that ``request`` takes.
+        :param kwargs: Optional arguments that ``request`` takes.
         :return: :class:`Response <Response>` object
         :rtype: requests.Response
         """

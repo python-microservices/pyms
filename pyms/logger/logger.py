@@ -1,9 +1,15 @@
 """Return a JSON as log to insert, i.e, elasticsearch
 """
 import datetime
+import logging
 
 import opentracing
+from flask import request, current_app
 from pythonjsonlogger import jsonlogger
+
+from pyms.constants import LOGGER_NAME
+
+logger = logging.getLogger(LOGGER_NAME)
 
 
 class CustomJsonFormatter(jsonlogger.JsonFormatter):
@@ -21,18 +27,18 @@ class CustomJsonFormatter(jsonlogger.JsonFormatter):
         else:
             log_record['severity'] = record.levelname
         log_record["service"] = self.service_name
-
-        # Add traces
-        if self.tracer:
-            span = self.tracer.get_span()
+        try:
+            # FLASK https://github.com/opentracing-contrib/python-flask
+            self.tracer = current_app.tracer
+            # Add traces
+            span = self.tracer.get_span(request=request)
             headers = {}
-            self.tracer._tracer.inject(span, opentracing.Format.HTTP_HEADERS, headers)
-            log_record["trace"] = headers['X-B3-TraceId']
-            log_record["span"] = headers['X-B3-SpanId']
-            log_record["parent"] = headers.get('X-B3-ParentSpanId', '')
+            self.tracer.tracer.inject(span.context, opentracing.Format.HTTP_HEADERS, headers)
+            log_record["trace"] = headers['ot-tracer-traceid']
+            log_record["span"] = headers['ot-tracer-spanid']
+            log_record["parent"] = headers.get('ot-tracer-parentspanid', '')
+        except Exception as ex:
+            logger.debug("Tracer error {}".format(ex))
 
     def add_service_name(self, project_name):
         self.service_name = project_name.lower()
-
-    def add_trace_span(self, tracer):
-        self.tracer = tracer
