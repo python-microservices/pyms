@@ -3,7 +3,6 @@ import os
 import unittest
 
 from pyms.config.conf import Config
-
 from pyms.config.confile import ConfFile
 from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT, LOGGER_NAME
 from pyms.exceptions import AttrDoesNotExistException, ConfigDoesNotFoundException, ServiceDoesNotExistException
@@ -47,6 +46,26 @@ class ConfTests(unittest.TestCase):
     def test_dictionary_recursive_dict_normal_key_dinamyc(self):
         config = ConfFile(config={"test-1": {"test-1-1": "a", "test_1-2": "b"}, "test_2": "c"})
         self.assertEqual(getattr(config, "test_1.test_1_2"), "b")
+
+    def test_equal_instances_error(self):
+        config1 = ConfFile(config={"test-1": {"test-1-1": "a", "test_1-2": "b"}, "test_2": "c"})
+        config2 = ConfFile(config={"test-1": {"test-1-1": "a", "test_1-2": "b"}})
+        self.assertNotEqual(config1, config2)
+
+    def test_equal_instances_error2(self):
+        config1 = ConfFile(config={"test-1": {"test-1-1": "a", "test_1-2": "b"}})
+        config2 = {"test-1": {"test-1-1": "a", "test-1-2": "b"}}
+        self.assertNotEqual(config1, config2)
+
+    def test_equal_instances_ok(self):
+        config1 = ConfFile(config={"test-1": {"test-1-1": "a", "test_1-2": "b"}})
+        config2 = ConfFile(config={"test-1": {"test-1-1": "a", "test_1-2": "b"}})
+        self.assertEqual(config1, config2)
+
+    def test_equal_instances_ok2(self):
+        config1 = ConfFile(config={"test-1": {"test-1-1": "a", "test_1-2": "b"}})
+        config2 = {"test_1": {"test_1_1": "a", "test_1_2": "b"}}
+        self.assertEqual(config1, config2)
 
     def test_dictionary_attribute_not_exists(self):
         config = ConfFile(config={"test-1": "a"})
@@ -98,3 +117,7 @@ class ConfNotExistTests(unittest.TestCase):
     def test_empty_conf_three_levels(self):
         config = ConfFile(empty_init=True)
         self.assertEqual(config.my_ms.level_two.level_three, {})
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -50,6 +50,11 @@ class ConfFile(dict):
         key = key.replace("-", "_")
         return key
 
+    def __eq__(self, other):
+        if not isinstance(other, ConfFile) and not isinstance(other, dict):
+            return False
+        return dict(self) == dict(other)
+
     def __getattr__(self, name, *args, **kwargs):
         try:
             keys = self.normalize_keys(name).split(".")
