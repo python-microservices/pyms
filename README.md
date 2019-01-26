@@ -12,7 +12,7 @@
 PyMS, Python MicroService, is a collections of libraries, best practices and recommended ways to build 
 microservices with Python.
 
-To know how use, install or build a porject see the docs (TODO: add url to readthedocs)
+To know how use, install or build a project see the docs: https://py-ms.readthedocs.io/en/latest/
 
 ## Installation 
 ```bash
