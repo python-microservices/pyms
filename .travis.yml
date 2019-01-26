@@ -9,6 +9,8 @@ script:
   - coverage erase
   - tox
 after_success:
+  - coverage combine
+  - coverage report
   - coveralls
 
 notifications:
