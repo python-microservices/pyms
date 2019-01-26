@@ -1,4 +1,6 @@
 language: python
+sudo: false
+cache: false
 python:
     - '3.6'
 install:
@@ -10,7 +12,6 @@ script:
   - tox
 after_success:
   - coverage combine
-  - coverage report
   - coveralls
 
 notifications:
