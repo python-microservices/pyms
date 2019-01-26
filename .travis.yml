@@ -2,9 +2,12 @@ language: python
 python:
     - '3.6'
 install:
+  - pip install pipenv
   - pip install -U tox coveralls
 
 script:
+  - pipenv install --dev
+  - pipenv run pip freeze > requirements-tests.txt
   - coverage erase
   - tox
 after_success:
