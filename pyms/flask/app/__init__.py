@@ -4,13 +4,16 @@ from typing import Text
 
 import connexion
 from flask import Flask
-from flask_opentracing import FlaskTracer
+from flask_opentracing import FlaskTracing
 
 from pyms.config.conf import get_conf
+from pyms.constants import LOGGER_NAME
 from pyms.flask.healthcheck import healthcheck_blueprint
 from pyms.flask.services.driver import ServicesManager
 from pyms.logger import CustomJsonFormatter
-from pyms.tracer.main import init_jaeger_tracer
+from pyms.tracer.main import init_lightstep_tracer
+
+logger = logging.getLogger(LOGGER_NAME)
 
 
 class Microservice:
@@ -32,15 +35,18 @@ class Microservice:
         return self.application
 
     def init_tracer(self):
-        self.application.tracer = FlaskTracer(init_jaeger_tracer(), True, self.application)
+        self.application.opentracing_tracer = init_lightstep_tracer(self.application.config["APP_NAME"])
+        self.application.tracer = FlaskTracing(self.application.opentracing_tracer, True, self.application)
 
     def init_logger(self):
+        self.application.logger = logger
+        os.environ['WERKZEUG_RUN_MAIN'] = "true"
+
         formatter = CustomJsonFormatter('(timestamp) (level) (name) (module) (funcName) (lineno) (message)')
         formatter.add_service_name(self.application.config["APP_NAME"])
-        if getattr(self.application, "tracer", False):
-            formatter.add_trace_span(self.application.tracer)
         log_handler = logging.StreamHandler()
         log_handler.setFormatter(formatter)
+
         self.application.logger.addHandler(log_handler)
         self.application.logger.propagate = False
         self.application.logger.setLevel(logging.INFO)
@@ -78,8 +84,7 @@ class Microservice:
         self.init_libs()
         self.add_error_handlers()
 
-        if not self.application.config["TESTING"]:
-            self.init_tracer()
+        self.init_tracer()
 
         self.init_logger()
 
