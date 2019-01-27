@@ -62,7 +62,7 @@ thrift==0.10.0
 toml==0.10.0
 tornado==6.0a1
 tox==3.7.0
-typed-ast==1.1.0
+typed-ast==1.2.0
 urllib3==1.24.1
 virtualenv==16.3.0
 Werkzeug==0.14.1
