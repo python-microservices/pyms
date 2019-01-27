@@ -42,7 +42,7 @@ paths:
           description: "Example"
         405:
           description: "Invalid input"
-      x-swagger-router-controller: "tests.tests_flask"
+      x-swagger-router-controller: "tests.test_flask"
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"

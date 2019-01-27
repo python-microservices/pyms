@@ -16,10 +16,13 @@ flask-opentracing = "*"
 [dev-packages]
 requests-mock = "*"
 coverage = "*"
-mock = "*"
-nose = "*"
+pytest = "*"
+pytest-cov = "*"
 pylint = "*"
 tox = "*"
+safety = "*"
+bandit = "*"
+mkdocs = "*"
 
 [requires]
 python_version = "3.6"
