@@ -63,7 +63,10 @@ class Microservice:
             application = app.app
             application._connexion_app = app
         else:
-            application = Flask(__name__)
+            application = Flask(__name__, static_folder=os.path.join(self.path, 'static'),
+                                template_folder=os.path.join(self.path, 'templates'))
+
+        application.root_path = self.path
 
         return application
 
