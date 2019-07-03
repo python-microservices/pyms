@@ -18,5 +18,4 @@ import lightstep
 
 def init_lightstep_tracer(component_name):
     return lightstep.Tracer(
-        component_name=component_name,
-        access_token='{your_access_token}')
+        component_name=component_name)
