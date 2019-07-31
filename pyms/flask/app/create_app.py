@@ -1,13 +1,12 @@
 import logging
 import os
-from typing import Text
 
 import connexion
 from flask import Flask
 from flask_opentracing import FlaskTracing
 
 from pyms.config.conf import get_conf
-from pyms.constants import LOGGER_NAME
+from pyms.constants import LOGGER_NAME, SERVICE_ENVIRONMENT
 from pyms.flask.healthcheck import healthcheck_blueprint
 from pyms.flask.services.driver import ServicesManager
 from pyms.logger import CustomJsonFormatter
@@ -22,22 +21,24 @@ class SingletonMeta(type):
     possible methods include: base class, decorator, metaclass. We will use the
     metaclass because it is best suited for this purpose.
     """
+    _instances = {}
 
-    _instance = None
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(SingletonMeta, cls).__call__(*args, **kwargs)
+        else:
+            cls._instances[cls].__init__(*args, **kwargs)
 
-    def __call__(self, *args, **kwargs):
-        if self._instance is None:
-            self._instance = super().__call__(*args, **kwargs)
-        return self._instance
+        return cls._instances[cls]
 
 
 class Microservice(metaclass=SingletonMeta):
     service = None
     application = None
 
-    def __init__(self, service: Text, path=__file__, override_instance=False):
-        self.service = service
-        self.path = os.path.dirname(path)
+    def __init__(self, *args, **kwargs):
+        self.service = kwargs.get("service", os.environ.get(SERVICE_ENVIRONMENT, "ms"))
+        self.path = os.path.dirname(kwargs.get("path", __file__))
         self.config = get_conf(service=self.service)
         self.init_services()
 

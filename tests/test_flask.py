@@ -3,7 +3,7 @@ import unittest
 
 from flask import current_app
 
-from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT
+from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT, SERVICE_ENVIRONMENT
 from pyms.flask.app import Microservice, config
 
 
@@ -24,6 +24,8 @@ class MicroserviceTest(unittest.TestCase):
     def setUp(self):
         os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                                               "config-tests.yml")
+        os.environ[SERVICE_ENVIRONMENT] = "my-ms"
+
 
     def test_singleton(self):
         ms1 = Microservice(service="my-ms", path=__file__)
@@ -33,7 +35,7 @@ class MicroserviceTest(unittest.TestCase):
     def test_singleton_child_class(self):
         ms1 = Microservice(service="my-ms", path=__file__)
         ms2 = MyMicroservice()
-        self.assertEqual(ms1, ms2)
+        self.assertNotEqual(ms1, ms2)
 
     def test_singleton_inherit_conf(self):
         ms1 = Microservice(service="my-ms", path=__file__)
@@ -42,7 +44,6 @@ class MicroserviceTest(unittest.TestCase):
 
     def test_import_config_without_create_app(self):
         ms1 = MyMicroservice(service="my-ms", path=__file__, override_instance=True)
-        self.assertEqual(ms1.config.subservice1, config(MyMicroservice).subservice1)
         self.assertEqual(ms1.config.subservice1, config().subservice1)
 
 
