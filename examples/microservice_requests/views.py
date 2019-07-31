@@ -1,5 +1,7 @@
-from examples.microservice_requests import ms
 from flask import current_app
+
+from examples.microservice_requests import ms
+
 
 def example():
     current_app.logger.info("start request")
