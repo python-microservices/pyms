@@ -25,9 +25,9 @@ class SingletonMeta(type):
 
     _instance = None
 
-    def __call__(self, service: Text = None, path=None):
+    def __call__(self, *args, **kwargs):
         if self._instance is None:
-            self._instance = super().__call__(service=service, path=path)
+            self._instance = super().__call__(*args, **kwargs)
         return self._instance
 
 
@@ -35,7 +35,7 @@ class Microservice(metaclass=SingletonMeta):
     service = None
     application = None
 
-    def __init__(self, service: Text, path=__file__):
+    def __init__(self, service: Text, path=__file__, override_instance=False):
         self.service = service
         self.path = os.path.dirname(path)
         self.config = get_conf(service=self.service)
