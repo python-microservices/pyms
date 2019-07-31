@@ -39,7 +39,7 @@ mkdocs==1.0.4
 mock==2.0.0
 more-itertools==7.1.0
 nose==1.3.7
-numpy==1.13.3
+numpy==1.17.0
 openapi-spec-validator==0.2.7
 opentracing==2.0.0
 packaging==19.0
