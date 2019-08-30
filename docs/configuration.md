@@ -128,14 +128,18 @@ This raise a `'working outside of application context` error. Who can solve this
 ```python
 from flask import Blueprint, current_app
 from flask_restplus import Api
+from pyms.flask.app import config
 
 my_api_blueprint = Blueprint('api', __name__)
 
 API = Api(
     my_api_blueprint,
     title='My Microservice',
-    version=current_app.config["APP_VERSION"],
+    version=config().APP_VERSION,
     description='Microservice to manage hierarchies',
     add_specs=True,
 )
 ```
+
+**IMPORTANT:** If you use this method to get configuration out of context, you must set the `CONFIGMAP_SERVICE` or set 
+the default key `ms` for your configuration block in your config.yml
