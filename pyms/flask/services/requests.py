@@ -5,11 +5,36 @@ import logging
 import opentracing
 import requests
 from flask import current_app, request
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
 from pyms.constants import LOGGER_NAME
 from pyms.flask.services.driver import DriverService
 
 logger = logging.getLogger(LOGGER_NAME)
+
+DEFAULT_RETRIES = 3
+
+DEFAULT_STATUS_RETRIES = (500, 502, 504)
+
+
+def retry(f):
+    def wrapper(*args, **kwargs):
+        response = False
+        i = 0
+        response_ok = False
+        retries = args[0].retries
+        status_retries = args[0].status_retries
+        while i < retries and response_ok is False:
+            response = f(*args, **kwargs)
+            i += 1
+            if response.status_code not in status_retries:
+                response_ok = True
+                logger.debug("Response {}".format(response))
+        if not response_ok:
+            logger.warning("Response ERROR: {}".format(response))
+        return response
+    return wrapper
 
 
 class Service(DriverService):
@@ -21,8 +46,32 @@ class Service(DriverService):
     def __init__(self, service, *args, **kwargs):
         """Initialization for trace headers propagation"""
         super().__init__(service, *args, **kwargs)
+        self.retries = self.config.retries or DEFAULT_RETRIES
+        self.status_retries = self.config.status_retries or DEFAULT_STATUS_RETRIES
 
-    def insert_trace_headers(self, headers):
+    def requests(self, session: requests.Session):
+        """
+        A backoff factor to apply between attempts after the second try (most errors are resolved immediately by a
+        second try without a delay). urllib3 will sleep for: {backoff factor} * (2 ^ ({number of total retries} - 1))
+        seconds. If the backoff_factor is 0.1, then sleep() will sleep for [0.0s, 0.2s, 0.4s, ...] between retries.
+        It will never be longer than Retry.BACKOFF_MAX. By default, backoff is disabled (set to 0).
+        :param session:
+        :return:
+        """
+        session_r = session or requests.Session()
+        retry = Retry(
+            total=self.retries,
+            read=self.retries,
+            connect=self.retries,
+            backoff_factor=0.3,
+            status_forcelist=self.status_retries,
+        )
+        adapter = HTTPAdapter(max_retries=retry)
+        session_r.mount('http://', adapter)
+        session_r.mount('https://', adapter)
+        return session_r
+
+    def insert_trace_headers(self, headers: dict) -> dict:
         """Inject trace headers if enabled.
 
         :param headers: dictionary of HTTP Headers to send.
@@ -38,7 +87,13 @@ class Service(DriverService):
             logger.debug("Tracer error {}".format(ex))
         return headers
 
-    def _get_headers(self, headers):
+    def propagate_headers(self, headers: dict) -> dict:
+        for k, v in request.headers:
+            if not headers.get(k):
+                headers.update({k: v})
+        return headers
+
+    def _get_headers(self, headers, propagate_headers=False):
         """If enabled appends trace headers to received ones.
 
         :param headers: dictionary of HTTP Headers to send.
@@ -52,7 +107,8 @@ class Service(DriverService):
         self._tracer = current_app.tracer
         if self._tracer:
             headers = self.insert_trace_headers(headers)
-
+        if self.config.propagate_headers or propagate_headers:
+            headers = self.propagate_headers(headers)
         return headers
 
     @staticmethod
@@ -81,10 +137,11 @@ class Service(DriverService):
                 data = data.get(self.config.data, {})
             return data
         except ValueError:
-            current_app.logger.warning("Response.content is not a valid json {}".format(response.content))
+            logger.warning("Response.content is not a valid json {}".format(response.content))
             return {}
 
-    def get(self, url, path_params=None, params=None, headers=None, **kwargs):
+    @retry
+    def get(self, url, path_params=None, params=None, headers=None, propagate_headers=False, **kwargs):
         """Sends a GET request.
 
         :param url: URL for the new :class:`Request` object. Could contain path parameters
@@ -98,11 +155,12 @@ class Service(DriverService):
         """
 
         full_url = self._build_url(url, path_params)
-        headers = self._get_headers(headers)
-        current_app.logger.info("Get with url {}, params {}, headers {}, kwargs {}".
-                                format(full_url, params, headers, kwargs))
-        response = requests.get(full_url, params=params, headers=headers, **kwargs)
-        current_app.logger.info("Response {}".format(response))
+        headers = self._get_headers(headers=headers, propagate_headers=propagate_headers)
+        logger.info("Get with url {}, params {}, headers {}, kwargs {}".
+                    format(full_url, params, headers, kwargs))
+
+        session = requests.Session()
+        response = self.requests(session=session).get(full_url, params=params, headers=headers, **kwargs)
 
         return response
 
@@ -122,6 +180,7 @@ class Service(DriverService):
         response = self.get(url, path_params=path_params, params=params, headers=headers, **kwargs)
         return self.parse_response(response)
 
+    @retry
     def post(self, url, path_params=None, data=None, json=None, headers=None, **kwargs):
         """Sends a POST request.
 
@@ -138,10 +197,12 @@ class Service(DriverService):
 
         full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers)
-        current_app.logger.info("Post with url {}, data {}, json {}, headers {}, kwargs {}".format(full_url, data, json,
-                                                                                                   headers, kwargs))
-        response = requests.post(full_url, data=data, json=json, headers=headers, **kwargs)
-        current_app.logger.info("Response {}".format(response))
+        logger.info("Post with url {}, data {}, json {}, headers {}, kwargs {}".format(full_url, data, json,
+                                                                                       headers, kwargs))
+
+        session = requests.Session()
+        response = self.requests(session=session).post(full_url, data=data, json=json, headers=headers, **kwargs)
+        logger.info("Response {}".format(response))
 
         return response
 
@@ -162,6 +223,7 @@ class Service(DriverService):
         response = self.post(url, path_params=path_params, data=data, json=json, headers=headers, **kwargs)
         return self.parse_response(response)
 
+    @retry
     def put(self, url, path_params=None, data=None, headers=None, **kwargs):
         """Sends a PUT request.
 
@@ -178,10 +240,12 @@ class Service(DriverService):
 
         full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers)
-        current_app.logger.info("Put with url {}, data {}, headers {}, kwargs {}".format(full_url, data, headers,
-                                                                                         kwargs))
-        response = requests.put(full_url, data, headers=headers, **kwargs)
-        current_app.logger.info("Response {}".format(response))
+        logger.info("Put with url {}, data {}, headers {}, kwargs {}".format(full_url, data, headers,
+                                                                             kwargs))
+
+        session = requests.Session()
+        response = self.requests(session=session).put(full_url, data, headers=headers, **kwargs)
+        logger.info("Response {}".format(response))
 
         return response
 
@@ -202,6 +266,7 @@ class Service(DriverService):
         response = self.put(url, path_params=path_params, data=data, headers=headers, **kwargs)
         return self.parse_response(response)
 
+    @retry
     def delete(self, url, path_params=None, headers=None, **kwargs):
         """Sends a DELETE request.
 
@@ -215,8 +280,10 @@ class Service(DriverService):
 
         full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers)
-        current_app.logger.info("Delete with url {}, headers {}, kwargs {}".format(full_url, headers, kwargs))
-        response = requests.delete(full_url, headers=headers, **kwargs)
-        current_app.logger.info("Response {}".format(response))
+        logger.info("Delete with url {}, headers {}, kwargs {}".format(full_url, headers, kwargs))
+
+        session = requests.Session()
+        response = self.requests(session=session).delete(full_url, headers=headers, **kwargs)
+        logger.info("Response {}".format(response))
 
         return response

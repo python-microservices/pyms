@@ -2,12 +2,14 @@
 """
 import json
 import os
+import time
 import unittest
 
 import requests_mock
 
 from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT
 from pyms.flask.app import Microservice
+from pyms.flask.services.requests import DEFAULT_RETRIES
 
 
 class RequestServiceTests(unittest.TestCase):
@@ -20,8 +22,7 @@ class RequestServiceTests(unittest.TestCase):
         os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(self.BASE_DIR, "config-tests.yml")
         ms = Microservice(service="my-ms", path=__file__)
         self.app = ms.create_app()
-        with self.app.app_context():
-            self.request = ms.requests
+        self.request = ms.requests
 
     @requests_mock.Mocker()
     def test_get(self, mock_request):
@@ -207,3 +208,82 @@ class RequestServiceTests(unittest.TestCase):
 
         self.assertEqual(204, response.status_code)
         self.assertEqual('', response.text)
+
+    def test_propagate_headers_empty(self, ):
+        input_headers = {
+
+        }
+        expected_headers = {
+            'Content-Length': '12',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Host': 'localhost'
+        }
+        with self.app.test_request_context(
+                '/tests/', data={'format': 'short'}):
+            headers = self.request.propagate_headers(input_headers)
+
+        self.assertEqual(expected_headers, headers)
+
+    def test_propagate_headers_no_override(self):
+        input_headers = {
+            'Host': 'my-server'
+        }
+        expected_headers = {
+            'Host': 'my-server'
+        }
+        with self.app.test_request_context(
+                '/tests/'):
+            headers = self.request.propagate_headers(input_headers)
+
+        self.assertEqual(expected_headers, headers)
+
+    def test_propagate_headers_propagate(self):
+        input_headers = {
+        }
+        expected_headers = {
+            'Content-Length': '12',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Host': 'localhost',
+            'A': 'b',
+        }
+        with self.app.test_request_context(
+                '/tests/', data={'format': 'short'}, headers={'a': 'b'}):
+            headers = self.request.propagate_headers(input_headers)
+
+        self.assertEqual(expected_headers, headers)
+
+    def test_propagate_headers_propagate_no_override(self):
+        input_headers = {
+            'Host': 'my-server',
+            'Span': '1234',
+        }
+        expected_headers = {
+            'Host': 'my-server',
+            'A': 'b',
+            'Span': '1234',
+        }
+        with self.app.test_request_context(
+                '/tests/', headers={'a': 'b', 'span': '5678'}):
+            headers = self.request.propagate_headers(input_headers)
+
+        self.assertEqual(expected_headers, headers)
+
+    @requests_mock.Mocker()
+    def test_retries_with_500(self, mock_request):
+        url = 'http://localhost:9999'
+        with self.app.app_context():
+            mock_request.get(url, text="", status_code=500)
+            response = self.request.get(url)
+
+        self.assertEqual(DEFAULT_RETRIES, mock_request.call_count)
+        self.assertEqual(500, response.status_code)
+
+    @requests_mock.Mocker()
+    def test_retries_with_200(self, mock_request):
+        url = 'http://localhost:9999'
+        with self.app.app_context():
+            mock_request.get(url, text="", status_code=200)
+            response = self.request.get(url)
+
+        self.assertEqual(1, mock_request.call_count)
+        self.assertEqual(200, response.status_code)
