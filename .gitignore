@@ -23,3 +23,6 @@ pylintReport.txt
 # Deploy
 build/
 dist/
+
+# other
+site/*
