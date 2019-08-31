@@ -8,7 +8,7 @@ from flask_opentracing import FlaskTracing
 from pyms.config.conf import get_conf
 from pyms.constants import LOGGER_NAME, SERVICE_ENVIRONMENT
 from pyms.flask.healthcheck import healthcheck_blueprint
-from pyms.flask.services.driver import ServicesManager
+from pyms.flask.services.driver import ServicesManager, DriverService
 from pyms.logger import CustomJsonFormatter
 from pyms.tracer.main import init_lightstep_tracer
 
@@ -35,6 +35,8 @@ class SingletonMeta(type):
 class Microservice(metaclass=SingletonMeta):
     service = None
     application = None
+    swagger = DriverService
+    requests = DriverService
 
     def __init__(self, *args, **kwargs):
         self.service = kwargs.get("service", os.environ.get(SERVICE_ENVIRONMENT, "ms"))
@@ -70,14 +72,15 @@ class Microservice(metaclass=SingletonMeta):
     def init_app(self) -> Flask:
         if getattr(self, "swagger", False):
             app = connexion.App(__name__, specification_dir=os.path.join(self.path, self.swagger.path))
-            app.add_api(self.swagger.file,
-                        arguments={'title': self.config.APP_NAME},
-                        base_path=self.config.APPLICATION_ROOT
-                        )
+            app.add_api(
+                self.swagger.file,
+                arguments={'title': self.config.APP_NAME},
+                base_path=self.config.APPLICATION_ROOT
+            )
 
             # Invert the objects, instead connexion with a Flask object, a Flask object with
             application = app.app
-            application._connexion_app = app
+            application.connexion_app = app
         else:
             application = Flask(__name__, static_folder=os.path.join(self.path, 'static'),
                                 template_folder=os.path.join(self.path, 'templates'))
@@ -121,4 +124,4 @@ class Microservice(metaclass=SingletonMeta):
         :param code_or_exception: HTTP error code or exception
         :param handler: callback for error handler
         """
-        self.application._connexion_app.add_error_handler(code_or_exception, handler)
+        self.application.connexion_app.add_error_handler(code_or_exception, handler)
