@@ -7,6 +7,9 @@ Module to read yaml or json configuration from a dictionary or a path.
 With the function `create_app` initialize the Flask app, register [blueprints](http://flask.pocoo.org/docs/0.12/blueprints/)
 and initialize all libraries such as Swagger, database, trace system, custom logger format, etc.
 
+### pyms/flask/services
+Integrations and wrappers over common libs like request, swagger, connexion
+
 ### pyms/flask/healthcheck
 This view is usually used by Kubernetes, Eureka and other systems to check if our application is running.
 
