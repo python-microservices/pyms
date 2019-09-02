@@ -99,6 +99,7 @@ class Microservice(metaclass=SingletonMeta):
         self.application = self.init_app()
         self.application.config.from_object(self.config)
         self.application.tracer = None
+        self.application.ms = self
 
         # Initialize Blueprints
         self.application.register_blueprint(healthcheck_blueprint)
