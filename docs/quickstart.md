@@ -35,7 +35,8 @@ ms: # 1.3
   SECRET_KEY: "gjr39dkjn344_!67#"
 ```
 
-So what did that code do?
+## So what did that code do?
+
 1. Create a instance of PyMS Microservice class (#1.1). This initialization inject the configuration defined in the 
 1.3 block and could be accessed through current_app.config. Then, initialize the service defined in the 1.2 block. See [Services](services.md) for more details.
 2. Initialize [Flask](https://flask.palletsprojects.com/en/1.1.x/) instance, [Connexion](https://github.com/zalando/connexion) 

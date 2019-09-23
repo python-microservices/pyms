@@ -39,26 +39,51 @@ Nowadays, is not perfect and we have a looong roadmap, but we hope this library 
 pip install py-ms
 ```
 
-## Structure
+# Quickstart
 
-### pyms/config
-Module to read yaml or json configuration from a dictionary or a path.
+You need to create 2 files: main.py and config.yml:
 
-### pyms/flask/app
-With the function `create_app` initialize the Flask app, register [blueprints](http://flask.pocoo.org/docs/0.12/blueprints/)
-and initialize all libraries such as Swagger, database, trace system, custom logger format, etc.
+main.py
+```python
+from flask import jsonify
 
-### pyms/flask/services
-Integrations and wrappers over common libs like request, swagger, connexion
+from pyms.flask.app import Microservice
 
-### pyms/flask/healthcheck
-This view is usually used by Kubernetes, Eureka and other systems to check if our application is running.
+ms = Microservice(path=__file__) # 1.1
+app = ms.create_app() # 2.1
 
-### pyms/logger
-Print logger in JSON format to send to server like Elasticsearch. Inject span traces in logger.
 
-### pyms/tracer
-Create an injector `flask_opentracing.FlaskTracer` to use in our projects.
+@app.route("/") # 3.1
+def example():
+    return jsonify({"main": "hello world"})
+
+
+if __name__ == '__main__':
+    app.run()
+```
+
+config.yml
+```yaml
+pyms: # 1.2
+  requests:
+    data: {}
+ms: # 1.3
+  DEBUG: true
+  APP_NAME: business-glossary
+  APPLICATION_ROOT : ""
+  SECRET_KEY: "gjr39dkjn344_!67#"
+```
+
+### So what did that code do?
+
+1. Create a instance of PyMS Microservice class (#1.1). This initialization inject the configuration defined in the 
+1.3 block and could be accessed through current_app.config. Then, initialize the service defined in the 1.2 block. See [Services](services.md) for more details.
+2. Initialize [Flask](https://flask.palletsprojects.com/en/1.1.x/) instance, [Connexion](https://github.com/zalando/connexion) 
+if it was defined in the pyms configuration block, create a tracer, add health-check blueprint, initialize libs and set the PyMS Microservice in
+`ms` attribute and you can access to it with `current_app.ms`. This steps has their each functions and you can easy override it.
+3. `create_app` return the flask instance and you can interact with it as a typical flask app
+
+See Documentation https://py-ms.readthedocs.io/en/latest/ to learn more.
 
 ## How To Contrib
 We appreciate opening issues and pull requests to make PyMS even more stable & useful! See [This doc](COONTRIBUTING.md)
