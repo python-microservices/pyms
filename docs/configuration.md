@@ -1,5 +1,12 @@
 # Configuration
 
+## Environments variables of PyMS:
+
+**CONFIGMAP_FILE**: The path to the configuration file. By default, PyMS search the configuration file in your
+actual folder with the name "config.yml"
+**CONFIGMAP_SERVICE**: the name of the keyword that define the block of key-value of [Flask Configuration Handling](http://flask.pocoo.org/docs/1.0/config/)
+and your own configuration (see the next section to more  info)
+
 ## Create configuration
 Each microservice needs a config file in yaml or json format to work with it. This configuration contains
 the Flask settings of your project and the [Services](services.md). With this way to create configuration files, we 
@@ -43,7 +50,6 @@ or in a config.json:
 ```
 
 This file could contains this keywords:
-
 
 ## pyms block
 
@@ -96,6 +102,8 @@ ms1-api:
   TESTING: false
 ```
 
+You can set this keyword with the environment var **CONFIGMAP_SERVICE**.
+
 ## Import Configuration
 With pyms, all configuration is stored as flask configuration and it can be acceded from:
 
@@ -143,3 +151,36 @@ API = Api(
 
 **IMPORTANT:** If you use this method to get configuration out of context, you must set the `CONFIGMAP_SERVICE` or set 
 the default key `ms` for your configuration block in your config.yml
+
+
+## Looking for Configuration file with Kubernetes Configmaps
+By default, Microservice class search a config.yml in the same path. You can set a different route or set a json file.
+To change this path, define a environment variable `CONFIGMAP_FILE`.
+
+This way of looking for the configuration is useful when you work with Docker and Kubernetes. For example, you can integrate
+a configmap of Kubernetes, with this microservice and a deployment with:
+
+```yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: my-microservice
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+      - name: my-microservice
+        image: ...
+        env:
+          - name: CONFIGMAP_FILE
+            value: "/usr/share/microservice/config.yaml"
+
+        volumeMounts:
+          - mountPath: /usr/share/microservice
+            name: ms-config-volume
+      volumes:
+        - name: ms-config-volume
+          configMap:
+            name: my-microservice-configmap
+```

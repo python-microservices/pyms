@@ -58,38 +58,4 @@ print(ms.config.multiplevars.config2)
 # >> "test2"
 ```
 
-
-
-# Looking for Configuration file
-By default, Microservice class search a config.yml in the same path. You can set a different route or set a json file.
-To change this path, define a environment variable `CONFIGMAP_FILE`.
-
-This way of looking for the configuration is useful when you work with Docker and Kubernetes. For example, you can integrate
-a configmap of Kubernetes, with this microservice and a deployment with:
-
-```yaml
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  name: my-microservice
-spec:
-  replicas: 1
-  template:
-    spec:
-      containers:
-      - name: my-microservice
-        image: ...
-        env:
-          - name: CONFIGMAP_FILE
-            value: "/usr/share/microservice/config.yaml"
-
-        volumeMounts:
-          - mountPath: /usr/share/microservice
-            name: ms-config-volume
-      volumes:
-        - name: ms-config-volume
-          configMap:
-            name: my-microservice-configmap
-```
-
 Check more examples in [this Github page](https://github.com/python-microservices/pyms/tree/master/examples)

@@ -1,2 +1,7 @@
 my-minimal-microservice:
-  APP_NAME: "Python Microservice"
+  DEBUG: true
+  TESTING: false
+  SWAGGER: true
+  APP_NAME: business-glossary
+  APPLICATION_ROOT : ""
+  SECRET_KEY: "gjr39dkjn344_!67#"
