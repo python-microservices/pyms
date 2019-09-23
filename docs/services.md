@@ -13,3 +13,8 @@ Extends the Microservice with [Connexion](https://github.com/zalando/connexion)
 ## Requests
 Extend the [requests library](http://docs.python-requests.org/en/master/) with trace headers and parsing JSON objects.
 Encapsulate common rest operations between business services propagating trace headers if set up.
+
+
+## How to contrib: create your own service:
+
+TODO

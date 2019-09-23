@@ -1,7 +1,17 @@
 # Welcome to PyMS
 
-PyMS, Python MicroService, is a collection of libraries, best practices and recommended ways to build 
-microservices with Python.
+PyMS, Python MicroService, is a [Microservice chassis pattern](https://microservices.io/patterns/microservice-chassis.html) 
+like Spring Boot (Java) or Gizmo (Golang). PyMS is a collection of libraries, best practices and recommended ways to build 
+microservices with Python which handles cross-cutting concerns: 
+- Externalized configuration
+- Logging
+- Health checks
+- Metrics (TODO)
+- Distributed tracing
+
+PyMS is powered by [Flask](https://flask.palletsprojects.com/en/1.1.x/), [Connexion](https://github.com/zalando/connexion) and [Opentracing](https://opentracing.io/).
+
+Get started with [Installation](installation.md) and then get an overview with the [Quickstart](quickstart.md). 
 
 ## Motivation
 
@@ -24,9 +34,11 @@ Nowadays, is not perfect and we have a looong roadmap, but we hope this library 
 
 
 ## Index:
-* [PyMS structure](structure.md)
+* [Installation](installation.md)
+* [Quickstart](quickstart.md)
 * [Configuration](configuration.md)
 * [Services](services.md)
+* [PyMS structure](structure.md)
 * [Microservice class](ms_class.md)
 * [Quick start and examples](examples.md)
 * [Structure of a microservice project](structure_project.md)

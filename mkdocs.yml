@@ -1,5 +1,8 @@
-site_name: My Docs
-
+site_name: PyMS
+site_url: https://github.com/python-microservices/pyms
+repo_url: https://github.com/python-microservices/pyms
+repo_name: GitHub
+site_author: Alberto Vara
 nav:
     - Home: index.md
     - Structure: structure.md
