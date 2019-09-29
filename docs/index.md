@@ -3,6 +3,7 @@
 PyMS, Python MicroService, is a [Microservice chassis pattern](https://microservices.io/patterns/microservice-chassis.html) 
 like Spring Boot (Java) or Gizmo (Golang). PyMS is a collection of libraries, best practices and recommended ways to build 
 microservices with Python which handles cross-cutting concerns: 
+
 - Externalized configuration
 - Logging
 - Health checks
@@ -17,6 +18,7 @@ Get started with [Installation](installation.md) and then get an overview with t
 
 When we started to create microservice with no idea, we were looking for tutorials, guides, best practices, but we found
 nothing to create professional projects. Most articles say:
+
 - "Install flask"
 - "Create routes"
 - (Sometimes) "Create a swagger specs"

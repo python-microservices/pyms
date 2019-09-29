@@ -89,7 +89,7 @@ Microservice class initialize the libraries and other process by this way:
         return self.application
 ```
 
-Create a class that innerit from `pyms.flask.app.Microservice` and create and override methods with your own configuration.
+Create a class that inherit from `pyms.flask.app.Microservice` and create and override methods with your own configuration.
 The next example show how to create your own logger and innit a lib like [Flask Babel](https://pythonhosted.org/Flask-Babel/)
 
 ```python

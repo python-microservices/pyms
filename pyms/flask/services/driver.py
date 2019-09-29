@@ -16,7 +16,7 @@ class DriverService:
 
     def __getattr__(self, attr, *args, **kwargs):
         config_attribute = getattr(self.config, attr)
-        return config_attribute if config_attribute is "" or config_attribute != {} else self.default_values.get(attr,
+        return config_attribute if config_attribute == "" or config_attribute != {} else self.default_values.get(attr,
                                                                                                                  None)
 
 
