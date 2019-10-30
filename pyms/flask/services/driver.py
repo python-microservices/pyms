@@ -32,5 +32,5 @@ class ServicesManager:
 
     def get_service(self, service, *args, **kwargs):
         service_object = import_from("pyms.flask.services.{}".format(service), "Service")
-        logger.info("Init service {}".format(service))
+        logger.debug("Init service {}".format(service))
         return service_object(service=self.service, *args, **kwargs)
