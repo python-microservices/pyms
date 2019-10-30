@@ -45,7 +45,8 @@ class ConfFile(dict):
                 item = ConfFile(config=item, empty_init=self.empty_init)
             yield self.normalize_keys(key), item
 
-    def normalize_keys(self, key):
+    @staticmethod
+    def normalize_keys(key):
         """The keys will be transformed to a attribute. We need to replace the charactes not valid"""
         key = key.replace("-", "_")
         return key
@@ -65,18 +66,18 @@ class ConfFile(dict):
         except KeyError:
             if self.empty_init:
                 return ConfFile(config={}, empty_init=self.empty_init)
-            else:
-                raise AttrDoesNotExistException("Variable {} not exist in the config file".format(name))
+            raise AttrDoesNotExistException("Variable {} not exist in the config file".format(name))
 
     def _get_conf_from_env(self):
         config_file = os.environ.get(CONFIGMAP_FILE_ENVIRONMENT, self.default_file)
-        logger.info("[CONF] Searching file in ENV[{}]: {}...".format(CONFIGMAP_FILE_ENVIRONMENT, config_file))
+        logger.debug("[CONF] Searching file in ENV[{}]: {}...".format(CONFIGMAP_FILE_ENVIRONMENT, config_file))
         return self._get_conf_from_file(config_file)
 
-    def _get_conf_from_file(self, path: Text) -> dict:
+    @staticmethod
+    def _get_conf_from_file(path: Text) -> dict:
         if not path or not os.path.isfile(path):
             return {}
-        logger.info("[CONF] Configmap {} found".format(path))
+        logger.debug("[CONF] Configmap {} found".format(path))
         conf = anyconfig.load(path)
         return conf
 

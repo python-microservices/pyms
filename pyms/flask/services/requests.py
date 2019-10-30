@@ -156,7 +156,7 @@ class Service(DriverService):
 
         full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers=headers, propagate_headers=propagate_headers)
-        logger.info("Get with url {}, params {}, headers {}, kwargs {}".
+        logger.debug("Get with url {}, params {}, headers {}, kwargs {}".
                     format(full_url, params, headers, kwargs))
 
         session = requests.Session()
@@ -197,12 +197,12 @@ class Service(DriverService):
 
         full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers)
-        logger.info("Post with url {}, data {}, json {}, headers {}, kwargs {}".format(full_url, data, json,
+        logger.debug("Post with url {}, data {}, json {}, headers {}, kwargs {}".format(full_url, data, json,
                                                                                        headers, kwargs))
 
         session = requests.Session()
         response = self.requests(session=session).post(full_url, data=data, json=json, headers=headers, **kwargs)
-        logger.info("Response {}".format(response))
+        logger.debug("Response {}".format(response))
 
         return response
 
@@ -240,12 +240,12 @@ class Service(DriverService):
 
         full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers)
-        logger.info("Put with url {}, data {}, headers {}, kwargs {}".format(full_url, data, headers,
+        logger.debug("Put with url {}, data {}, headers {}, kwargs {}".format(full_url, data, headers,
                                                                              kwargs))
 
         session = requests.Session()
         response = self.requests(session=session).put(full_url, data, headers=headers, **kwargs)
-        logger.info("Response {}".format(response))
+        logger.debug("Response {}".format(response))
 
         return response
 
@@ -280,10 +280,10 @@ class Service(DriverService):
 
         full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers)
-        logger.info("Delete with url {}, headers {}, kwargs {}".format(full_url, headers, kwargs))
+        logger.debug("Delete with url {}, headers {}, kwargs {}".format(full_url, headers, kwargs))
 
         session = requests.Session()
         response = self.requests(session=session).delete(full_url, headers=headers, **kwargs)
-        logger.info("Response {}".format(response))
+        logger.debug("Response {}".format(response))
 
         return response
