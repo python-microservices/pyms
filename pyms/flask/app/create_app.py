@@ -53,8 +53,9 @@ class Microservice(metaclass=SingletonMeta):
         return self.application
 
     def init_tracer(self):
-        self.application.opentracing_tracer = init_lightstep_tracer(self.application.config["APP_NAME"])
-        self.application.tracer = FlaskTracing(self.application.opentracing_tracer, True, self.application)
+        if getattr(self, "tracer", False) and self.tracer:
+            client = self.tracer.get_client()
+            self.application.tracer = FlaskTracing(client, True, self.application)
 
     def init_logger(self):
         self.application.logger = logger
