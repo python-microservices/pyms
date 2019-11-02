@@ -8,9 +8,8 @@ from flask_opentracing import FlaskTracing
 from pyms.config.conf import get_conf
 from pyms.constants import LOGGER_NAME, SERVICE_ENVIRONMENT
 from pyms.flask.healthcheck import healthcheck_blueprint
-from pyms.flask.services.driver import ServicesManager, DriverService
+from pyms.flask.services.driver import ServicesManager
 from pyms.logger import CustomJsonFormatter
-from pyms.tracer.main import init_lightstep_tracer
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -35,8 +34,9 @@ class SingletonMeta(type):
 class Microservice(metaclass=SingletonMeta):
     service = None
     application = None
-    swagger = DriverService
-    requests = DriverService
+    swagger = False
+    request = False
+    tracer = False
 
     def __init__(self, *args, **kwargs):
         self.service = kwargs.get("service", os.environ.get(SERVICE_ENVIRONMENT, "ms"))
@@ -71,7 +71,7 @@ class Microservice(metaclass=SingletonMeta):
         self.application.logger.setLevel(logging.INFO)
 
     def init_app(self) -> Flask:
-        if getattr(self, "swagger", False):
+        if getattr(self, "swagger", False) and self.swagger:
             app = connexion.App(__name__, specification_dir=os.path.join(self.path, self.swagger.path))
             app.add_api(
                 self.swagger.file,
