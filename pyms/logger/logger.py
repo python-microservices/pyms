@@ -5,6 +5,7 @@ import logging
 
 import opentracing
 from flask import request, current_app
+from opentracing_instrumentation import get_current_span
 from pythonjsonlogger import jsonlogger
 
 from pyms.constants import LOGGER_NAME
@@ -32,13 +33,20 @@ class CustomJsonFormatter(jsonlogger.JsonFormatter):
             # FLASK https://github.com/opentracing-contrib/python-flask
             self.tracer = current_app.tracer
             # Add traces
+            span = None
             if self.tracer:
                 span = self.tracer.get_span(request=request)
-                headers = {}
-                self.tracer.tracer.inject(span.context, opentracing.Format.HTTP_HEADERS, headers)
-                log_record["trace"] = headers.get('X-B3-TraceId', "")
-                log_record["span"] = headers.get('X-B3-SpanId', "")
-                log_record["parent"] = headers.get('X-B3-ParentSpanId', "")
+                if not span:
+                    span = get_current_span()
+                    if not span:
+                        span = self.tracer.tracer.start_span()
+
+            headers = {}
+            context = span.context if span else None
+            self.tracer.tracer.inject(context, opentracing.Format.HTTP_HEADERS, headers)
+            log_record["trace"] = headers.get('X-B3-TraceId', "")
+            log_record["span"] = headers.get('X-B3-SpanId', "")
+            log_record["parent"] = headers.get('X-B3-ParentSpanId', "")
         except Exception as ex:
             logger.error("Tracer error {}".format(ex))
 

@@ -13,7 +13,7 @@ connexion = {extras = ["swagger-ui"],version = ">=2.2.0"}
 jaeger-client = "==4.1.0"
 flask-opentracing = "*"
 opentracing = ">=2.1"
-
+opentracing-instrumentation = "==3.2.1"
 [dev-packages]
 requests-mock = "*"
 coverage = "==4.4.0"
