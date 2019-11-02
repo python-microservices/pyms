@@ -1,4 +1,4 @@
-ms:
+my-ms:
   DEBUG: true
   TESTING: true
   APP_NAME: "Python Microservice With Flask"
