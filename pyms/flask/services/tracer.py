@@ -29,29 +29,31 @@ class Service(DriverService):
         return opentracing_tracer
 
     def init_jaeger_tracer(self):
-        from jaeger_client import Config
-
         """This scaffold is configured whith `Jeager <https://github.com/jaegertracing/jaeger>`_ but you can use
         one of the `opentracing tracers <http://opentracing.io/documentation/pages/supported-tracers.html>`_
         :param service_name: the name of your application to register in the tracer
         :return: opentracing.Tracer
         """
+        from jaeger_client import Config
         host = {}
         if self.host:
             host = {
                 'local_agent': {
-                    'reporting_host': self.host,
-                    'reporting_port': '5775',
+                    'reporting_host': self.host
                 }
             }
 
         config = Config(config={
-            **{
+            **{'sampler': {
+                'type': 'const',
+                'param': 1,
+            },
                 'propagation': 'b3',
                 'logging': True
             },
             **host
-        }, service_name=self.component_name)
+        }, service_name=self.component_name,
+            validate=True)
         return config.initialize_tracer()
 
     def init_lightstep_tracer(self):
