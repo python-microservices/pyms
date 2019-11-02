@@ -9,7 +9,7 @@ from pythonjsonlogger import jsonlogger
 
 from pyms.constants import LOGGER_NAME
 
-logger = logging.getLogger(LOGGER_NAME)
+logger = logging.getLogger(LOGGER_NAME + "-tracer")
 
 
 class CustomJsonFormatter(jsonlogger.JsonFormatter):
@@ -27,18 +27,20 @@ class CustomJsonFormatter(jsonlogger.JsonFormatter):
         else:
             log_record['severity'] = record.levelname
         log_record["service"] = self.service_name
+        1.4.0-rc1
         try:
             # FLASK https://github.com/opentracing-contrib/python-flask
             self.tracer = current_app.tracer
             # Add traces
-            span = self.tracer.get_span(request=request)
-            headers = {}
-            self.tracer.tracer.inject(span.context, opentracing.Format.HTTP_HEADERS, headers)
-            log_record["trace"] = headers['ot-tracer-traceid']
-            log_record["span"] = headers['ot-tracer-spanid']
-            log_record["parent"] = headers.get('ot-tracer-parentspanid', '')
+            if self.tracer:
+                span = self.tracer.get_span(request=request)
+                headers = {}
+                self.tracer.tracer.inject(span.context, opentracing.Format.HTTP_HEADERS, headers)
+                log_record["trace"] = headers.get('X-B3-TraceId', "")
+                log_record["span"] = headers.get('X-B3-SpanId', "")
+                log_record["parent"] = headers.get('X-B3-ParentSpanId', "")
         except Exception as ex:
-            logger.debug("Tracer error {}".format(ex))
+            logger.error("Tracer error {}".format(ex))
 
     def add_service_name(self, project_name):
         self.service_name = project_name.lower()

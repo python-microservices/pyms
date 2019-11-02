@@ -68,7 +68,11 @@ class Microservice(metaclass=SingletonMeta):
 
         self.application.logger.addHandler(log_handler)
         self.application.logger.propagate = False
-        self.application.logger.setLevel(logging.INFO)
+
+        if self.application.config["DEBUG"]:
+            self.application.logger.setLevel(logging.DEBUG)
+        else:
+            self.application.logger.setLevel(logging.INFO)
 
     def init_app(self) -> Flask:
         if getattr(self, "swagger", False) and self.swagger:
