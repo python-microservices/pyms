@@ -3,7 +3,7 @@ python:
     - '3.6'
 install:
   - pip install pipenv
-  - pip install -U tox python-coveralls
+  - pip install -U tox coverage==4.0.3 coveralls==1.8.2
 
 script:
   - pipenv install --dev
