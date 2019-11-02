@@ -4,6 +4,8 @@ pyms:
   swagger:
     path: ""
     file: "swagger.yaml"
+  tracer:
+    client: ""
 my-ms:
   DEBUG: true
   TESTING: true

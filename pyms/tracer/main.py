@@ -4,7 +4,7 @@
 import lightstep
 
 
-# def init_jaeger_tracer():
+# def init_jaeger_tracer(component_name):
 #     """This scaffold is configured whith `Jeager <https://github.com/jaegertracing/jaeger>`_ but you can use
 #     one of the `opentracing tracers <http://opentracing.io/documentation/pages/supported-tracers.html>`_
 #     :param service_name: the name of your application to register in the tracer
