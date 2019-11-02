@@ -80,7 +80,7 @@ class HomeWithFlaskTests(unittest.TestCase):
     def setUp(self):
         os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                                               "config-tests-flask.yml")
-        ms = MyMicroservice(path=__file__)
+        ms = MyMicroservice(service="my-ms", path=__file__)
         self.app = ms.create_app()
         self.client = self.app.test_client()
         self.assertEqual("Python Microservice With Flask", self.app.config["APP_NAME"])
