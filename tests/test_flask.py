@@ -26,7 +26,6 @@ class MicroserviceTest(unittest.TestCase):
                                                               "config-tests.yml")
         os.environ[SERVICE_ENVIRONMENT] = "my-ms"
 
-
     def test_singleton(self):
         ms1 = Microservice(service="my-ms", path=__file__)
         ms2 = Microservice(service="my-ms", path=__file__)
@@ -47,7 +46,7 @@ class MicroserviceTest(unittest.TestCase):
         self.assertEqual(ms1.config.subservice1, config().subservice1)
 
 
-class HomeTests(unittest.TestCase):
+class HomeWithConnexionTests(unittest.TestCase):
     """
     Tests for healthcheack endpoints
     """
@@ -58,6 +57,7 @@ class HomeTests(unittest.TestCase):
         ms = Microservice(service="my-ms", path=__file__)
         self.app = ms.create_app()
         self.client = self.app.test_client()
+        self.assertEqual("Python Microservice", self.app.config["APP_NAME"])
 
     def test_home(self):
         response = self.client.get('/')
@@ -69,4 +69,22 @@ class HomeTests(unittest.TestCase):
 
     def test_error(self):
         response = self.client.get('/notexist')
+        self.assertEqual(404, response.status_code)
+
+
+class HomeWithFlaskTests(unittest.TestCase):
+    """
+    Tests for healthcheack endpoints
+    """
+
+    def setUp(self):
+        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                                              "config-tests-flask.yml")
+        ms = MyMicroservice(path=__file__)
+        self.app = ms.create_app()
+        self.client = self.app.test_client()
+        self.assertEqual("Python Microservice With Flask", self.app.config["APP_NAME"])
+
+    def test_home(self):
+        response = self.client.get('/')
         self.assertEqual(404, response.status_code)

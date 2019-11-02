@@ -89,7 +89,7 @@ class Microservice(metaclass=SingletonMeta):
             application = app.app
             application.connexion_app = app
         else:
-            check_package_exists("Flask")
+            check_package_exists("flask")
             application = Flask(__name__, static_folder=os.path.join(self.path, 'static'),
                                 template_folder=os.path.join(self.path, 'templates'))
 
