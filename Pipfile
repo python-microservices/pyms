@@ -16,7 +16,7 @@ opentracing = ">=2.1"
 
 [dev-packages]
 requests-mock = "*"
-coverage = "==4.0.3"
+coverage = "==4.4.0"
 pytest = "*"
 pytest-cov = "*"
 pylint = "*"
