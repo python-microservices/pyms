@@ -1,8 +1,8 @@
 import logging
 
 from pyms.constants import LOGGER_NAME
-
 from pyms.flask.services.driver import DriverService
+from pyms.utils.utils import check_package_exists, import_package, import_from
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -34,7 +34,8 @@ class Service(DriverService):
         :param service_name: the name of your application to register in the tracer
         :return: opentracing.Tracer
         """
-        from jaeger_client import Config
+        check_package_exists("jaeger_client")
+        Config = import_from("jaeger_client", "Config")
         host = {}
         if self.host:
             host = {
@@ -57,5 +58,6 @@ class Service(DriverService):
         return config.initialize_tracer()
 
     def init_lightstep_tracer(self):
-        import lightstep
+        check_package_exists("lightstep")
+        lightstep = import_package("lightstep")
         return lightstep.Tracer(component_name=self.component_name)

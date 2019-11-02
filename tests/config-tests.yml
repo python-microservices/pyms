@@ -5,7 +5,9 @@ pyms:
     path: ""
     file: "swagger.yaml"
   tracer:
-    client: ""
+    client: "jaeger"
+    host: "localhost"
+    component_name: "Python Microservice"
 my-ms:
   DEBUG: true
   TESTING: true

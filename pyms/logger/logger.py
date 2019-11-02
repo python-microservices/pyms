@@ -27,7 +27,7 @@ class CustomJsonFormatter(jsonlogger.JsonFormatter):
         else:
             log_record['severity'] = record.levelname
         log_record["service"] = self.service_name
-        
+
         try:
             # FLASK https://github.com/opentracing-contrib/python-flask
             self.tracer = current_app.tracer

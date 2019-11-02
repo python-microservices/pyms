@@ -10,6 +10,7 @@ from pyms.constants import LOGGER_NAME, SERVICE_ENVIRONMENT
 from pyms.flask.healthcheck import healthcheck_blueprint
 from pyms.flask.services.driver import ServicesManager
 from pyms.logger import CustomJsonFormatter
+from pyms.utils.utils import check_package_exists
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -76,6 +77,7 @@ class Microservice(metaclass=SingletonMeta):
 
     def init_app(self) -> Flask:
         if getattr(self, "swagger", False) and self.swagger:
+            check_package_exists("connexion")
             app = connexion.App(__name__, specification_dir=os.path.join(self.path, self.swagger.path))
             app.add_api(
                 self.swagger.file,
@@ -87,6 +89,7 @@ class Microservice(metaclass=SingletonMeta):
             application = app.app
             application.connexion_app = app
         else:
+            check_package_exists("Flask")
             application = Flask(__name__, static_folder=os.path.join(self.path, 'static'),
                                 template_folder=os.path.join(self.path, 'templates'))
 
