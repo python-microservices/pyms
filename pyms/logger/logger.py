@@ -36,7 +36,7 @@ class CustomJsonFormatter(jsonlogger.JsonFormatter):
             span = None
             if self.tracer:
                 span = self.tracer.get_span(request=request)
-                if not span:
+                if not span:  # pragma: no cover
                     span = get_current_span()
                     if not span:
                         span = self.tracer.tracer.start_span()

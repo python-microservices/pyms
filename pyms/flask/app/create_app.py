@@ -22,9 +22,10 @@ class SingletonMeta(type):
     metaclass because it is best suited for this purpose.
     """
     _instances = {}
+    _singleton = True
 
     def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances:
+        if cls not in cls._instances or not cls._singleton:
             cls._instances[cls] = super(SingletonMeta, cls).__call__(*args, **kwargs)
         else:
             cls._instances[cls].__init__(*args, **kwargs)
@@ -38,6 +39,7 @@ class Microservice(metaclass=SingletonMeta):
     swagger = False
     request = False
     tracer = False
+    _singleton = True
 
     def __init__(self, *args, **kwargs):
         self.service = kwargs.get("service", os.environ.get(SERVICE_ENVIRONMENT, "ms"))
@@ -72,7 +74,7 @@ class Microservice(metaclass=SingletonMeta):
 
         if self.application.config["DEBUG"]:
             self.application.logger.setLevel(logging.DEBUG)
-        else:
+        else:  # pragma: no cover
             self.application.logger.setLevel(logging.INFO)
 
     def init_app(self) -> Flask:

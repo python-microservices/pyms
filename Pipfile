@@ -24,6 +24,7 @@ tox = "*"
 safety = "*"
 bandit = "*"
 mkdocs = "*"
+lightstep = "==4.1.0"
 
 [requires]
 python_version = "3.6"
