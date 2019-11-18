@@ -5,6 +5,7 @@ import logging
 import opentracing
 import requests
 from flask import current_app, request
+from opentracing_instrumentation import get_current_span
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
@@ -42,6 +43,7 @@ class Service(DriverService):
     default_values = {
         "data": ""
     }
+    tracer = None
 
     def __init__(self, service, *args, **kwargs):
         """Initialization for trace headers propagation"""
@@ -81,8 +83,13 @@ class Service(DriverService):
 
         try:
             # FLASK https://github.com/opentracing-contrib/python-flask
-            span = self._tracer.get_span(request)
-            self._tracer.tracer.inject(span.context, opentracing.Format.HTTP_HEADERS, headers)
+            span = self.tracer.get_span(request=request)
+            if not span:  # pragma: no cover
+                span = get_current_span()
+                if not span:
+                    span = self.tracer.tracer.start_span()
+            context = span.context if span else None
+            self._tracer.tracer.inject(context, opentracing.Format.HTTP_HEADERS, headers)
         except Exception as ex:
             logger.debug("Tracer error {}".format(ex))
         return headers
@@ -104,8 +111,8 @@ class Service(DriverService):
         if not headers:
             headers = {}
 
-        self._tracer = current_app.tracer
-        if self._tracer:
+        self.tracer = current_app.tracer
+        if self.tracer:
             headers = self.insert_trace_headers(headers)
         if self.config.propagate_headers or propagate_headers:
             headers = self.propagate_headers(headers)
