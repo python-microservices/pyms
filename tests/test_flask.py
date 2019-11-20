@@ -1,5 +1,6 @@
 import os
 import unittest
+from unittest import mock
 
 import pytest
 from flask import current_app
@@ -68,22 +69,28 @@ class MicroserviceTest(unittest.TestCase):
         ms1 = MyMicroservice(service="my-ms", path=__file__, override_instance=True)
         self.assertEqual(ms1.config.subservice1, config().subservice1)
 
+    def test_config_singleton(self):
+        conf_one = config().subservice1
+        conf_two = config().subservice1
+
+        assert conf_one is conf_two
+
 
 @pytest.mark.parametrize("payload, configfile, status_code", [
     (
-            "Python Microservice",
-            "config-tests.yml",
-            200
+        "Python Microservice",
+        "config-tests.yml",
+        200
     ),
     (
-            "Python Microservice With Flask",
-            "config-tests-flask.yml",
-            404
+        "Python Microservice With Flask",
+        "config-tests-flask.yml",
+        404
     ),
     (
-            "Python Microservice With Flask and Lightstep",
-            "config-tests-flask-trace-lightstep.yml",
-            200
+        "Python Microservice With Flask and Lightstep",
+        "config-tests-flask-trace-lightstep.yml",
+        200
     )
 ])
 def test_configfiles(payload, configfile, status_code):
