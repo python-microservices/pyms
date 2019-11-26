@@ -8,6 +8,7 @@ from flask_opentracing import FlaskTracing
 from pyms.config.conf import get_conf
 from pyms.constants import LOGGER_NAME, SERVICE_ENVIRONMENT
 from pyms.flask.healthcheck import healthcheck_blueprint
+from pyms.flask.metrics import metrics_blueprint, monitor
 from pyms.flask.services.driver import ServicesManager
 from pyms.logger import CustomJsonFormatter
 from pyms.utils.utils import check_package_exists
@@ -113,6 +114,8 @@ class Microservice(metaclass=SingletonMeta):
 
         # Initialize Blueprints
         self.application.register_blueprint(healthcheck_blueprint)
+        self.application.register_blueprint(metrics_blueprint)
+        monitor(self.application)
 
         self.init_libs()
         self.add_error_handlers()
