@@ -8,7 +8,7 @@ from flask_opentracing import FlaskTracing
 from pyms.config.conf import get_conf
 from pyms.constants import LOGGER_NAME, SERVICE_ENVIRONMENT
 from pyms.flask.healthcheck import healthcheck_blueprint
-from pyms.flask.metrics import metrics_blueprint, monitor
+from pyms.flask.metrics import metrics_blueprint, monitor, logger_metrics
 from pyms.flask.services.driver import ServicesManager
 from pyms.logger import CustomJsonFormatter
 from pyms.utils.utils import check_package_exists
@@ -63,6 +63,10 @@ class Microservice(metaclass=SingletonMeta):
 
     def init_logger(self):
         self.application.logger = logger
+        self.application.logger = logger_metrics(
+            self.application.config["APP_NAME"],
+            self.application.logger
+        )
         os.environ['WERKZEUG_RUN_MAIN'] = "true"
 
         formatter = CustomJsonFormatter('(timestamp) (level) (name) (module) (funcName) (lineno) (message)')
