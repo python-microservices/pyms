@@ -62,10 +62,9 @@ class Microservice(metaclass=SingletonMeta):
             self.application.tracer = FlaskTracing(client, True, self.application)
 
     def init_logger(self):
-        self.application.logger = logger
         self.application.logger = logger_metrics(
             self.application.config["APP_NAME"],
-            self.application.logger
+            logger
         )
         os.environ['WERKZEUG_RUN_MAIN'] = "true"
 
