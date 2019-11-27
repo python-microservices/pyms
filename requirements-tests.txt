@@ -85,3 +85,4 @@ webencodings==0.5.1
 Werkzeug==0.16.0
 wrapt==1.11.2
 zipp==0.6.0
+prometheus_client==0.7.1
