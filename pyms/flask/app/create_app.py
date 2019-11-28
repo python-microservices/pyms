@@ -62,6 +62,7 @@ class Microservice(metaclass=SingletonMeta):
             self.application.tracer = FlaskTracing(client, True, self.application)
 
     def init_logger(self):
+        self.application.logger = logger
         os.environ['WERKZEUG_RUN_MAIN'] = "true"
 
         formatter = CustomJsonFormatter('(timestamp) (level) (name) (module) (funcName) (lineno) (message)')
