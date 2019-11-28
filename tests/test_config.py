@@ -1,8 +1,9 @@
 import logging
 import os
 import unittest
+from unittest import mock
 
-# from pyms.config.conf import Config
+from pyms.config.conf import get_conf
 from pyms.config.confile import ConfFile
 from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT, LOGGER_NAME
 from pyms.exceptions import AttrDoesNotExistException, ConfigDoesNotFoundException, ServiceDoesNotExistException
@@ -89,22 +90,6 @@ class ConfTests(unittest.TestCase):
         self.assertEqual(config.my_ms.test_var, "general")
 
 
-# class ConfServiceTests(unittest.TestCase):
-
-#     def test_config_with_service(self):
-#         class MyService(Config):
-#             service = "service"
-
-#         config = MyService()
-#         configuration = config.config(config={"service": {"service1": "a", "service2": "b"}})
-#         self.assertEqual(configuration.service1, "a")
-
-#     def test_config_with_service_not_exist(self):
-#         config = Config()
-#         with self.assertRaises(ServiceDoesNotExistException):
-#             configuration = config.config(config={"service": {"service1": "a", "service2": "b"}})
-
-
 class ConfNotExistTests(unittest.TestCase):
     def test_empty_conf(self):
         config = ConfFile(empty_init=True)
@@ -117,6 +102,44 @@ class ConfNotExistTests(unittest.TestCase):
     def test_empty_conf_three_levels(self):
         config = ConfFile(empty_init=True)
         self.assertEqual(config.my_ms.level_two.level_three, {})
+
+
+
+class GetConfig(unittest.TestCase):
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+    def setUp(self):
+        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(self.BASE_DIR, "config-tests.yml")
+
+    def tearDown(self):
+        del os.environ[CONFIGMAP_FILE_ENVIRONMENT]
+
+    def test_default(self):
+        config = get_conf(service="my-ms")
+
+        assert config.APP_NAME == "Python Microservice"
+        assert config.subservice1.test == "input"
+
+    @mock.patch('pyms.config.conf.ConfFile')
+    def test_memoized(self, mock_confile):
+        mock_confile.pyms = {}
+        get_conf(service="pyms")
+        get_conf(service="pyms")
+
+        mock_confile.assert_called_once()
+
+    @mock.patch('pyms.config.conf.ConfFile')
+    def test_without_memoize(self, mock_confile):
+        mock_confile.pyms = {}
+        get_conf(service="pyms", memoize=False)
+        get_conf(service="pyms", memoize=False)
+
+        assert mock_confile.call_count == 2
+
+    @mock.patch('pyms.config.conf.ConfFile')
+    def test_without_params(self, mock_confile):
+        with self.assertRaises(ServiceDoesNotExistException):
+            get_conf()
 
 
 if __name__ == '__main__':
