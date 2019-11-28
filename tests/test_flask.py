@@ -39,6 +39,12 @@ class HomeWithFlaskTests(unittest.TestCase):
         response = self.client.get('/')
         self.assertEqual(404, response.status_code)
 
+    def test_healthcheck(self):
+        response = self.client.get('/healthcheck')
+        self.assertEqual(b"OK", response.data)
+        self.assertEqual(200, response.status_code)
+
+
 
 class MicroserviceTest(unittest.TestCase):
     """

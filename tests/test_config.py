@@ -68,6 +68,14 @@ class ConfTests(unittest.TestCase):
         config2 = {"test_1": {"test_1_1": "a", "test_1_2": "b"}}
         self.assertEqual(config1, config2)
 
+    def test_equal_instances_ko(self):
+        config = ConfFile(config={"test-1": {"test-1-1": "a"}})
+        no_valid_type = ConfigDoesNotFoundException
+
+        result = config == no_valid_type
+
+        self.assertEqual(result, False)
+
     def test_dictionary_attribute_not_exists(self):
         config = ConfFile(config={"test-1": "a"})
         with self.assertRaises(AttrDoesNotExistException):
@@ -140,7 +148,3 @@ class GetConfig(unittest.TestCase):
     def test_without_params(self, mock_confile):
         with self.assertRaises(ServiceDoesNotExistException):
             get_conf()
-
-
-if __name__ == '__main__':
-    unittest.main()
