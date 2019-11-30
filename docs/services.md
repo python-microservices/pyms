@@ -23,6 +23,7 @@ At the moment, the next metrics are available:
 - Incoming requests number as a counter, divided by HTTP method, endpoint and
   HTTP status
 - Total number of log events divided by level
+- If `tracer` service activated and it's jaeger, it will show its metrics
 
 To use this service, you may add the next to you configuration file:
 

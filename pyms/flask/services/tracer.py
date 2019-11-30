@@ -1,8 +1,11 @@
 import logging
 
+from jaeger_client.metrics.prometheus import PrometheusMetricsFactory
+
 from pyms.constants import LOGGER_NAME
 from pyms.flask.services.driver import DriverService
 from pyms.utils.utils import check_package_exists, import_package, import_from
+from pyms.config.conf import get_conf
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -43,7 +46,11 @@ class Service(DriverService):
                     'reporting_host': self.host
                 }
             }
-
+        metrics_config = get_conf(service="pyms.metrics", empty_init=True, memoize=False)
+        metrics = ""
+        if metrics_config:
+            service_name = self.component_name.lower().replace("-", "_").replace(" ", "_")
+            metrics = PrometheusMetricsFactory(namespace=service_name)
         config = Config(config={
             **{'sampler': {
                 'type': 'const',
@@ -54,6 +61,7 @@ class Service(DriverService):
             },
             **host
         }, service_name=self.component_name,
+            metrics_factory=metrics,
             validate=True)
         return config.initialize_tracer()
 
