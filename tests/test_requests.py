@@ -12,6 +12,33 @@ from pyms.flask.app import Microservice
 from pyms.flask.services.requests import DEFAULT_RETRIES
 
 
+class RequestServiceNoDataTests(unittest.TestCase):
+    """Test common rest operations wrapper.
+    """
+
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+    def setUp(self):
+        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(self.BASE_DIR, "config-tests-requests-no-data.yml")
+        ms = Microservice(service="my-ms", path=__file__)
+        self.app = ms.create_app()
+        self.request = ms.requests
+
+    @requests_mock.Mocker()
+    def test_get(self, mock_request):
+        url = "http://www.my-site.com/users"
+        full_url = url
+        text = json.dumps([{'id': 1, 'name': 'Peter', 'email': 'peter@my-site.com.com'},
+                                    {'id': 2, 'name': 'Jon', 'email': 'jon@my-site.com.com'}])
+
+        with self.app.app_context():
+            mock_request.get(full_url, text=text)
+            response = self.request.get(url)
+
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(text, response.text)
+
+
 class RequestServiceTests(unittest.TestCase):
     """Test common rest operations wrapper.
     """
