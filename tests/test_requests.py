@@ -268,6 +268,35 @@ class RequestServiceTests(unittest.TestCase):
 
         self.assertEqual(expected_headers, headers)
 
+    def test_propagate_headers_on_get(self):
+        url = "http://www.my-site.com/users"
+        mock_headers = {
+            'A': 'b',
+        }
+        self.request.propagate_headers = unittest.mock.Mock()
+        self.request.propagate_headers.return_value = mock_headers
+        with self.app.test_request_context(
+                '/tests/', data={'format': 'short'}, headers=mock_headers):
+            self.request.get(url, propagate_headers=True)
+
+        self.request.propagate_headers.assert_called_once_with({})
+
+    def test_propagate_headers_on_get_with_headers(self):
+        url = "http://www.my-site.com/users"
+        mock_headers = {
+            'A': 'b',
+        }
+        get_headers = {
+            'C': 'd',
+        }
+        self.request.propagate_headers = unittest.mock.Mock()
+        self.request.propagate_headers.return_value = mock_headers
+        with self.app.test_request_context(
+                '/tests/', data={'format': 'short'}, headers=mock_headers):
+            self.request.get(url, headers=get_headers, propagate_headers=True)
+
+        self.request.propagate_headers.assert_called_once_with(get_headers)
+
     @requests_mock.Mocker()
     def test_retries_with_500(self, mock_request):
         url = 'http://localhost:9999'

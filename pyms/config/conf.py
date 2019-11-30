@@ -2,28 +2,14 @@ from pyms.config.confile import ConfFile
 from pyms.exceptions import ServiceDoesNotExistException
 
 
-class Config:
-    service = None
-    _config = False
-
-    def __init__(self):
-        pass
-
-    def config(self, *args, **kwargs):
-        """Set the configuration, if our yaml file is like:
-        myservice:
-          myservice1:
-           myvar1
-        and we want to get the configuration of service1, our self.service will be "myservice.myservice1"
-        """
-        if not self._config:
-            self._config = ConfFile(*args, **kwargs)
-        if not self.service:
-            raise ServiceDoesNotExistException("Service not defined")
-        return getattr(self._config, self.service)
+__service_configs = {}
 
 
-def get_conf(service=None, *args, **kwargs):
-    config = Config()
-    config.service = service
-    return config.config(*args, **kwargs)
+def get_conf(*args, **kwargs):
+    service = kwargs.pop('service', None)
+    memoize = kwargs.pop('memoize', True)
+    if not service:
+        raise ServiceDoesNotExistException("Service not defined")
+    if not memoize or service not in __service_configs:
+        __service_configs[service] = ConfFile(*args, **kwargs)
+    return getattr(__service_configs[service], service)
