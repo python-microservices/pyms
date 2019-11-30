@@ -218,7 +218,6 @@
             "hashes": [
                 "sha256:f3b280d030afb652f79d67c5586157c5c1355c9a58dfc7940566e28d28f3df1b"
             ],
-            "index": "pypi",
             "version": "==0.15.6"
         },
         "python-json-logger": {
