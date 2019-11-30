@@ -44,7 +44,7 @@ class Microservice(metaclass=SingletonMeta):
     def __init__(self, *args, **kwargs):
         self.service = kwargs.get("service", os.environ.get(SERVICE_ENVIRONMENT, "ms"))
         self.path = os.path.dirname(kwargs.get("path", __file__))
-        self.config = get_conf(service=self.service)
+        self.config = get_conf(service=self.service, memoize=self._singleton)
         self.init_services()
 
     def init_services(self):

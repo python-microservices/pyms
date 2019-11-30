@@ -25,7 +25,7 @@ class ServicesManager:
 
     def __init__(self, service=None):
         self.service = (service if service else SERVICE_BASE)
-        self.config = get_conf(service=self.service, empty_init=True)
+        self.config = get_conf(service=self.service, empty_init=True, memoize=False)
 
     def get_services(self):
         return ((k, self.get_service(k)) for k in self.config.__dict__.keys() if k not in ['empty_init', ])
