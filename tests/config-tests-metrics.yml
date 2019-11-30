@@ -1,0 +1,8 @@
+---
+pyms:
+  metrics: true
+my-ms:
+  DEBUG: true
+  TESTING: true
+  APP_NAME: "Python Microservice"
+  APPLICATION_ROOT: /
