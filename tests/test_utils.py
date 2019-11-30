@@ -6,7 +6,7 @@ import unittest
 import pytest
 
 from pyms.exceptions import PackageNotExists
-from pyms.utils.utils import check_package_exists, import_package
+from pyms.utils import check_package_exists, import_package
 
 
 class ConfUtils(unittest.TestCase):

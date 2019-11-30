@@ -35,8 +35,8 @@ class ConfFile(dict):
             kwargs=kwargs,
         ))
 
-        config = {k: v for k, v in self.normalize_config(config)}
-        [setattr(self, k, v) for k, v in config.items()]
+        config = dict(self.normalize_config(config))
+        _ = [setattr(self, k, v) for k, v in config.items()]
         super(ConfFile, self).__init__(config)
 
     def normalize_config(self, config):

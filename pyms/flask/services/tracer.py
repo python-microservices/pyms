@@ -2,7 +2,7 @@ import logging
 
 from pyms.constants import LOGGER_NAME
 from pyms.flask.services.driver import DriverService
-from pyms.utils.utils import check_package_exists, import_package, import_from
+from pyms.utils import check_package_exists, import_package, import_from
 
 logger = logging.getLogger(LOGGER_NAME)
 
