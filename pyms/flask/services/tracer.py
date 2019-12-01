@@ -50,7 +50,7 @@ class Service(DriverService):
         metrics = ""
         if metrics_config:
             service_name = self.component_name.lower().replace("-", "_").replace(" ", "_")
-            metrics = PrometheusMetricsFactory(namespace=service_name)
+            metrics = PrometheusMetricsFactory()
         config = Config(config={
             **{'sampler': {
                 'type': 'const',
