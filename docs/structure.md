@@ -8,7 +8,7 @@ With the function `create_app` initialize the Flask app, register [blueprints](h
 and initialize all libraries such as Swagger, database, trace system, custom logger format, etc.
 
 ### pyms/flask/services
-Integrations and wrappers over common libs like request, swagger, connexion
+Integrations and wrappers over common libs like request, swagger, connexion or metrics.
 
 ### pyms/flask/healthcheck
 This view is usually used by Kubernetes, Eureka and other systems to check if our application is running.
