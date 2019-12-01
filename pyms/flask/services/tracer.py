@@ -4,7 +4,7 @@ from jaeger_client.metrics.prometheus import PrometheusMetricsFactory
 
 from pyms.constants import LOGGER_NAME
 from pyms.flask.services.driver import DriverService
-from pyms.utils.utils import check_package_exists, import_package, import_from
+from pyms.utils import check_package_exists, import_package, import_from
 from pyms.config.conf import get_conf
 
 logger = logging.getLogger(LOGGER_NAME)

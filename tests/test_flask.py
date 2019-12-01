@@ -48,7 +48,7 @@ class HomeWithFlaskTests(unittest.TestCase):
 
 class MicroserviceTest(unittest.TestCase):
     """
-    Tests for healthcheack endpoints
+    Tests for Singleton
     """
 
     def setUp(self):

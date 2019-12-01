@@ -1,16 +1,17 @@
 import logging
 import os
+from typing import Text
 
 import connexion
 from flask import Flask
 from flask_opentracing import FlaskTracing
 
-from pyms.config.conf import get_conf
+from pyms.config import get_conf
 from pyms.constants import LOGGER_NAME, SERVICE_ENVIRONMENT
 from pyms.flask.healthcheck import healthcheck_blueprint
 from pyms.flask.services.driver import ServicesManager
 from pyms.logger import CustomJsonFormatter
-from pyms.utils.utils import check_package_exists
+from pyms.utils import check_package_exists
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -56,7 +57,7 @@ class Microservice(metaclass=SingletonMeta):
         return self.application
 
     def init_tracer(self):
-        if getattr(self, "tracer", False) and self.tracer:
+        if self._exists_service("tracer"):
             client = self.tracer.get_client()
             self.application.tracer = FlaskTracing(client, True, self.application)
 
@@ -79,7 +80,7 @@ class Microservice(metaclass=SingletonMeta):
             self.application.logger.setLevel(logging.INFO)
 
     def init_app(self) -> Flask:
-        if getattr(self, "swagger", False) and self.swagger:
+        if self._exists_service("swagger"):
             check_package_exists("connexion")
             app = connexion.App(__name__, specification_dir=os.path.join(self.path, self.swagger.path))
             app.add_api(
@@ -134,6 +135,10 @@ class Microservice(metaclass=SingletonMeta):
         self.init_metrics()
 
         return self.application
+
+    def _exists_service(self, service_name: Text) -> bool:
+        service = getattr(self, service_name, False)
+        return service and service is not None
 
     def add_error_handlers(self):
         """Subclasses will override this method in order to add specific error handlers. This should be done with
