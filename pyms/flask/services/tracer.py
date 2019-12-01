@@ -2,10 +2,10 @@ import logging
 
 from jaeger_client.metrics.prometheus import PrometheusMetricsFactory
 
+from pyms.config.conf import get_conf
 from pyms.constants import LOGGER_NAME
 from pyms.flask.services.driver import DriverService
 from pyms.utils import check_package_exists, import_package, import_from
-from pyms.config.conf import get_conf
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -49,20 +49,21 @@ class Service(DriverService):
         metrics_config = get_conf(service="pyms.metrics", empty_init=True, memoize=False)
         metrics = ""
         if metrics_config:
-            service_name = self.component_name.lower().replace("-", "_").replace(" ", "_")
             metrics = PrometheusMetricsFactory()
-        config = Config(config={
-            **{'sampler': {
-                'type': 'const',
-                'param': 1,
-            },
-                'propagation': 'b3',
-                'logging': True
-            },
-            **host
-        }, service_name=self.component_name,
+        config = Config(
+            config={
+                **{'sampler': {
+                    'type': 'const',
+                    'param': 1,
+                },
+                    'propagation': 'b3',
+                    'logging': True
+                },
+                **host
+            }, service_name=self.component_name,
             metrics_factory=metrics,
-            validate=True)
+            validate=True
+        )
         return config.initialize_tracer()
 
     def init_lightstep_tracer(self):

@@ -15,7 +15,7 @@ Extend the [requests library](http://docs.python-requests.org/en/master/) with t
 Encapsulate common rest operations between business services propagating trace headers if set up.
 
 ## Metrics
-Adds ![Prometheus](https://prometheus.io/) metrics using the ![Prometheus Client
+Adds [Prometheus](https://prometheus.io/) metrics using the [Prometheus Client
 Library](https://github.com/prometheus/client_python).
 
 At the moment, the next metrics are available:
