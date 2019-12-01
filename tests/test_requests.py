@@ -46,7 +46,7 @@ class RequestServiceTests(unittest.TestCase):
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
     def setUp(self):
-        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(self.BASE_DIR, "config-tests.yml")
+        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(self.BASE_DIR, "config-tests-requests.yml")
         ms = Microservice(service="my-ms", path=__file__)
         self.app = ms.create_app()
         self.request = ms.requests

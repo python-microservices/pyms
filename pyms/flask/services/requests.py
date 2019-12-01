@@ -79,7 +79,7 @@ class Service(DriverService):
         return session_r
 
     @staticmethod
-    def insert_trace_headers(self, headers: dict) -> dict:
+    def insert_trace_headers(headers: dict) -> dict:
         """Inject trace headers if enabled.
 
         :param headers: dictionary of HTTP Headers to send.
@@ -111,7 +111,6 @@ class Service(DriverService):
         if not headers:
             headers = {}
 
-        headers = self.insert_trace_headers(headers)
         if self._propagate_headers or propagate_headers:
             headers = self.propagate_headers(headers)
         return headers
@@ -154,6 +153,7 @@ class Service(DriverService):
         :param params: (optional) Dictionary, list of tuples or bytes to send in the body of the :class:`Request` (as query
                     string parameters)
         :param headers: (optional) Dictionary of HTTP Headers to send with the :class:`Request`.
+        :param propagate_headers: Optional arguments that ``request`` takes.
         :param kwargs: Optional arguments that ``request`` takes.
         :return: :class:`Response <Response>` object
         :rtype: requests.Response
@@ -161,6 +161,7 @@ class Service(DriverService):
 
         full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers=headers, propagate_headers=propagate_headers)
+        headers = self.insert_trace_headers(headers)
         logger.debug("Get with url {}, params {}, headers {}, kwargs {}".
                      format(full_url, params, headers, kwargs))
 
@@ -202,6 +203,7 @@ class Service(DriverService):
 
         full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers)
+        headers = self.insert_trace_headers(headers)
         logger.debug("Post with url {}, data {}, json {}, headers {}, kwargs {}".format(full_url, data, json,
                                                                                         headers, kwargs))
 
@@ -245,6 +247,7 @@ class Service(DriverService):
 
         full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers)
+        headers = self.insert_trace_headers(headers)
         logger.debug("Put with url {}, data {}, headers {}, kwargs {}".format(full_url, data, headers,
                                                                               kwargs))
 
@@ -285,6 +288,7 @@ class Service(DriverService):
 
         full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers)
+        headers = self.insert_trace_headers(headers)
         logger.debug("Delete with url {}, headers {}, kwargs {}".format(full_url, headers, kwargs))
 
         session = requests.Session()

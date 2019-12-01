@@ -17,6 +17,7 @@ LIGHT_CLIENT = "lightstep"
 
 DEFAULT_CLIENT = JAEGER_CLIENT
 
+
 def inject_span_in_headers(headers):
     # FLASK https://github.com/opentracing-contrib/python-flask
     tracer = current_app.tracer
@@ -31,6 +32,7 @@ def inject_span_in_headers(headers):
     context = span.context if span else None
     tracer.tracer.inject(context, opentracing.Format.HTTP_HEADERS, headers)
     return headers
+
 
 class Service(DriverService):
     service = "tracer"
