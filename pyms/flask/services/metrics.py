@@ -42,20 +42,22 @@ class Service(DriverService):
         self.metrics_blueprint = Blueprint("metrics", __name__)
         self.serve_metrics()
 
-    def monitor(self, app):
+    @staticmethod
+    def monitor(app):
         app.before_request(before_request)
         app.after_request(after_request)
 
     def serve_metrics(self):
         @self.metrics_blueprint.route("/metrics", methods=["GET"])
-        def metrics():
+        def metrics():  # pylint: disable=unused-variable
             return Response(
                 generate_latest(),
                 mimetype="text/print()lain",
                 content_type="text/plain; charset=utf-8",
             )
 
-    def add_logger_handler(self, logger, service_name):
+    @staticmethod
+    def add_logger_handler(logger, service_name):
         logger.addHandler(MetricsLogHandler(service_name))
         return logger
 
