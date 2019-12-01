@@ -4,9 +4,7 @@
             "sha256": "46717e53a0a7b838196e1d835cd574369f0cccc9a4ecb42c2e96577663ff8ee1"
         },
         "pipfile-spec": 6,
-        "requires": {
-            "python_version": "3.6"
-        },
+        "requires": {},
         "sources": [
             {
                 "name": "pypi",
@@ -208,6 +206,13 @@
             ],
             "index": "pypi",
             "version": "==3.2.1"
+        },
+        "prometheus-client": {
+            "hashes": [
+                "sha256:71cd24a2b3eb335cb800c7159f423df1bd4dcd5171b234be15e3f31ec9f622da"
+            ],
+            "index": "pypi",
+            "version": "==0.7.1"
         },
         "pyrsistent": {
             "hashes": [

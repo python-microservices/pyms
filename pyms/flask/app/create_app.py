@@ -70,6 +70,7 @@ class Microservice(metaclass=SingletonMeta):
         log_handler.setFormatter(formatter)
 
         self.application.logger.addHandler(log_handler)
+
         self.application.logger.propagate = False
 
         if self.application.config["DEBUG"]:
@@ -99,6 +100,15 @@ class Microservice(metaclass=SingletonMeta):
 
         return application
 
+    def init_metrics(self):
+        if getattr(self, "metrics", False) and self.metrics:
+            self.application.register_blueprint(self.metrics.metrics_blueprint)
+            self.metrics.add_logger_handler(
+                self.application.logger,
+                self.application.config["APP_NAME"]
+            )
+            self.metrics.monitor(self.application)
+
     def create_app(self):
         """Initialize the Flask app, register blueprints and initialize
         all libraries like Swagger, database,
@@ -120,6 +130,8 @@ class Microservice(metaclass=SingletonMeta):
         self.init_tracer()
 
         self.init_logger()
+
+        self.init_metrics()
 
         return self.application
 
