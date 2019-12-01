@@ -1,6 +1,9 @@
 ---
 pyms:
   metrics: true
+  tracer:
+    client: "jaeger"
+    component_name: "Python Microservice"
 my-ms:
   DEBUG: true
   TESTING: true

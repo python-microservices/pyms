@@ -18,7 +18,6 @@ class TestMetricsFlask(unittest.TestCase):
         ms = Microservice(service="my-ms", path=__file__)
         self.app = ms.create_app()
         self.client = self.app.test_client()
-        # self.init_test_metrics()
 
     def test_metrics_latency(self):
         self.client.get("/")
@@ -40,4 +39,10 @@ class TestMetricsFlask(unittest.TestCase):
         self.client.get("/")
         self.client.get("/metrics")
         generated_logger = b'python_logging_messages_total{level="INFO",service="Python Microservice With Flask and Lightstep"}'
+        assert generated_logger in generate_latest()
+
+    def test_metrics_jaeger(self):
+        self.client.get("/")
+        self.client.get("/metrics")
+        generated_logger = b'jaeger:reporter_spans_total'
         assert generated_logger in generate_latest()

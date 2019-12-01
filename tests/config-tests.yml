@@ -1,4 +1,5 @@
 pyms:
+  metrics: true
   requests:
     data: data
   swagger:
