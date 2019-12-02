@@ -68,7 +68,8 @@ class Service(DriverService):
         metrics_config = get_conf(service="pyms.metrics", empty_init=True, memoize=False)
         metrics = ""
         if metrics_config:
-            metrics = PrometheusMetricsFactory()
+            service_name = self.component_name.lower().replace("-", "_").replace(" ", "_")
+            metrics = PrometheusMetricsFactory(service_name_label=service_name)
         config = Config(
             config={
                 **{
