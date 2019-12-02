@@ -2,21 +2,20 @@
 """
 import logging
 
-import opentracing
 import requests
-from flask import current_app, request
-from opentracing_instrumentation import get_current_span
+from flask import request
 from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
+from urllib3.util.retry import Retry
 
 from pyms.constants import LOGGER_NAME
 from pyms.flask.services.driver import DriverService
+from pyms.flask.services.tracer import inject_span_in_headers
 
 logger = logging.getLogger(LOGGER_NAME)
 
 DEFAULT_RETRIES = 3
 
-DEFAULT_STATUS_RETRIES = (500, 502, 504)
+DEFAULTstatus_retries = (500, 502, 504)
 
 
 def retry(f):
@@ -24,8 +23,8 @@ def retry(f):
         response = False
         i = 0
         response_ok = False
-        retries = args[0]._retries
-        status_retries = args[0]._status_retries
+        retries = args[0].retries
+        status_retries = args[0].status_retries
         while i < retries and response_ok is False:
             response = f(*args, **kwargs)
             i += 1
@@ -45,16 +44,16 @@ class Service(DriverService):
         "data": ""
     }
     tracer = None
-    _retries = DEFAULT_RETRIES
-    _status_retries = DEFAULT_STATUS_RETRIES
+    retries = DEFAULT_RETRIES
+    status_retries = DEFAULTstatus_retries
     _propagate_headers = False
 
     def __init__(self, service, *args, **kwargs):
         """Initialization for trace headers propagation"""
         super().__init__(service, *args, **kwargs)
         if self.exists_config():
-            self._retries = self.config.retries or DEFAULT_RETRIES
-            self._status_retries = self.config.status_retries or DEFAULT_STATUS_RETRIES
+            self.retries = self.config.retries or DEFAULT_RETRIES
+            self.status_retries = self.config.status_retries or DEFAULTstatus_retries
             self._propagate_headers = self.config.propagate_headers
 
     def requests(self, session: requests.Session):
@@ -67,19 +66,20 @@ class Service(DriverService):
         :return:
         """
         session_r = session or requests.Session()
-        retry = Retry(
-            total=self._retries,
-            read=self._retries,
-            connect=self._retries,
+        max_retries = Retry(
+            total=self.retries,
+            read=self.retries,
+            connect=self.retries,
             backoff_factor=0.3,
-            status_forcelist=self._status_retries,
+            status_forcelist=self.status_retries,
         )
-        adapter = HTTPAdapter(max_retries=retry)
+        adapter = HTTPAdapter(max_retries=max_retries)
         session_r.mount('http://', adapter)
         session_r.mount('https://', adapter)
         return session_r
 
-    def insert_trace_headers(self, headers: dict) -> dict:
+    @staticmethod
+    def insert_trace_headers(headers: dict) -> dict:
         """Inject trace headers if enabled.
 
         :param headers: dictionary of HTTP Headers to send.
@@ -88,14 +88,7 @@ class Service(DriverService):
         """
 
         try:
-            # FLASK https://github.com/opentracing-contrib/python-flask
-            span = self.tracer.get_span(request=request)
-            if not span:  # pragma: no cover
-                span = get_current_span()
-                if not span:
-                    span = self.tracer.tracer.start_span()
-            context = span.context if span else None
-            self._tracer.tracer.inject(context, opentracing.Format.HTTP_HEADERS, headers)
+            headers = inject_span_in_headers(headers)
         except Exception as ex:
             logger.debug("Tracer error {}".format(ex))
         return headers
@@ -118,9 +111,6 @@ class Service(DriverService):
         if not headers:
             headers = {}
 
-        self.tracer = current_app.tracer
-        if self.tracer:
-            headers = self.insert_trace_headers(headers)
         if self._propagate_headers or propagate_headers:
             headers = self.propagate_headers(headers)
         return headers
@@ -163,6 +153,7 @@ class Service(DriverService):
         :param params: (optional) Dictionary, list of tuples or bytes to send in the body of the :class:`Request` (as query
                     string parameters)
         :param headers: (optional) Dictionary of HTTP Headers to send with the :class:`Request`.
+        :param propagate_headers: Optional arguments that ``request`` takes.
         :param kwargs: Optional arguments that ``request`` takes.
         :return: :class:`Response <Response>` object
         :rtype: requests.Response
@@ -170,6 +161,7 @@ class Service(DriverService):
 
         full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers=headers, propagate_headers=propagate_headers)
+        headers = self.insert_trace_headers(headers)
         logger.debug("Get with url {}, params {}, headers {}, kwargs {}".
                      format(full_url, params, headers, kwargs))
 
@@ -211,6 +203,7 @@ class Service(DriverService):
 
         full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers)
+        headers = self.insert_trace_headers(headers)
         logger.debug("Post with url {}, data {}, json {}, headers {}, kwargs {}".format(full_url, data, json,
                                                                                         headers, kwargs))
 
@@ -254,6 +247,7 @@ class Service(DriverService):
 
         full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers)
+        headers = self.insert_trace_headers(headers)
         logger.debug("Put with url {}, data {}, headers {}, kwargs {}".format(full_url, data, headers,
                                                                               kwargs))
 
@@ -294,6 +288,7 @@ class Service(DriverService):
 
         full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers)
+        headers = self.insert_trace_headers(headers)
         logger.debug("Delete with url {}, headers {}, kwargs {}".format(full_url, headers, kwargs))
 
         session = requests.Session()

@@ -1,6 +1,9 @@
 import logging
 
+import opentracing
+from flask import current_app, request
 from jaeger_client.metrics.prometheus import PrometheusMetricsFactory
+from opentracing_instrumentation import get_current_span
 
 from pyms.config.conf import get_conf
 from pyms.constants import LOGGER_NAME
@@ -13,6 +16,22 @@ JAEGER_CLIENT = "jaeger"
 LIGHT_CLIENT = "lightstep"
 
 DEFAULT_CLIENT = JAEGER_CLIENT
+
+
+def inject_span_in_headers(headers):
+    # FLASK https://github.com/opentracing-contrib/python-flask
+    tracer = current_app.tracer
+    # Add traces
+    span = None
+    if tracer:
+        span = tracer.get_span(request=request)
+        if not span:  # pragma: no cover
+            span = get_current_span()
+            if not span:
+                span = tracer.tracer.start_span()
+    context = span.context if span else None
+    tracer.tracer.inject(context, opentracing.Format.HTTP_HEADERS, headers)
+    return headers
 
 
 class Service(DriverService):
@@ -52,10 +71,11 @@ class Service(DriverService):
             metrics = PrometheusMetricsFactory()
         config = Config(
             config={
-                **{'sampler': {
-                    'type': 'const',
-                    'param': 1,
-                },
+                **{
+                    'sampler': {
+                        'type': 'const',
+                        'param': 1,
+                    },
                     'propagation': 'b3',
                     'logging': True
                 },
