@@ -2,6 +2,7 @@ pyms:
   swagger:
     path: ""
     file: "swagger.yaml"
+    url: "ws-doc/"
 my-ms:
   DEBUG: true
   TESTING: false

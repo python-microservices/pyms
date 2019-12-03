@@ -1,0 +1,10 @@
+pyms:
+  swagger:
+    path: "path"
+    file: "swaggasdsdasder.yaml"
+    url: "ws-doc/"
+my-ms:
+  DEBUG: true
+  TESTING: true
+  APP_NAME: "Python Microservice Swagger"
+  APPLICATION_ROOT: /

@@ -4,7 +4,7 @@ pyms:
   swagger:
     path: ""
     file: "swagger.yaml"
-my-configure-microservice:
+ms:
   DEBUG: true
   TESTING: false
   APP_NAME: "Python Microservice"
