@@ -2,7 +2,6 @@ import logging
 import os
 from typing import Text
 
-import connexion
 from flask import Flask
 from flask_opentracing import FlaskTracing
 
