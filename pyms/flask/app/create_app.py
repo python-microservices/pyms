@@ -2,7 +2,6 @@ import logging
 import os
 from typing import Text
 
-import connexion
 from flask import Flask
 from flask_opentracing import FlaskTracing
 
@@ -50,7 +49,7 @@ class Microservice(metaclass=SingletonMeta):
 
     def init_services(self):
         service_manager = ServicesManager()
-        for service_name, service in service_manager.get_services():
+        for service_name, service in service_manager.get_services(memoize=self._singleton):
             setattr(self, service_name, service)
 
     def init_libs(self):
@@ -81,17 +80,7 @@ class Microservice(metaclass=SingletonMeta):
 
     def init_app(self) -> Flask:
         if self._exists_service("swagger"):
-            check_package_exists("connexion")
-            app = connexion.App(__name__, specification_dir=os.path.join(self.path, self.swagger.path))
-            app.add_api(
-                self.swagger.file,
-                arguments={'title': self.config.APP_NAME},
-                base_path=self.config.APPLICATION_ROOT
-            )
-
-            # Invert the objects, instead connexion with a Flask object, a Flask object with
-            application = app.app
-            application.connexion_app = app
+            application = self.swagger.init_app(config=self.config, path=self.path)
         else:
             check_package_exists("flask")
             application = Flask(__name__, static_folder=os.path.join(self.path, 'static'),

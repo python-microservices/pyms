@@ -31,10 +31,6 @@ class ConfFile(dict):
             else:
                 raise ConfigDoesNotFoundException("Configuration file not found")
 
-        logger.debug("[CONF] INIT: Settings {kwargs}".format(
-            kwargs=kwargs,
-        ))
-
         config = dict(self.normalize_config(config))
         _ = [setattr(self, k, v) for k, v in config.items()]
         super(ConfFile, self).__init__(config)

@@ -1,25 +1,17 @@
 import os
 import unittest
-from unittest import mock
 
 import pytest
 from flask import current_app
 
 from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT, SERVICE_ENVIRONMENT
 from pyms.flask.app import Microservice, config
+from tests.common import MyMicroserviceNoSingleton, MyMicroservice
 
 
 def home():
     current_app.logger.info("start request")
     return "OK"
-
-
-class MyMicroserviceNoSingleton(Microservice):
-    _singleton = False
-
-
-class MyMicroservice(Microservice):
-    pass
 
 
 class HomeWithFlaskTests(unittest.TestCase):
@@ -30,7 +22,7 @@ class HomeWithFlaskTests(unittest.TestCase):
     def setUp(self):
         os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                                               "config-tests-flask.yml")
-        ms = MyMicroserviceNoSingleton(service="my-ms", path=__file__)
+        ms = MyMicroserviceNoSingleton(service="my-ms", path=__file__, override_instance=True)
         self.app = ms.create_app()
         self.client = self.app.test_client()
         self.assertEqual("Python Microservice With Flask", self.app.config["APP_NAME"])
@@ -44,6 +36,32 @@ class HomeWithFlaskTests(unittest.TestCase):
         self.assertEqual(b"OK", response.data)
         self.assertEqual(200, response.status_code)
 
+    def test_swagger(self):
+        response = self.client.get('/ui/')
+        self.assertEqual(404, response.status_code)
+
+
+class FlaskWithSwaggerTests(unittest.TestCase):
+    """
+    Tests for healthcheack endpoints
+    """
+
+    def setUp(self):
+        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                                              "config-tests-flask-swagger.yml")
+        ms = MyMicroserviceNoSingleton(service="my-ms", path=__file__, override_instance=True)
+        self.app = ms.create_app()
+        self.client = self.app.test_client()
+        self.assertEqual("Python Microservice With Flask", self.app.config["APP_NAME"])
+
+    def test_healthcheck(self):
+        response = self.client.get('/healthcheck')
+        self.assertEqual(b"OK", response.data)
+        self.assertEqual(200, response.status_code)
+
+    def test_swagger(self):
+        response = self.client.get('/ui/')
+        self.assertEqual(200, response.status_code)
 
 
 class MicroserviceTest(unittest.TestCase):
@@ -84,19 +102,19 @@ class MicroserviceTest(unittest.TestCase):
 
 @pytest.mark.parametrize("payload, configfile, status_code", [
     (
-        "Python Microservice",
-        "config-tests.yml",
-        200
+            "Python Microservice",
+            "config-tests.yml",
+            200
     ),
     (
-        "Python Microservice With Flask",
-        "config-tests-flask.yml",
-        404
+            "Python Microservice With Flask",
+            "config-tests-flask.yml",
+            404
     ),
     (
-        "Python Microservice With Flask and Lightstep",
-        "config-tests-flask-trace-lightstep.yml",
-        200
+            "Python Microservice With Flask and Lightstep",
+            "config-tests-flask-trace-lightstep.yml",
+            200
     )
 ])
 def test_configfiles(payload, configfile, status_code):
