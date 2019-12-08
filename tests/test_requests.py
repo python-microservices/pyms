@@ -12,6 +12,33 @@ from pyms.flask.app import Microservice
 from pyms.flask.services.requests import DEFAULT_RETRIES
 
 
+class RequestServiceNoDataTests(unittest.TestCase):
+    """Test common rest operations wrapper.
+    """
+
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+    def setUp(self):
+        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(self.BASE_DIR, "config-tests-requests-no-data.yml")
+        ms = Microservice(service="my-ms", path=__file__)
+        self.app = ms.create_app()
+        self.request = ms.requests
+
+    @requests_mock.Mocker()
+    def test_get(self, mock_request):
+        url = "http://www.my-site.com/users"
+        full_url = url
+        text = json.dumps([{'id': 1, 'name': 'Peter', 'email': 'peter@my-site.com.com'},
+                                    {'id': 2, 'name': 'Jon', 'email': 'jon@my-site.com.com'}])
+
+        with self.app.app_context():
+            mock_request.get(full_url, text=text)
+            response = self.request.get(url)
+
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(text, response.text)
+
+
 class RequestServiceTests(unittest.TestCase):
     """Test common rest operations wrapper.
     """
@@ -19,7 +46,7 @@ class RequestServiceTests(unittest.TestCase):
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
     def setUp(self):
-        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(self.BASE_DIR, "config-tests.yml")
+        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(self.BASE_DIR, "config-tests-requests.yml")
         ms = Microservice(service="my-ms", path=__file__)
         self.app = ms.create_app()
         self.request = ms.requests
@@ -267,6 +294,35 @@ class RequestServiceTests(unittest.TestCase):
             headers = self.request.propagate_headers(input_headers)
 
         self.assertEqual(expected_headers, headers)
+
+    def test_propagate_headers_on_get(self):
+        url = "http://www.my-site.com/users"
+        mock_headers = {
+            'A': 'b',
+        }
+        self.request.propagate_headers = unittest.mock.Mock()
+        self.request.propagate_headers.return_value = mock_headers
+        with self.app.test_request_context(
+                '/tests/', data={'format': 'short'}, headers=mock_headers):
+            self.request.get(url, propagate_headers=True)
+
+        self.request.propagate_headers.assert_called_once_with({})
+
+    def test_propagate_headers_on_get_with_headers(self):
+        url = "http://www.my-site.com/users"
+        mock_headers = {
+            'A': 'b',
+        }
+        get_headers = {
+            'C': 'd',
+        }
+        self.request.propagate_headers = unittest.mock.Mock()
+        self.request.propagate_headers.return_value = mock_headers
+        with self.app.test_request_context(
+                '/tests/', data={'format': 'short'}, headers=mock_headers):
+            self.request.get(url, headers=get_headers, propagate_headers=True)
+
+        self.request.propagate_headers.assert_called_once_with(get_headers)
 
     @requests_mock.Mocker()
     def test_retries_with_500(self, mock_request):

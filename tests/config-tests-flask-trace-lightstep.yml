@@ -1,18 +1,16 @@
 pyms:
-  metrics: true
   requests:
     data: data
   swagger:
     path: ""
     file: "swagger.yaml"
   tracer:
-    client: "jaeger"
-    host: "localhost"
+    client: "lightstep"
     component_name: "Python Microservice"
 my-ms:
   DEBUG: true
   TESTING: true
-  APP_NAME: "Python Microservice"
+  APP_NAME: "Python Microservice With Flask and Lightstep"
   APPLICATION_ROOT: /
   test_var: general
   subservice1:

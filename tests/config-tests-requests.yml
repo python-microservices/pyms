@@ -1,14 +1,9 @@
 pyms:
-  metrics: true
   requests:
     data: data
   swagger:
     path: ""
     file: "swagger.yaml"
-  tracer:
-    client: "jaeger"
-    host: "localhost"
-    component_name: "Python Microservice"
 my-ms:
   DEBUG: true
   TESTING: true
