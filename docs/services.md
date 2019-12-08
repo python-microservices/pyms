@@ -8,11 +8,28 @@ To add a service check the [configuration section](configuration.md).
 Current services are:
 
 ## Swagger / connexion
-Extends the Microservice with [Connexion](https://github.com/zalando/connexion)
+Extends the Microservice with [Connexion](https://github.com/zalando/connexion) and [swagger-ui](https://github.com/sveint/flask-swagger-ui).
+### Configuration
+The parameters you can add to your config are:
+* **path:** The relative or absolute route to your swagger yaml file. The default value is the current directory
+* **file:** The name of you swagger yaml file. The default value is `swagger.yaml`
+* **url:** The url where swagger run in your server. The default value is `/ui/`.
 
 ## Requests
 Extend the [requests library](http://docs.python-requests.org/en/master/) with trace headers and parsing JSON objects.
 Encapsulate common rest operations between business services propagating trace headers if set up.
+### Configuration
+The parameters you can add to your config are:
+* **data:** wrap the response in a data field of an envelope object, and add other meta data to that wrapper. The default value is None
+* **retries:** If the response is not correct, send again the request. The default number of retries is 3.
+* **status_retries:** List of response status code that consider "not correct". The default values are [500, 502, 504]
+* **propagate_headers:** Propagate the headers of the actual execution to the request. The default values is False
+
+## Tracer
+Add trace to all executions with[opentracing](https://github.com/opentracing-contrib/python-flask).
+### Configuration
+The parameters you can add to your config are:
+* **client:** set the client to use traces, The actual options are [Jaeger](https://github.com/jaegertracing/jaeger-client-python) and [Lightstep](https://github.com/lightstep/lightstep-tracer-python). The default value is jaeger.
 
 ## Metrics
 Adds [Prometheus](https://prometheus.io/) metrics using the [Prometheus Client
