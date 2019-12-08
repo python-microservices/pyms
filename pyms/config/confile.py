@@ -12,13 +12,19 @@ logger = logging.getLogger(LOGGER_NAME)
 
 
 class ConfFile(dict):
+    """Recursive get configuration from dictionary, a config file in JSON or YAML format from a path or
+    `CONFIGMAP_FILE` environment variable.
+    **Atributes:**
+    * empty_init: Allow blank variables
+    * default_file: search for config.yml file
+    """
     empty_init = False
     default_file = "config.yml"
 
     def __init__(self, *args, **kwargs):
         """
         Get configuration from a dictionary(variable `config`), from path (variable `path`) or from
-        environment with the constant `CONFIGMAP_FILE_ENVIRONMENT`
+        environment with the constant `CONFIGMAP_FILE`
         """
         self.empty_init = kwargs.get("empty_init", False)
         config = kwargs.get("config")

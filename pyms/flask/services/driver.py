@@ -8,6 +8,28 @@ logger = logging.getLogger(LOGGER_NAME)
 
 
 class DriverService:
+    """All services must inherit from this class. This set the configuration. If we have got his config file:
+    ```
+    pyms:
+      metrics: true
+      requests:
+        data: data
+      swagger:
+        path: ""
+        file: "swagger.yaml"
+      tracer:
+        client: "jaeger"
+        host: "localhost"
+        component_name: "Python Microservice"
+    my-ms:
+      DEBUG: true
+      TESTING: true
+    ```
+    * `pyms` block is the default key to load in the pyms.flask.app.create_app.Microservice class.
+        * `metrics`: is set as the service `pyms.metrics`
+        * `swagger`: is set as the service `pyms.swagger`
+        * `tracer`: is set as the service `pyms.tracer`
+    """
     service = ""
     config = None
 
@@ -25,6 +47,9 @@ class DriverService:
 
 
 class ServicesManager:
+    """This class works between `pyms.flask.create_app.Microservice` and `pyms.flask.services.[THESERVICE]`. Search
+    for a file with the name you want to load, set the configuration and return a instance of the class you want
+    """
     service = SERVICE_BASE
 
     def __init__(self, service=None):

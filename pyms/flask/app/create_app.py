@@ -34,6 +34,60 @@ class SingletonMeta(type):
 
 
 class Microservice(metaclass=SingletonMeta):
+    """The class Microservice is the core of all microservices built with PyMS.
+    You can create a simple microservice such as:
+    ```python
+    from flask import jsonify
+
+    from pyms.flask.app import Microservice
+
+    ms = Microservice(service="my-minimal-microservice", path=__file__)
+    app = ms.create_app()
+
+
+    @app.route("/")
+    def example():
+        return jsonify({"main": "hello world"})
+
+
+    if __name__ == '__main__':
+        app.run()
+    ```
+    Environments variables of PyMS:
+    **CONFIGMAP_FILE**: The path to the configuration file. By default, PyMS search the configuration file in your
+    actual folder with the name "config.yml"
+    **CONFIGMAP_SERVICE**: the name of the keyword that define the block of key-value of [Flask Configuration Handling](http://flask.pocoo.org/docs/1.0/config/)
+    and your own configuration (see the next section to more  info)
+
+    ## Create configuration
+    Each microservice needs a config file in yaml or json format to work with it. This configuration contains
+    the Flask settings of your project and the [Services](services.md). With this way to create configuration files, we
+    solve two problems of the [12 Factor apps](https://12factor.net/):
+    - Store config out of the code
+    - Dev/prod parity: the configuration could be injected and not depends of our code, for example, Kubernetes config maps
+
+    a simple configuration file could be a config.yaml:
+
+    ```yaml
+    pyms:
+      requests: true
+      swagger:
+        path: ""
+        file: "swagger.yaml"
+    my-ms:
+      DEBUG: true
+      TESTING: false
+      APP_NAME: "Python Microservice"
+      APPLICATION_ROOT: ""
+    ```
+
+    Services are libraries, resources and extensions added to the Microservice in the configuration file.
+    This services are created as an attribute of the [Microservice class](ms_class.md) to use in the code.
+
+    To add a service check the [configuration section](configuration.md).
+
+    Current services are swagger, request, tracer, metrics
+    """
     service = None
     application = None
     swagger = False
@@ -47,20 +101,35 @@ class Microservice(metaclass=SingletonMeta):
         self.config = get_conf(service=self.service, memoize=self._singleton)
         self.init_services()
 
-    def init_services(self):
+    def init_services(self) -> None:
+        """
+        Set the Attributes of all service defined in config.yml and exists in `pyms.flask.service`
+        :return: None
+        """
         service_manager = ServicesManager()
         for service_name, service in service_manager.get_services(memoize=self._singleton):
             setattr(self, service_name, service)
 
-    def init_libs(self):
+    def init_libs(self) -> Flask:
+        """This function exists to override if you need to set more libs such as SQLAlchemy, CORs, and any else
+        library needs to be init over flask, like the usual pattern [MYLIB].init_app(app)
+        :return:
+        """
         return self.application
 
-    def init_tracer(self):
+    def init_tracer(self) -> None:
+        """Set attribute in flask `tracer`. See in `pyms.flask.services.tracer` how it works
+        :return: None
+        """
         if self._exists_service("tracer"):
             client = self.tracer.get_client()
             self.application.tracer = FlaskTracing(client, True, self.application)
 
-    def init_logger(self):
+    def init_logger(self) -> None:
+        """
+        Set a logger and return in JSON format.
+        :return:
+        """
         self.application.logger = logger
         os.environ['WERKZEUG_RUN_MAIN'] = "true"
 
@@ -79,6 +148,10 @@ class Microservice(metaclass=SingletonMeta):
             self.application.logger.setLevel(logging.INFO)
 
     def init_app(self) -> Flask:
+        """Set attribute in flask `swagger`. See in `pyms.flask.services.swagger` how it works. If not set,
+        run a "normal" Flask app.
+        :return: None
+        """
         if self._exists_service("swagger"):
             application = self.swagger.init_app(config=self.config, path=self.path)
         else:
@@ -91,6 +164,9 @@ class Microservice(metaclass=SingletonMeta):
         return application
 
     def init_metrics(self):
+        """Set attribute in flask `metrics`. See in `pyms.flask.services.metrics` how it works
+        :return: None
+        """
         if getattr(self, "metrics", False) and self.metrics:
             self.application.register_blueprint(self.metrics.metrics_blueprint)
             self.metrics.add_logger_handler(
@@ -126,6 +202,10 @@ class Microservice(metaclass=SingletonMeta):
         return self.application
 
     def _exists_service(self, service_name: Text) -> bool:
+        """Check if service exists in the config.yml file
+        :param service_name:
+        :return: bool
+        """
         service = getattr(self, service_name, False)
         return service and service is not None
 
