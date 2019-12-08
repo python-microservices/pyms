@@ -77,10 +77,14 @@ ms: # 1.3
 ### So what did that code do?
 
 1. Create a instance of PyMS Microservice class (#1.1). This initialization inject the configuration defined in the 
-1.3 block and could be accessed through current_app.config. Then, initialize the service defined in the 1.2 block. See [Services](services.md) for more details.
+1.3 block and could be accessed through current_app.config like typical 
+[Flask config](https://flask.palletsprojects.com/en/1.1.x/config/). 
+Then, initialize the service defined in the 1.2 block. See [Services](services.md) for more details.
 2. Initialize [Flask](https://flask.palletsprojects.com/en/1.1.x/) instance, [Connexion](https://github.com/zalando/connexion) 
-if it was defined in the pyms configuration block, create a tracer, add health-check blueprint, initialize libs and set the PyMS Microservice in
-`ms` attribute and you can access to it with `current_app.ms`. This steps has their each functions and you can easy override it.
+if it was defined in the pyms configuration block, create a tracer, add health-check blueprint, initialize libs and set 
+the PyMS Microservice in
+`ms` attribute and you can access to it with `current_app.ms`. This steps has their each functions and you can easy 
+override it.
 3. `create_app` return the flask instance and you can interact with it as a typical flask app
 
 See Documentation https://py-ms.readthedocs.io/en/latest/ to learn more.

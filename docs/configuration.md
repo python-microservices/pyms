@@ -184,3 +184,5 @@ spec:
           configMap:
             name: my-microservice-configmap
 ```
+
+See [Routing](routing.md) and [Examples](examples.md) to continue with this tutorial
