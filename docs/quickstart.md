@@ -46,4 +46,4 @@ if it was defined in the pyms configuration block, create a tracer, add health-c
 
 
 
-See [Configuration](configuration.md) and [Examples](examples.md) to continue with this tutorial
+See [Configuration](configuration.md), [Routing](routing.md) and [Examples](examples.md) to continue with this tutorial
