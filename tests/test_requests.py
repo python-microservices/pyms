@@ -2,7 +2,6 @@
 """
 import json
 import os
-import time
 import unittest
 
 import requests_mock
@@ -29,7 +28,7 @@ class RequestServiceNoDataTests(unittest.TestCase):
         url = "http://www.my-site.com/users"
         full_url = url
         text = json.dumps([{'id': 1, 'name': 'Peter', 'email': 'peter@my-site.com.com'},
-                                    {'id': 2, 'name': 'Jon', 'email': 'jon@my-site.com.com'}])
+                           {'id': 2, 'name': 'Jon', 'email': 'jon@my-site.com.com'}])
 
         with self.app.app_context():
             mock_request.get(full_url, text=text)
@@ -247,7 +246,7 @@ class RequestServiceTests(unittest.TestCase):
         }
         with self.app.test_request_context(
                 '/tests/', data={'format': 'short'}):
-            headers = self.request.propagate_headers(input_headers)
+            headers = self.request.set_propagate_headers(input_headers)
 
         self.assertEqual(expected_headers, headers)
 
@@ -260,7 +259,7 @@ class RequestServiceTests(unittest.TestCase):
         }
         with self.app.test_request_context(
                 '/tests/'):
-            headers = self.request.propagate_headers(input_headers)
+            headers = self.request.set_propagate_headers(input_headers)
 
         self.assertEqual(expected_headers, headers)
 
@@ -275,7 +274,7 @@ class RequestServiceTests(unittest.TestCase):
         }
         with self.app.test_request_context(
                 '/tests/', data={'format': 'short'}, headers={'a': 'b'}):
-            headers = self.request.propagate_headers(input_headers)
+            headers = self.request.set_propagate_headers(input_headers)
 
         self.assertEqual(expected_headers, headers)
 
@@ -291,7 +290,7 @@ class RequestServiceTests(unittest.TestCase):
         }
         with self.app.test_request_context(
                 '/tests/', headers={'a': 'b', 'span': '5678'}):
-            headers = self.request.propagate_headers(input_headers)
+            headers = self.request.set_propagate_headers(input_headers)
 
         self.assertEqual(expected_headers, headers)
 
@@ -300,13 +299,13 @@ class RequestServiceTests(unittest.TestCase):
         mock_headers = {
             'A': 'b',
         }
-        self.request.propagate_headers = unittest.mock.Mock()
-        self.request.propagate_headers.return_value = mock_headers
+        self.request.set_propagate_headers = unittest.mock.Mock()
+        self.request.set_propagate_headers.return_value = mock_headers
         with self.app.test_request_context(
                 '/tests/', data={'format': 'short'}, headers=mock_headers):
             self.request.get(url, propagate_headers=True)
 
-        self.request.propagate_headers.assert_called_once_with({})
+        self.request.set_propagate_headers.assert_called_once_with({})
 
     def test_propagate_headers_on_get_with_headers(self):
         url = "http://www.my-site.com/users"
@@ -316,13 +315,13 @@ class RequestServiceTests(unittest.TestCase):
         get_headers = {
             'C': 'd',
         }
-        self.request.propagate_headers = unittest.mock.Mock()
-        self.request.propagate_headers.return_value = mock_headers
+        self.request.set_propagate_headers = unittest.mock.Mock()
+        self.request.set_propagate_headers.return_value = mock_headers
         with self.app.test_request_context(
                 '/tests/', data={'format': 'short'}, headers=mock_headers):
             self.request.get(url, headers=get_headers, propagate_headers=True)
 
-        self.request.propagate_headers.assert_called_once_with(get_headers)
+        self.request.set_propagate_headers.assert_called_once_with(get_headers)
 
     @requests_mock.Mocker()
     def test_retries_with_500(self, mock_request):
