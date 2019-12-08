@@ -13,7 +13,7 @@ class DriverService:
 
     def __init__(self, service, *args, **kwargs):
         self.service = ".".join([service, self.service])
-        self.config = get_conf(service=self.service, empty_init=True)
+        self.config = get_conf(service=self.service, empty_init=True, memoize=kwargs.get("memoize", True))
 
     def __getattr__(self, attr, *args, **kwargs):
         config_attribute = getattr(self.config, attr)
@@ -31,8 +31,8 @@ class ServicesManager:
         self.service = (service if service else SERVICE_BASE)
         self.config = get_conf(service=self.service, empty_init=True, memoize=False)
 
-    def get_services(self):
-        return ((k, self.get_service(k)) for k in self.config.__dict__.keys() if k not in ['empty_init', ])
+    def get_services(self, memoize):
+        return ((k, self.get_service(k, memoize=memoize)) for k in self.config.__dict__.keys() if k not in ['empty_init', ])
 
     def get_service(self, service, *args, **kwargs):
         service_object = import_from("pyms.flask.services.{}".format(service), "Service")

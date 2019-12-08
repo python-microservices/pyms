@@ -36,9 +36,32 @@ class HomeWithFlaskTests(unittest.TestCase):
         self.assertEqual(b"OK", response.data)
         self.assertEqual(200, response.status_code)
 
-    # def test_swagger(self):
-    #     response = self.client.get('/ui/')
-    #     self.assertEqual(200, response.status_code)
+    def test_swagger(self):
+        response = self.client.get('/ui/')
+        self.assertEqual(404, response.status_code)
+
+
+class FlaskWithSwaggerTests(unittest.TestCase):
+    """
+    Tests for healthcheack endpoints
+    """
+
+    def setUp(self):
+        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                                              "config-tests-flask-swagger.yml")
+        ms = MyMicroserviceNoSingleton(service="my-ms", path=__file__, override_instance=True)
+        self.app = ms.create_app()
+        self.client = self.app.test_client()
+        self.assertEqual("Python Microservice With Flask", self.app.config["APP_NAME"])
+
+    def test_healthcheck(self):
+        response = self.client.get('/healthcheck')
+        self.assertEqual(b"OK", response.data)
+        self.assertEqual(200, response.status_code)
+
+    def test_swagger(self):
+        response = self.client.get('/ui/')
+        self.assertEqual(200, response.status_code)
 
 
 class MicroserviceTest(unittest.TestCase):

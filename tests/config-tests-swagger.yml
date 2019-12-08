@@ -1,7 +1,7 @@
 pyms:
   swagger:
-    path: "path"
-    file: "swaggasdsdasder.yaml"
+    path: ""
+    file: "swagger.yaml"
     url: "ws-doc/"
 my-ms:
   DEBUG: true

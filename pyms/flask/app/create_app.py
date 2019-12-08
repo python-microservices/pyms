@@ -49,7 +49,7 @@ class Microservice(metaclass=SingletonMeta):
 
     def init_services(self):
         service_manager = ServicesManager()
-        for service_name, service in service_manager.get_services():
+        for service_name, service in service_manager.get_services(memoize=self._singleton):
             setattr(self, service_name, service)
 
     def init_libs(self):

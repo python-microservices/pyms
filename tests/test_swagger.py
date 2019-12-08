@@ -20,6 +20,6 @@ class SwaggerTests(unittest.TestCase):
         self.client = self.app.test_client()
         self.assertEqual("Python Microservice Swagger", self.app.config["APP_NAME"])
 
-    # def test_default(self):
-    #     response = self.client.get('/ws-doc/')
-    #     self.assertEqual(200, response.status_code)
+    def test_default(self):
+        response = self.client.get('/ws-doc/')
+        self.assertEqual(200, response.status_code)
