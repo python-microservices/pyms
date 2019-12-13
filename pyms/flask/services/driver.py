@@ -3,6 +3,7 @@ import logging
 from pyms.config import get_conf, ConfFile
 from pyms.constants import SERVICE_BASE, LOGGER_NAME
 from pyms.utils import import_from
+from pyms.utils.utils import get_service_name
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -33,8 +34,8 @@ class DriverService:
     service = ""
     config = None
 
-    def __init__(self, service, *args, **kwargs):
-        self.service = ".".join([service, self.service])
+    def __init__(self, *args, **kwargs):
+        self.service = get_service_name(service=self.service)
         self.config = get_conf(service=self.service, empty_init=True, memoize=kwargs.get("memoize", True))
 
     def __getattr__(self, attr, *args, **kwargs):
@@ -54,10 +55,11 @@ class ServicesManager:
 
     def __init__(self, service=None):
         self.service = (service if service else SERVICE_BASE)
-        self.config = get_conf(service=self.service, empty_init=True, memoize=False)
+        self.config = get_conf(service=self.service, empty_init=True, memoize=False, uppercase=False)
 
     def get_services(self, memoize):
-        return ((k, self.get_service(k, memoize=memoize)) for k in self.config.__dict__.keys() if k not in ['empty_init', ])
+        return ((k, self.get_service(k, memoize=memoize)) for k in self.config.__dict__.keys()
+                if k.islower() and k not in ['empty_init', ])
 
     def get_service(self, service, *args, **kwargs):
         service_object = import_from("pyms.flask.services.{}".format(service), "Service")

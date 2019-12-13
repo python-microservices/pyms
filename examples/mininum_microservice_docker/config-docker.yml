@@ -1,4 +1,4 @@
 pyms:
   config:
     app_name: "Python Microservice"
-    environment: "I'm running in a local machine"
+    environment: "I'm running in docker"

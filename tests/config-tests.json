@@ -1,15 +1,17 @@
 {
-	"my-ms": {
-		"DEBUG": true,
-		"TESTING": true,
-		"APP_NAME": "Python Microservice",
-		"APPLICATION_ROOT": "/",
-		"test_var": "general",
-		"subservice1": {
-			"test": "input"
-		},
-		"subservice2": {
-			"test": "output"
-		}
-	}
+  "pyms": {
+    "config": {
+      "DEBUG": true,
+      "TESTING": true,
+      "APP_NAME": "Python Microservice",
+      "APPLICATION_ROOT": "/",
+      "test_var": "general",
+      "subservice1": {
+        "test": "input"
+      },
+      "subservice2": {
+        "test": "output"
+      }
+    }
+  }
 }
