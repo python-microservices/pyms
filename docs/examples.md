@@ -7,24 +7,25 @@ pip install py-ms
 config.yml:
 
 ```yaml
-my-minimal-microservice:
-  APP_NAME: "Python Microservice"
+pyms:
+  config:
+    app_name: "Python Microservice"
 ```
 
 main.py
 
 ```python
-from flask import jsonify
+from flask import jsonify, current_app
 
 from pyms.flask.app import Microservice
 
-ms = Microservice(service="my-minimal-microservice", path=__file__)
+ms = Microservice(path=__file__)
 app = ms.create_app()
 
 
 @app.route("/")
 def example():
-    return jsonify({"main": "hello world"})
+    return jsonify({"main": "hello world {}".format(current_app.config["APP_NAME"])})
 
 
 if __name__ == '__main__':
