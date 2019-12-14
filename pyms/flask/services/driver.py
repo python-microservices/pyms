@@ -68,7 +68,8 @@ class ServicesManager:
                 if service.is_enabled():
                     yield (k, service)
 
-    def get_service(self, service: Text, *args, **kwargs) -> DriverService:
+    @staticmethod
+    def get_service(service: Text, *args, **kwargs) -> DriverService:
         service_object = import_from("pyms.flask.services.{}".format(service), "Service")
         logger.debug("Init service {}".format(service))
         return service_object(*args, **kwargs)
