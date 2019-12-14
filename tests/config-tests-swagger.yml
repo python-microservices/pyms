@@ -1,5 +1,7 @@
 pyms:
   services:
+    metrics:
+      enabled: false
     swagger:
       path: ""
       file: "swagger.yaml"

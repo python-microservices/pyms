@@ -6,6 +6,7 @@ from flask import current_app
 
 from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT
 from pyms.flask.app import Microservice, config
+from pyms.flask.services.driver import DriverService
 from tests.common import MyMicroserviceNoSingleton, MyMicroservice
 
 
@@ -63,6 +64,14 @@ class FlaskWithSwaggerTests(unittest.TestCase):
         response = self.client.get('/ui/')
         self.assertEqual(200, response.status_code)
 
+    def test_exists_service(self):
+        self.assertTrue(isinstance(self.app.ms.swagger, DriverService))
+
+    def test_disabled_service(self):
+        with pytest.raises(AttributeError) as excinfo:
+            self.assertTrue(isinstance(self.app.ms.metrics, DriverService))
+        assert "'MyMicroserviceNoSingleton' object has no attribute 'metrics'" in str(excinfo.value)
+
 
 class MicroserviceTest(unittest.TestCase):
     """
@@ -72,6 +81,7 @@ class MicroserviceTest(unittest.TestCase):
     def setUp(self):
         os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                                               "config-tests.yml")
+
     def test_singleton(self):
         ms1 = Microservice(path=__file__)
         ms2 = Microservice(path=__file__)
