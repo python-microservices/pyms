@@ -9,6 +9,7 @@ from pyms.config.conf import get_conf
 from pyms.constants import LOGGER_NAME
 from pyms.flask.services.driver import DriverService
 from pyms.utils import check_package_exists, import_package, import_from
+from pyms.utils.utils import get_service_name
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -67,7 +68,7 @@ class Service(DriverService):
                     'reporting_host': self.host
                 }
             }
-        metrics_config = get_conf(service="pyms.metrics", empty_init=True, memoize=False)
+        metrics_config = get_conf(service=get_service_name(service="metrics"), empty_init=True, memoize=False)
         metrics = ""
         if metrics_config:
             metrics = PrometheusMetricsFactory()

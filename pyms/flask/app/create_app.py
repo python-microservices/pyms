@@ -6,7 +6,7 @@ from flask import Flask
 from flask_opentracing import FlaskTracing
 
 from pyms.config import get_conf
-from pyms.constants import LOGGER_NAME, SERVICE_ENVIRONMENT
+from pyms.constants import LOGGER_NAME, CONFIG_BASE
 from pyms.flask.healthcheck import healthcheck_blueprint
 from pyms.flask.services.driver import ServicesManager
 from pyms.logger import CustomJsonFormatter
@@ -70,15 +70,16 @@ class Microservice(metaclass=SingletonMeta):
 
     ```yaml
     pyms:
-      requests: true
-      swagger:
-        path: ""
-        file: "swagger.yaml"
-    my-ms:
-      DEBUG: true
-      TESTING: false
-      APP_NAME: "Python Microservice"
-      APPLICATION_ROOT: ""
+      services:
+        requests: true
+        swagger:
+          path: ""
+          file: "swagger.yaml"
+      config:
+        DEBUG: true
+        TESTING: false
+        APP_NAME: "Python Microservice"
+        APPLICATION_ROOT: ""
     ```
 
     Services are libraries, resources and extensions added to the Microservice in the configuration file.
@@ -96,9 +97,8 @@ class Microservice(metaclass=SingletonMeta):
     _singleton = True
 
     def __init__(self, *args, **kwargs):
-        self.service = kwargs.get("service", os.environ.get(SERVICE_ENVIRONMENT, "ms"))
         self.path = os.path.dirname(kwargs.get("path", __file__))
-        self.config = get_conf(service=self.service, memoize=self._singleton)
+        self.config = get_conf(service=CONFIG_BASE, memoize=self._singleton)
         self.init_services()
 
     def init_services(self) -> None:

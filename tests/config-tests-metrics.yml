@@ -1,11 +1,12 @@
 ---
 pyms:
-  metrics: true
-  tracer:
-    client: "jaeger"
-    component_name: "Python Microservice"
-my-ms:
-  DEBUG: true
-  TESTING: true
-  APP_NAME: "Python Microservice"
-  APPLICATION_ROOT: /
+  services:
+    metrics: true
+    tracer:
+      client: "jaeger"
+      component_name: "Python Microservice with Jaeger"
+  config:
+    DEBUG: true
+    TESTING: true
+    APP_NAME: "Python Microservice with Jaeger"
+    APPLICATION_ROOT: /

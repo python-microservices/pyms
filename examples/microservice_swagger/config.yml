@@ -1,10 +1,11 @@
 pyms:
-  swagger:
-    path: ""
-    file: "swagger.yaml"
-    url: "ws-doc/"
-my-ms:
-  DEBUG: true
-  TESTING: false
-  APP_NAME: "Python Microservice"
-  APPLICATION_ROOT: ""
+  services:
+    swagger:
+      path: ""
+      file: "swagger.yaml"
+      url: "ws-doc/"
+  config:
+    DEBUG: true
+    TESTING: false
+    APP_NAME: "Python Microservice"
+    APPLICATION_ROOT: ""

@@ -25,9 +25,16 @@ class ConfFile(dict):
         """
         Get configuration from a dictionary(variable `config`), from path (variable `path`) or from
         environment with the constant `CONFIGMAP_FILE`
+        Set the configuration as upper case to inject the keys in flask config. Flask search for uppercase keys in
+        `app.config.from_object`
+        ```python
+        if key.isupper():
+            self[key] = getattr(obj, key)
+        ```
         """
         self.empty_init = kwargs.get("empty_init", False)
         config = kwargs.get("config")
+        uppercase = kwargs.get("uppercase", True)
         if config is None:
             config = self._get_conf_from_file(kwargs.get("path")) or self._get_conf_from_env()
 
@@ -38,7 +45,12 @@ class ConfFile(dict):
                 raise ConfigDoesNotFoundException("Configuration file not found")
 
         config = dict(self.normalize_config(config))
-        _ = [setattr(self, k, v) for k, v in config.items()]
+        for k, v in config.items():
+            setattr(self, k, v)
+            # Flask search for uppercase keys
+            if uppercase:
+                setattr(self, k.upper(), v)
+
         super(ConfFile, self).__init__(config)
 
     def normalize_config(self, config):

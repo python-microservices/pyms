@@ -15,7 +15,7 @@ class SwaggerTests(unittest.TestCase):
 
     def setUp(self):
         os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(self.BASE_DIR, "config-tests-swagger.yml")
-        ms = MyMicroserviceNoSingleton(service="my-ms", path=__file__)
+        ms = MyMicroserviceNoSingleton(path=__file__)
         self.app = ms.create_app()
         self.client = self.app.test_client()
         self.assertEqual("Python Microservice Swagger", self.app.config["APP_NAME"])
