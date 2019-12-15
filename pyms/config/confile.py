@@ -9,6 +9,7 @@ from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT, LOGGER_NAME
 from pyms.exceptions import AttrDoesNotExistException, ConfigDoesNotFoundException
 
 logger = logging.getLogger(LOGGER_NAME)
+config_cache = {}
 
 
 class ConfFile(dict):
@@ -36,7 +37,7 @@ class ConfFile(dict):
         config = kwargs.get("config")
         uppercase = kwargs.get("uppercase", True)
         if config is None:
-            config = self._get_conf_from_file(kwargs.get("path")) or self._get_conf_from_env()
+            config = self.load_config(kwargs.get("path"))
 
         if not config:
             if self.empty_init:
@@ -82,18 +83,28 @@ class ConfFile(dict):
                 return ConfFile(config={}, empty_init=self.empty_init)
             raise AttrDoesNotExistException("Variable {} not exist in the config file".format(name))
 
-    def _get_conf_from_env(self):
-        config_file = os.environ.get(CONFIGMAP_FILE_ENVIRONMENT, self.default_file)
+    @classmethod
+    def _get_conf_from_env(cls):
+        config_file = os.environ.get(CONFIGMAP_FILE_ENVIRONMENT, cls.default_file)
         logger.debug("[CONF] Searching file in ENV[{}]: {}...".format(CONFIGMAP_FILE_ENVIRONMENT, config_file))
-        return self._get_conf_from_file(config_file)
+        return cls._get_conf_from_file(config_file)
 
     @staticmethod
     def _get_conf_from_file(path: Text) -> dict:
         if not path or not os.path.isfile(path):
             return {}
-        logger.debug("[CONF] Configmap {} found".format(path))
-        conf = anyconfig.load(path)
-        return conf
+        if path not in config_cache:
+            logger.debug("[CONF] Configmap {} found".format(path))
+            config_cache[path] = anyconfig.load(path)
+        return config_cache[path]
+
+    @classmethod
+    def load_config(cls, path: Text):
+        return cls._get_conf_from_file(path) or cls._get_conf_from_env()
+
+    def reload_config(cls, path: Text):
+        config_cache[path] = None
+        return cls.load_config(path)
 
     def __setattr__(self, name, value, *args, **kwargs):
         super(ConfFile, self).__setattr__(name, value)
