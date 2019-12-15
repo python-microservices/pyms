@@ -1,7 +1,7 @@
 import logging
 
 import opentracing
-from flask import current_app, request
+from flask import current_app, request, has_request_context
 from jaeger_client.metrics.prometheus import PrometheusMetricsFactory
 from opentracing_instrumentation import get_current_span
 
@@ -19,18 +19,20 @@ DEFAULT_CLIENT = JAEGER_CLIENT
 
 
 def inject_span_in_headers(headers):
-    # FLASK https://github.com/opentracing-contrib/python-flask
-    tracer = current_app.tracer
-    # Add traces
-    span = None
-    if tracer:
-        span = tracer.get_span(request=request)
-        if not span:  # pragma: no cover
-            span = get_current_span()
-            if not span:
-                span = tracer.tracer.start_span()
-    context = span.context if span else None
-    tracer.tracer.inject(context, opentracing.Format.HTTP_HEADERS, headers)
+    if has_request_context():
+        # FLASK https://github.com/opentracing-contrib/python-flask
+        tracer = current_app.tracer if getattr(current_app, "tracer") else None
+        # Add traces
+        span = None
+        current_app.app_context()
+        if tracer:
+            span = tracer.get_span(request=request)
+            if not span:  # pragma: no cover
+                span = get_current_span()
+                if not span:
+                    span = tracer.tracer.start_span()
+        context = span.context if span else None
+        tracer.tracer.inject(context, opentracing.Format.HTTP_HEADERS, headers)
     return headers
 
 
