@@ -15,9 +15,10 @@ flask-opentracing = "*"
 opentracing = ">=2.1"
 opentracing-instrumentation = "==3.2.1"
 prometheus_client = ">=0.7.1"
+
 [dev-packages]
 requests-mock = "*"
-coverage = "==4.5.4"
+coverage = "==5.0"
 pytest = "*"
 pytest-cov = "*"
 pylint = "*"
