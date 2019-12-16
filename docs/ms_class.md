@@ -10,7 +10,7 @@ from flask import jsonify
 
 from pyms.flask.app import Microservice
 
-ms = Microservice(service="my-minimal-microservice", path=__file__)
+ms = Microservice(path=__file__)
 app = ms.create_app()
 
 
@@ -26,8 +26,9 @@ if __name__ == '__main__':
 And a config file like this config.yml
 
 ```yaml
-my-minimal-microservice:
-  APP_NAME: "Python Microservice"
+pyms:
+	config:
+  	APP_NAME: "Python Microservice"
 ```
 Check [Configuration](configuration.md) section to know how to create a configuration file.
 
@@ -35,12 +36,13 @@ Each keyword in our configuration block, can be accessed in our Microservice obj
 
 ```yaml
 # Config.yml
-example-config:
-  APP_NAME: "Python Microservice"
-  foo: "var"
-  multiplevars:
-    config1: "test1"
-    config2: "test2"
+pyms:
+	config:
+		app_name: "Python Microservice"
+		foo: "var"
+		multiplevars:
+			config1: "test1"
+			config2: "test2"
   
 ```
 ```python
@@ -49,6 +51,8 @@ from pyms.flask.app import Microservice
 
 ms = Microservice(service="example-config", path=__file__)
 print(ms.config.APP_NAME) 
+# >> "Python Microservice"
+print(ms.config.app_name) 
 # >> "Python Microservice"
 print(ms.config.foo) 
 # >> "bar"

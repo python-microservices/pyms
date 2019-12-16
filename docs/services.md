@@ -48,7 +48,8 @@ To use this service, you may add the next to you configuration file:
 
 ```yaml
 pyms:
-  metrics: true
+  services:
+		metrics: true
 ```
 
 This will add the endpoint `/metrics` to your microservice, which will expose
@@ -75,8 +76,9 @@ class Service(DriverService):
 * Now, you can configure your service from `config.yml`
 ```yaml
 pyms:
-  myawesomesrv:
-    myvalue: 5
+	config:
+		myawesomesrv:
+			myvalue: 5
 ```
 
 * Your service will be setted inside `ms` object in `flask.current_app` objetct. for example, with the last config,
