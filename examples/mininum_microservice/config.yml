@@ -1,7 +1,8 @@
-my-minimal-microservice:
-  DEBUG: true
-  TESTING: false
-  SWAGGER: true
-  APP_NAME: business-glossary
-  APPLICATION_ROOT : ""
-  SECRET_KEY: "gjr39dkjn344_!67#"
+pyms:
+  config:
+    DEBUG: true
+    TESTING: false
+    SWAGGER: true
+    APP_NAME: business-glossary
+    APPLICATION_ROOT : ""
+    SECRET_KEY: "gjr39dkjn344_!67#"

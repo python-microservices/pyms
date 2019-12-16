@@ -4,7 +4,7 @@ import unittest
 from unittest import mock
 
 from pyms.config import get_conf, ConfFile
-from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT, LOGGER_NAME
+from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT, LOGGER_NAME, CONFIG_BASE
 from pyms.exceptions import AttrDoesNotExistException, ConfigDoesNotFoundException, ServiceDoesNotExistException
 
 logger = logging.getLogger(LOGGER_NAME)
@@ -21,7 +21,7 @@ class ConfFromFileEnvTests(unittest.TestCase):
 
     def test_example_test_file_from_env(self):
         config = ConfFile()
-        self.assertEqual(config.my_ms.test_var, "general")
+        self.assertEqual(config.pyms.config.test_var, "general")
 
 
 class ConfTests(unittest.TestCase):
@@ -90,11 +90,11 @@ class ConfTests(unittest.TestCase):
 
     def test_example_test_yaml_file(self):
         config = ConfFile(path=os.path.join(self.BASE_DIR, "config-tests.yml"))
-        self.assertEqual(config.my_ms.test_var, "general")
+        self.assertEqual(config.pyms.config.test_var, "general")
 
     def test_example_test_json_file(self):
         config = ConfFile(path=os.path.join(self.BASE_DIR, "config-tests.json"))
-        self.assertEqual(config.my_ms.test_var, "general")
+        self.assertEqual(config.pyms.config.test_var, "general")
 
 
 class ConfNotExistTests(unittest.TestCase):
@@ -121,9 +121,9 @@ class GetConfig(unittest.TestCase):
         del os.environ[CONFIGMAP_FILE_ENVIRONMENT]
 
     def test_default(self):
-        config = get_conf(service="my-ms")
-
+        config = get_conf(service=CONFIG_BASE)
         assert config.APP_NAME == "Python Microservice"
+        assert config.app_name == "Python Microservice"
         assert config.subservice1.test == "input"
 
     @mock.patch('pyms.config.conf.ConfFile')

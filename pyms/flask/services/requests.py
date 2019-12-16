@@ -81,7 +81,7 @@ class Service(DriverService):
 
         try:
             headers = inject_span_in_headers(headers)
-        except Exception as ex:
+        except Exception as ex:  # pragma: no cover
             logger.debug("Tracer error {}".format(ex))
         return headers
 

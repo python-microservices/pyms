@@ -37,8 +37,8 @@ def after_request(response):
 class Service(DriverService):
     service = "metrics"
 
-    def __init__(self, service, *args, **kwargs):
-        super().__init__(service, *args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.metrics_blueprint = Blueprint("metrics", __name__)
         self.serve_metrics()
 

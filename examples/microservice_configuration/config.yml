@@ -1,15 +1,16 @@
 pyms:
-  requests:
-    data: ""
-  swagger:
-    path: ""
-    file: "swagger.yaml"
-ms:
-  DEBUG: true
-  TESTING: false
-  APP_NAME: "Python Microservice"
-  APPLICATION_ROOT: ""
-  request_variable_test: "this is a test"
-  MyVar: "this is MyVar"
-  test1: "ttest1"
-  test2: "ttest2"
+  services:
+    requests:
+      data: ""
+    swagger:
+      path: ""
+      file: "swagger.yaml"
+  config:
+    DEBUG: true
+    TESTING: false
+    APP_NAME: "Python Microservice"
+    APPLICATION_ROOT: ""
+    request_variable_test: "this is a test"
+    MyVar: "this is MyVar"
+    test1: "ttest1"
+    test2: "ttest2"
