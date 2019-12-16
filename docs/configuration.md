@@ -19,15 +19,15 @@ a simple configuration file could be a config.yaml:
 ```yaml
 pyms:
   services:
-		requests: true
-		swagger:
-			path: ""
-			file: "swagger.yaml"
-	config:
-		debug: true
-		testing: false
-		app_name: "Python Microservice"
-		APPLICATION_ROOT: ""
+    requests: true
+    swagger:
+      path: ""
+      file: "swagger.yaml"
+  config:
+    debug: true
+    testing: false
+    app_name: "Python Microservice"
+    APPLICATION_ROOT: ""
 ```
 
 or in a config.json:
@@ -35,13 +35,13 @@ or in a config.json:
 ```json
 {
   "pyms": {
-		"services":{
-			"requests": true,
-			"swagger": {
-				"path": "",
-				"file": "swagger.yaml"
-				}
-		},
+    "services":{
+      "requests": true,
+      "swagger": {
+        "path": "",
+        "file": "swagger.yaml"
+      }
+    },
     "config": {
       "DEBUG": true,
       "TESTING": true,
@@ -75,7 +75,7 @@ and a `config.yaml` file:
 ```yaml
 pyms:
   services:
-		requests: true
+    requests: true
 ```
 
 our object `ms` has an attribute `requests` that is a instance of our service [requests](services.md). 
@@ -131,9 +131,6 @@ API = Api(
     add_specs=True,
 )
 ```
-
-**IMPORTANT:** If you use this method to get configuration out of context, you must set the `CONFIGMAP_SERVICE` or set 
-the default key `ms` for your configuration block in your config.yml
 
 
 ## Looking for Configuration file with Kubernetes Configmaps
