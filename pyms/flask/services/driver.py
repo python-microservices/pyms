@@ -1,7 +1,7 @@
 import logging
 from typing import Text, Tuple
 
-from pyms.config import get_conf, ConfFile
+from pyms.config import get_conf
 from pyms.constants import SERVICE_BASE, LOGGER_NAME
 from pyms.utils import import_from
 from pyms.utils.utils import get_service_name
@@ -38,7 +38,7 @@ class DriverService:
 
     def __init__(self, *args, **kwargs):
         self.service = get_service_name(service=self.service)
-        self.config = get_conf(service=self.service, empty_init=True, memoize=kwargs.get("memoize", True))
+        self.config = get_conf(service=self.service, empty_init=True)
 
     def __getattr__(self, attr, *args, **kwargs):
         config_attribute = getattr(self.config, attr)
@@ -49,7 +49,7 @@ class DriverService:
         return self.enabled
 
     def exists_config(self):
-        return self.config is not None and isinstance(self.config, ConfFile)
+        return self.config is not None
 
 
 class ServicesManager:

@@ -1,4 +1,4 @@
-from pyms.config.confile import ConfFile
+from pyms.config.loader import ConfigLoader
 from pyms.exceptions import ServiceDoesNotExistException
 
 
@@ -11,19 +11,19 @@ def get_conf(*args, **kwargs):
     parent and this name, in example of the next yaml, tracer will be `pyms.tracer`. If we have got his config file:
     ```
     pyms:
-      metrics: true
-      requests:
-        data: data
-      swagger:
-        path: ""
-        file: "swagger.yaml"
-      tracer:
-        client: "jaeger"
-        host: "localhost"
-        component_name: "Python Microservice"
-    my-ms:
-      DEBUG: true
-      TESTING: true
+        services:
+            metrics: true
+            requests: true
+            swagger:
+                path: ""
+                file: "swagger.yaml"
+            tracer:
+                client: "jaeger"
+                host: "localhost"
+                component_name: "Python Microservice"
+        config:
+            DEBUG: true
+            TESTING: true
     ```
     * `pyms` block is the default key to load in the pyms.flask.app.create_app.Microservice class.
         * `metrics`: is set as the service `pyms.metrics`
@@ -35,10 +35,10 @@ def get_conf(*args, **kwargs):
     :param kwargs:
     :return:
     """
-    service = kwargs.pop('service', None)
-    memoize = kwargs.pop('memoize', True)
+    service = kwargs.pop("service", None)
+    memoize = kwargs.pop("memoize", True)
     if not service:
         raise ServiceDoesNotExistException("Service not defined")
     if not memoize or service not in __service_configs:
-        __service_configs[service] = ConfFile(*args, **kwargs)
-    return getattr(__service_configs[service], service)
+        __service_configs[service] = ConfigLoader(*args, **kwargs)
+    return getattr(__service_configs[service].config, service)

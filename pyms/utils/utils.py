@@ -25,3 +25,8 @@ def check_package_exists(package_name: Text) -> Union[Exception, bool]:
         raise PackageNotExists(
             "{package} is not installed. try with pip install -U {package}".format(package=package_name))
     return True
+
+
+class AttributeDict(dict):
+    __getattr__ = dict.__getitem__
+    __setattr__ = dict.__setitem__

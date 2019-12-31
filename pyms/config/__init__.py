@@ -1,4 +1,4 @@
-from pyms.config.conf import get_conf
-from pyms.config.confile import ConfFile
+from pyms.config.config import get_conf
+from pyms.config.loader import ConfigLoader
 
-__all__ = ['get_conf', 'ConfFile']
+__all__ = ["get_conf", "ConfigLoader"]

@@ -1,5 +1,7 @@
 CONFIGMAP_FILE_ENVIRONMENT = "CONFIGMAP_FILE"
 
+DEFAULT_CONFIG_FILE = "./config.yml"
+
 LOGGER_NAME = "pyms"
 
 CONFIG_BASE = "pyms.config"
