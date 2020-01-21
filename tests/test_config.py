@@ -97,6 +97,20 @@ class ConfTests(unittest.TestCase):
         self.assertEqual(config.pyms.config.test_var, "general")
 
 
+class ConfCacheTests(unittest.TestCase):
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    def test_get_cache(self):
+        config = ConfFile(path=os.path.join(self.BASE_DIR, "config-tests-cache.yml"))
+        config.set_path(os.path.join(self.BASE_DIR, "config-tests-cache2.yml"))
+        self.assertEqual(config.pyms.config.my_cache, 1234)
+
+    def test_get_cache_and_reload(self):
+        config = ConfFile(path=os.path.join(self.BASE_DIR, "config-tests-cache.yml"))
+        config.set_path(os.path.join(self.BASE_DIR, "config-tests-cache2.yml"))
+        config.reload()
+        self.assertEqual(config.pyms.config.my_cache, 12345678)
+
+
 class ConfNotExistTests(unittest.TestCase):
     def test_empty_conf(self):
         config = ConfFile(empty_init=True)

@@ -10,6 +10,7 @@ from pyms.exceptions import AttrDoesNotExistException, ConfigDoesNotFoundExcepti
 
 logger = logging.getLogger(LOGGER_NAME)
 
+config_cache = {}
 
 class ConfFile(dict):
     """Recursive get configuration from dictionary, a config file in JSON or YAML format from a path or
@@ -20,6 +21,8 @@ class ConfFile(dict):
     """
     empty_init = False
     default_file = "config.yml"
+    __path = None
+    _uppercase = False
 
     def __init__(self, *args, **kwargs):
         """
@@ -34,9 +37,10 @@ class ConfFile(dict):
         """
         self.empty_init = kwargs.get("empty_init", False)
         config = kwargs.get("config")
-        uppercase = kwargs.get("uppercase", True)
+        self._uppercase = kwargs.get("uppercase", True)
         if config is None:
-            config = self._get_conf_from_file(kwargs.get("path")) or self._get_conf_from_env()
+            self.set_path(kwargs.get("path"))
+            config = self._get_conf_from_file() or self._get_conf_from_env()
 
         if not config:
             if self.empty_init:
@@ -44,14 +48,21 @@ class ConfFile(dict):
             else:
                 raise ConfigDoesNotFoundException("Configuration file not found")
 
+        config = self.set_config(config)
+
+        super(ConfFile, self).__init__(config)
+
+    def set_path(self, path):
+        self.__path = path
+
+    def set_config(self, config):
         config = dict(self.normalize_config(config))
         for k, v in config.items():
             setattr(self, k, v)
             # Flask search for uppercase keys
-            if uppercase:
+            if self._uppercase:
                 setattr(self, k.upper(), v)
-
-        super(ConfFile, self).__init__(config)
+        return config
 
     def normalize_config(self, config):
         for key, item in config.items():
@@ -85,15 +96,25 @@ class ConfFile(dict):
     def _get_conf_from_env(self):
         config_file = os.environ.get(CONFIGMAP_FILE_ENVIRONMENT, self.default_file)
         logger.debug("[CONF] Searching file in ENV[{}]: {}...".format(CONFIGMAP_FILE_ENVIRONMENT, config_file))
-        return self._get_conf_from_file(config_file)
+        self.set_path(config_file)
+        return self._get_conf_from_file()
 
-    @staticmethod
-    def _get_conf_from_file(path: Text) -> dict:
-        if not path or not os.path.isfile(path):
+    def _get_conf_from_file(self) -> dict:
+        if not self.__path or not os.path.isfile(self.__path):
+            logger.debug("[CONF] Configmap {} NOT FOUND".format(self.__path))
             return {}
-        logger.debug("[CONF] Configmap {} found".format(path))
-        conf = anyconfig.load(path)
-        return conf
+        if self.__path not in config_cache:
+            logger.debug("[CONF] Configmap {} found".format(self.__path))
+            config_cache[self.__path] = anyconfig.load(self.__path)
+        return config_cache[self.__path]
+
+    def load(self):
+        config_src = self._get_conf_from_file() or self._get_conf_from_env()
+        self.set_config(config_src)
+
+    def reload(self):
+        config_cache.pop(self.__path, None)
+        self.load()
 
     def __setattr__(self, name, value, *args, **kwargs):
         super(ConfFile, self).__setattr__(name, value)
