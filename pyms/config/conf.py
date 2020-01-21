@@ -33,7 +33,6 @@ def get_conf(*args, **kwargs):
     :return:
     """
     service = kwargs.pop('service', None)
-    # memoize = kwargs.pop('memoize', True)
     if not service:
         raise ServiceDoesNotExistException("Service not defined")
 

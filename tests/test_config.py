@@ -140,22 +140,6 @@ class GetConfig(unittest.TestCase):
         assert config.app_name == "Python Microservice"
         assert config.subservice1.test == "input"
 
-    # @mock.patch('pyms.config.conf.ConfFile')
-    # def test_memoized(self, mock_confile):
-    #     mock_confile.pyms = {}
-    #     get_conf(service="pyms")
-    #     get_conf(service="pyms")
-    #
-    #     mock_confile.assert_called_once()
-
-    @mock.patch('pyms.config.conf.ConfFile')
-    def test_without_memoize(self, mock_confile):
-        mock_confile.pyms = {}
-        get_conf(service="pyms", memoize=False)
-        get_conf(service="pyms", memoize=False)
-
-        assert mock_confile.call_count == 2
-
     @mock.patch('pyms.config.conf.ConfFile')
     def test_without_params(self, mock_confile):
         with self.assertRaises(ServiceDoesNotExistException):
