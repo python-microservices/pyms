@@ -63,7 +63,7 @@ class ServicesManager:
 
     def get_services(self) -> Tuple[Text, DriverService]:
         for k in self.config.__dict__.keys():
-            if k.islower() and k not in ['empty_init', ] and not k.startswith("_"):
+            if k.islower() and not k.startswith("_"):
                 service = self.get_service(k)
                 if service.is_enabled():
                     yield k, service

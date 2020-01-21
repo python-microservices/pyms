@@ -30,6 +30,7 @@ def get_conf(*args, **kwargs):
     block config
     :param args:
     :param kwargs:
+
     :return:
     """
     service = kwargs.pop('service', None)

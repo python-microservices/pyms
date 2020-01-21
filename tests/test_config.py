@@ -135,7 +135,7 @@ class GetConfig(unittest.TestCase):
         del os.environ[CONFIGMAP_FILE_ENVIRONMENT]
 
     def test_default(self):
-        config = get_conf(service=CONFIG_BASE)
+        config = get_conf(service=CONFIG_BASE, uppercase=True)
         assert config.APP_NAME == "Python Microservice"
         assert config.app_name == "Python Microservice"
         assert config.subservice1.test == "input"

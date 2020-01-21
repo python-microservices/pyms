@@ -19,8 +19,8 @@ class ConfFile(dict):
     * empty_init: Allow blank variables
     * default_file: search for config.yml file
     """
-    empty_init = False
-    default_file = "config.yml"
+    _empty_init = False
+    _default_file = "config.yml"
     __path = None
     _uppercase = False
 
@@ -35,15 +35,15 @@ class ConfFile(dict):
             self[key] = getattr(obj, key)
         ```
         """
-        self.empty_init = kwargs.get("empty_init", False)
+        self._empty_init = kwargs.get("empty_init", False)
         config = kwargs.get("config")
-        self._uppercase = kwargs.get("uppercase", True)
+        self._uppercase = kwargs.get("uppercase", False)
         if config is None:
             self.set_path(kwargs.get("path"))
             config = self._get_conf_from_file() or self._get_conf_from_env()
 
         if not config:
-            if self.empty_init:
+            if self._empty_init:
                 config = {}
             else:
                 raise ConfigDoesNotFoundException("Configuration file not found")
@@ -67,7 +67,7 @@ class ConfFile(dict):
     def normalize_config(self, config):
         for key, item in config.items():
             if isinstance(item, dict):
-                item = ConfFile(config=item, empty_init=self.empty_init)
+                item = ConfFile(config=item, empty_init=self._empty_init, uppercase=self._uppercase)
             yield self.normalize_keys(key), item
 
     @staticmethod
@@ -89,12 +89,12 @@ class ConfFile(dict):
                 aux_dict = aux_dict[k]
             return aux_dict
         except KeyError:
-            if self.empty_init:
-                return ConfFile(config={}, empty_init=self.empty_init)
+            if self._empty_init:
+                return ConfFile(config={}, empty_init=self._empty_init)
             raise AttrDoesNotExistException("Variable {} not exist in the config file".format(name))
 
     def _get_conf_from_env(self):
-        config_file = os.environ.get(CONFIGMAP_FILE_ENVIRONMENT, self.default_file)
+        config_file = os.environ.get(CONFIGMAP_FILE_ENVIRONMENT, self._default_file)
         logger.debug("[CONF] Searching file in ENV[{}]: {}...".format(CONFIGMAP_FILE_ENVIRONMENT, config_file))
         self.set_path(config_file)
         return self._get_conf_from_file()
