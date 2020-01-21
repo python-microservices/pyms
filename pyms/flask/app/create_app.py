@@ -90,6 +90,7 @@ class Microservice(metaclass=SingletonMeta):
     Current services are swagger, request, tracer, metrics
     """
     service = None
+    services = []
     application = None
     swagger = False
     request = False
@@ -108,7 +109,19 @@ class Microservice(metaclass=SingletonMeta):
         """
         service_manager = ServicesManager()
         for service_name, service in service_manager.get_services(memoize=self._singleton):
+            self.services.append(service_name)
             setattr(self, service_name, service)
+
+    def delete_services(self) -> None:
+        """
+        Set the Attributes of all service defined in config.yml and exists in `pyms.flask.service`
+        :return: None
+        """
+        for service_name in self.services:
+            try:
+                delattr(self, service_name)
+            except AttributeError:
+                pass
 
     def init_libs(self) -> Flask:
         """This function exists to override if you need to set more libs such as SQLAlchemy, CORs, and any else
@@ -174,6 +187,12 @@ class Microservice(metaclass=SingletonMeta):
                 self.application.config["APP_NAME"]
             )
             self.metrics.monitor(self.application)
+
+    def reload_conf(self):
+        self.delete_services()
+        self.config.reload()
+        self.init_services()
+        # self.create_app()
 
     def create_app(self):
         """Initialize the Flask app, register blueprints and initialize

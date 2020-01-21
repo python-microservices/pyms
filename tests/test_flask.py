@@ -23,7 +23,8 @@ class HomeWithFlaskTests(unittest.TestCase):
     def setUp(self):
         os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                                               "config-tests-flask.yml")
-        ms = MyMicroserviceNoSingleton(path=__file__)
+        ms = MyMicroservice(path=__file__)
+        ms.reload_conf()
         self.app = ms.create_app()
         self.client = self.app.test_client()
         self.assertEqual("Python Microservice With Flask", self.app.config["APP_NAME"])
@@ -50,7 +51,7 @@ class FlaskWithSwaggerTests(unittest.TestCase):
     def setUp(self):
         os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                                               "config-tests-flask-swagger.yml")
-        ms = MyMicroserviceNoSingleton(path=__file__)
+        ms = MyMicroservice(path=__file__)
         self.app = ms.create_app()
         self.client = self.app.test_client()
         self.assertEqual("Python Microservice With Flask", self.app.config["APP_NAME"])
@@ -70,7 +71,7 @@ class FlaskWithSwaggerTests(unittest.TestCase):
     def test_disabled_service(self):
         with pytest.raises(AttributeError) as excinfo:
             self.assertTrue(isinstance(self.app.ms.metrics, DriverService))
-        assert "'MyMicroserviceNoSingleton' object has no attribute 'metrics'" in str(excinfo.value)
+        assert "'MyMicroservice' object has no attribute 'metrics'" in str(excinfo.value)
 
 
 class MicroserviceTest(unittest.TestCase):
@@ -105,7 +106,7 @@ class MicroserviceTest(unittest.TestCase):
         conf_one = config().subservice1
         conf_two = config().subservice1
 
-        assert conf_one is conf_two
+        assert conf_one == conf_two
 
 
 @pytest.mark.parametrize("payload, configfile, status_code", [
@@ -128,7 +129,8 @@ class MicroserviceTest(unittest.TestCase):
 def test_configfiles(payload, configfile, status_code):
     os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                                           configfile)
-    ms = MyMicroserviceNoSingleton(path=__file__)
+    ms = MyMicroservice(path=__file__)
+    ms.reload_conf()
     app = ms.create_app()
     client = app.test_client()
     response = client.get('/')

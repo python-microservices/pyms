@@ -36,9 +36,9 @@ def get_conf(*args, **kwargs):
     :return:
     """
     service = kwargs.pop('service', None)
-    memoize = kwargs.pop('memoize', True)
+    # memoize = kwargs.pop('memoize', True)
     if not service:
         raise ServiceDoesNotExistException("Service not defined")
-    if not memoize or service not in __service_configs:
-        __service_configs[service] = ConfFile(*args, **kwargs)
-    return getattr(__service_configs[service], service)
+
+    config = ConfFile(*args, **kwargs)
+    return getattr(config, service)
