@@ -2,9 +2,6 @@ from pyms.config.confile import ConfFile
 from pyms.exceptions import ServiceDoesNotExistException
 
 
-__service_configs = {}
-
-
 def get_conf(*args, **kwargs):
     """
     Returns an object with a set of attributes retrieved from the configuration file. Each subblock is a append of the
