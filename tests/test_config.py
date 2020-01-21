@@ -21,8 +21,7 @@ class ConfFromFileEnvTests(unittest.TestCase):
 
     def test_example_test_file_from_env(self):
         config = ConfigLoader().config
-        __import__('pdb').set_trace()
-        self.assertEqual(config.pyms.config.test_var, "general")
+        self.assertEqual(config.pyms.config.TEST_VAR, "general")
 
 
 class ConfTests(unittest.TestCase):
@@ -43,10 +42,6 @@ class ConfTests(unittest.TestCase):
     def test_dictionary_recursive_dict_normal_key(self):
         config = ConfigLoader(config={"test-1": {"test-1-1": "a", "test_1-2": "b"}, "test_2": "c"}).config
         self.assertEqual(config.test_1.test_1_2, "b")
-
-    def test_dictionary_recursive_dict_normal_key_dinamyc(self):
-        config = ConfigLoader(config={"test-1": {"test-1-1": "a", "test_1-2": "b"}, "test_2": "c"}).config
-        self.assertEqual(getattr(config, "test_1.test_1_2"), "b")
 
     def test_equal_instances_error(self):
         config1 = ConfigLoader(config={"test-1": {"test-1-1": "a", "test_1-2": "b"}, "test_2": "c"}).config
@@ -78,7 +73,7 @@ class ConfTests(unittest.TestCase):
 
     def test_dictionary_attribute_not_exists(self):
         config = ConfigLoader(config={"test-1": "a"}).config
-        with self.assertRaises(AttrDoesNotExistException):
+        with self.assertRaises(KeyError):
             config.not_exist
 
     def test_example_test_config_not_exixsts(self):
@@ -91,25 +86,11 @@ class ConfTests(unittest.TestCase):
 
     def test_example_test_yaml_file(self):
         config = ConfigLoader(path=os.path.join(self.BASE_DIR, "config-tests.yml")).config
-        self.assertEqual(config.pyms.config.test_var, "general")
+        self.assertEqual(config.pyms.config.TEST_VAR, "general")
 
     def test_example_test_json_file(self):
         config = ConfigLoader(path=os.path.join(self.BASE_DIR, "config-tests.json")).config
-        self.assertEqual(config.pyms.config.test_var, "general")
-
-
-class ConfNotExistTests(unittest.TestCase):
-    def test_empty_conf(self):
-        config = ConfigLoader(empty_init=True).config
-        self.assertEqual(config.my_ms, {})
-
-    def test_empty_conf_two_levels(self):
-        config = ConfigLoader(empty_init=True).config
-        self.assertEqual(config.my_ms.level_two, {})
-
-    def test_empty_conf_three_levels(self):
-        config = ConfigLoader(empty_init=True).config
-        self.assertEqual(config.my_ms.level_two.level_three, {})
+        self.assertEqual(config.pyms.config.TEST_VAR, "general")
 
 
 class GetConfig(unittest.TestCase):
@@ -124,24 +105,7 @@ class GetConfig(unittest.TestCase):
     def test_default(self):
         config = get_conf(service=CONFIG_BASE)
         assert config.APP_NAME == "Python Microservice"
-        assert config.app_name == "Python Microservice"
-        assert config.subservice1.test == "input"
-
-    @mock.patch('pyms.config.config.ConfigLoader')
-    def test_memoized(self, mock_confile):
-        mock_confile.pyms = {}
-        get_conf(service="pyms")
-        get_conf(service="pyms")
-
-        mock_confile.assert_called_once()
-
-    @mock.patch('pyms.config.config.ConfigLoader')
-    def test_without_memoize(self, mock_confile):
-        mock_confile.pyms = {}
-        get_conf(service="pyms", memoize=False)
-        get_conf(service="pyms", memoize=False)
-
-        assert mock_confile.call_count == 2
+        assert config.SUBSERVICE1.test == "input"
 
     @mock.patch('pyms.config.config.ConfigLoader')
     def test_without_params(self, mock_confile):

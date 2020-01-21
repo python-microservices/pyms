@@ -41,9 +41,8 @@ class DriverService:
         self.config = get_conf(service=self.service, empty_init=True)
 
     def __getattr__(self, attr, *args, **kwargs):
-        config_attribute = getattr(self.config, attr)
-        return config_attribute if config_attribute == "" or config_attribute != {} else self.default_values.get(attr,
-                                                                                                                 None)
+        config_attribute = self.config.get(attr)
+        return config_attribute if config_attribute != {} else self.default_values.get(attr)
 
     def is_enabled(self):
         return self.enabled
@@ -59,12 +58,12 @@ class ServicesManager:
     service = SERVICE_BASE
 
     def __init__(self):
-        self.config = get_conf(service=self.service, empty_init=True, memoize=False, uppercase=False)
+        self.config = get_conf(service=self.service, empty_init=True, uppercase=False)
 
-    def get_services(self, memoize: bool) -> Tuple[Text, DriverService]:
-        for k in self.config.__dict__.keys():
+    def get_services(self) -> Tuple[Text, DriverService]:
+        for k in self.config.keys():
             if k.islower() and k not in ['empty_init', ]:
-                service = self.get_service(k, memoize=memoize)
+                service = self.get_service(k)
                 if service.is_enabled():
                     yield (k, service)
 

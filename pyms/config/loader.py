@@ -15,7 +15,7 @@ config_cache = {}
 def _normalize_config(config):
     for key, item in config.items():
         if isinstance(item, dict):
-            item = dict(_normalize_config(item))
+            item = AttributeDict(dict(_normalize_config(item)))
         yield _normalize_keys(key), item
 
 
@@ -57,7 +57,6 @@ class ConfigLoader:
             self.load()
         else:
             self.config = self._transform(base_config)
-        #  __import__('pdb').set_trace()
         if not self.config and not self.__empty_init:
             raise ConfigDoesNotFoundException("Configuration file not found")
 
@@ -65,7 +64,7 @@ class ConfigLoader:
         config = dict(_normalize_config(config_src))
         # Flask search for uppercase keys
         if self.__uppercase and "config" in config.get("pyms", {}):
-            config["pyms"]["config"] = {k.upper(): v for k, v in config["pyms"]["config"].items()}
+            config["pyms"]["config"] = AttributeDict({k.upper(): v for k, v in config["pyms"]["config"].items()})
         return AttributeDict(config)
 
     def _get_conf_from_env(self) -> dict:

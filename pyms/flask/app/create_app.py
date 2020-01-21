@@ -98,7 +98,7 @@ class Microservice(metaclass=SingletonMeta):
 
     def __init__(self, *args, **kwargs):
         self.path = os.path.dirname(kwargs.get("path", __file__))
-        self.config = get_conf(service=CONFIG_BASE, memoize=self._singleton)
+        self.config = get_conf(service=CONFIG_BASE)
         self.init_services()
 
     def init_services(self) -> None:
@@ -107,7 +107,7 @@ class Microservice(metaclass=SingletonMeta):
         :return: None
         """
         service_manager = ServicesManager()
-        for service_name, service in service_manager.get_services(memoize=self._singleton):
+        for service_name, service in service_manager.get_services():
             setattr(self, service_name, service)
 
     def init_libs(self) -> Flask:

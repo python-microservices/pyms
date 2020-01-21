@@ -1,4 +1,5 @@
-from pyms.flask.app.create_app import Microservice
+from pyms.config import get_conf
+from pyms.constants import CONFIG_BASE
 
 
 def config():
@@ -8,5 +9,4 @@ def config():
     set the default key `ms` for your configuration block in your config.yml
     :return:
     """
-    ms = Microservice()
-    return ms.config
+    return get_conf(service=CONFIG_BASE)
