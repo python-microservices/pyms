@@ -1,7 +1,6 @@
 """Module to read yaml or json conf"""
 import logging
 import os
-from typing import Text
 
 import anyconfig
 
@@ -11,6 +10,7 @@ from pyms.exceptions import AttrDoesNotExistException, ConfigDoesNotFoundExcepti
 logger = logging.getLogger(LOGGER_NAME)
 
 config_cache = {}
+
 
 class ConfFile(dict):
     """Recursive get configuration from dictionary, a config file in JSON or YAML format from a path or

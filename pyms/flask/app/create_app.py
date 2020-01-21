@@ -1,5 +1,6 @@
 import logging
 import os
+from typing import Text
 
 from flask import Flask
 from flask_opentracing import FlaskTracing
@@ -10,7 +11,6 @@ from pyms.flask.healthcheck import healthcheck_blueprint
 from pyms.flask.services.driver import ServicesManager
 from pyms.logger import CustomJsonFormatter
 from pyms.utils import check_package_exists
-
 
 logger = logging.getLogger(LOGGER_NAME)
 
