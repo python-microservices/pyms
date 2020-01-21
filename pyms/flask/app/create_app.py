@@ -192,7 +192,7 @@ class Microservice(metaclass=SingletonMeta):
         self.delete_services()
         self.config.reload()
         self.init_services()
-        # self.create_app()
+        self.create_app()
 
     def create_app(self):
         """Initialize the Flask app, register blueprints and initialize
@@ -217,6 +217,8 @@ class Microservice(metaclass=SingletonMeta):
         self.init_logger()
 
         self.init_metrics()
+
+        logger.debug("Started app with PyMS and this services: {}".format(self.services))
 
         return self.application
 
