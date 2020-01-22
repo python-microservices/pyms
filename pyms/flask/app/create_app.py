@@ -90,6 +90,7 @@ class Microservice(metaclass=SingletonMeta):
     Current services are swagger, request, tracer, metrics
     """
     service = None
+    services = []
     application = None
     swagger = False
     request = False
@@ -98,7 +99,7 @@ class Microservice(metaclass=SingletonMeta):
 
     def __init__(self, *args, **kwargs):
         self.path = os.path.dirname(kwargs.get("path", __file__))
-        self.config = get_conf(service=CONFIG_BASE, memoize=self._singleton)
+        self.config = get_conf(service=CONFIG_BASE)
         self.init_services()
 
     def init_services(self) -> None:
@@ -107,8 +108,20 @@ class Microservice(metaclass=SingletonMeta):
         :return: None
         """
         service_manager = ServicesManager()
-        for service_name, service in service_manager.get_services(memoize=self._singleton):
+        for service_name, service in service_manager.get_services():
+            self.services.append(service_name)
             setattr(self, service_name, service)
+
+    def delete_services(self) -> None:
+        """
+        Set the Attributes of all service defined in config.yml and exists in `pyms.flask.service`
+        :return: None
+        """
+        for service_name in self.services:
+            try:
+                delattr(self, service_name)
+            except AttributeError:
+                pass
 
     def init_libs(self) -> Flask:
         """This function exists to override if you need to set more libs such as SQLAlchemy, CORs, and any else
@@ -153,7 +166,7 @@ class Microservice(metaclass=SingletonMeta):
         :return: None
         """
         if self._exists_service("swagger"):
-            application = self.swagger.init_app(config=self.config, path=self.path)
+            application = self.swagger.init_app(config=self.config.to_flask(), path=self.path)
         else:
             check_package_exists("flask")
             application = Flask(__name__, static_folder=os.path.join(self.path, 'static'),
@@ -175,6 +188,12 @@ class Microservice(metaclass=SingletonMeta):
             )
             self.metrics.monitor(self.application)
 
+    def reload_conf(self):
+        self.delete_services()
+        self.config.reload()
+        self.init_services()
+        self.create_app()
+
     def create_app(self):
         """Initialize the Flask app, register blueprints and initialize
         all libraries like Swagger, database,
@@ -183,7 +202,7 @@ class Microservice(metaclass=SingletonMeta):
         :return:
         """
         self.application = self.init_app()
-        self.application.config.from_object(self.config)
+        self.application.config.from_object(self.config.to_flask())
         self.application.tracer = None
         self.application.ms = self
 
@@ -198,6 +217,8 @@ class Microservice(metaclass=SingletonMeta):
         self.init_logger()
 
         self.init_metrics()
+
+        logger.debug("Started app with PyMS and this services: {}".format(self.services))
 
         return self.application
 

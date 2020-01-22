@@ -97,6 +97,20 @@ class ConfTests(unittest.TestCase):
         self.assertEqual(config.pyms.config.test_var, "general")
 
 
+class ConfCacheTests(unittest.TestCase):
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    def test_get_cache(self):
+        config = ConfFile(path=os.path.join(self.BASE_DIR, "config-tests-cache.yml"))
+        config.set_path(os.path.join(self.BASE_DIR, "config-tests-cache2.yml"))
+        self.assertEqual(config.pyms.config.my_cache, 1234)
+
+    def test_get_cache_and_reload(self):
+        config = ConfFile(path=os.path.join(self.BASE_DIR, "config-tests-cache.yml"))
+        config.set_path(os.path.join(self.BASE_DIR, "config-tests-cache2.yml"))
+        config.reload()
+        self.assertEqual(config.pyms.config.my_cache, 12345678)
+
+
 class ConfNotExistTests(unittest.TestCase):
     def test_empty_conf(self):
         config = ConfFile(empty_init=True)
@@ -121,26 +135,14 @@ class GetConfig(unittest.TestCase):
         del os.environ[CONFIGMAP_FILE_ENVIRONMENT]
 
     def test_default(self):
-        config = get_conf(service=CONFIG_BASE)
-        assert config.APP_NAME == "Python Microservice"
+        config = get_conf(service=CONFIG_BASE, uppercase=True)
         assert config.app_name == "Python Microservice"
         assert config.subservice1.test == "input"
 
-    @mock.patch('pyms.config.conf.ConfFile')
-    def test_memoized(self, mock_confile):
-        mock_confile.pyms = {}
-        get_conf(service="pyms")
-        get_conf(service="pyms")
-
-        mock_confile.assert_called_once()
-
-    @mock.patch('pyms.config.conf.ConfFile')
-    def test_without_memoize(self, mock_confile):
-        mock_confile.pyms = {}
-        get_conf(service="pyms", memoize=False)
-        get_conf(service="pyms", memoize=False)
-
-        assert mock_confile.call_count == 2
+    def test_default_flask(self):
+        config = get_conf(service=CONFIG_BASE, uppercase=True).to_flask()
+        assert config.APP_NAME == "Python Microservice"
+        assert config.SUBSERVICE1.test == "input"
 
     @mock.patch('pyms.config.conf.ConfFile')
     def test_without_params(self, mock_confile):

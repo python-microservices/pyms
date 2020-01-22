@@ -1,6 +1,7 @@
 pyms:
   services:
-    requests: true
+    requests:
+      enabled: true
     swagger:
       path: ""
       file: "swagger.yaml"
