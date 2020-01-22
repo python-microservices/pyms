@@ -22,7 +22,6 @@ class ConfFile(dict):
     _empty_init = False
     _default_file = "config.yml"
     __path = None
-    _uppercase = False
 
     def __init__(self, *args, **kwargs):
         """
@@ -37,7 +36,6 @@ class ConfFile(dict):
         """
         self._empty_init = kwargs.get("empty_init", False)
         config = kwargs.get("config")
-        self._uppercase = kwargs.get("uppercase", False)
         if config is None:
             self.set_path(kwargs.get("path"))
             config = self._get_conf_from_file() or self._get_conf_from_env()
@@ -55,19 +53,19 @@ class ConfFile(dict):
     def set_path(self, path):
         self.__path = path
 
+    def to_flask(self):
+        return ConfFile(config={k.upper(): v for k, v in self.items()})
+
     def set_config(self, config):
         config = dict(self.normalize_config(config))
         for k, v in config.items():
             setattr(self, k, v)
-            # Flask search for uppercase keys
-            if self._uppercase:
-                setattr(self, k.upper(), v)
         return config
 
     def normalize_config(self, config):
         for key, item in config.items():
             if isinstance(item, dict):
-                item = ConfFile(config=item, empty_init=self._empty_init, uppercase=self._uppercase)
+                item = ConfFile(config=item, empty_init=self._empty_init)
             yield self.normalize_keys(key), item
 
     @staticmethod

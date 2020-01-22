@@ -136,9 +136,13 @@ class GetConfig(unittest.TestCase):
 
     def test_default(self):
         config = get_conf(service=CONFIG_BASE, uppercase=True)
-        assert config.APP_NAME == "Python Microservice"
         assert config.app_name == "Python Microservice"
         assert config.subservice1.test == "input"
+
+    def test_default_flask(self):
+        config = get_conf(service=CONFIG_BASE, uppercase=True).to_flask()
+        assert config.APP_NAME == "Python Microservice"
+        assert config.SUBSERVICE1.test == "input"
 
     @mock.patch('pyms.config.conf.ConfFile')
     def test_without_params(self, mock_confile):

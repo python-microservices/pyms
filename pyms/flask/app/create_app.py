@@ -166,7 +166,7 @@ class Microservice(metaclass=SingletonMeta):
         :return: None
         """
         if self._exists_service("swagger"):
-            application = self.swagger.init_app(config=self.config, path=self.path)
+            application = self.swagger.init_app(config=self.config.to_flask(), path=self.path)
         else:
             check_package_exists("flask")
             application = Flask(__name__, static_folder=os.path.join(self.path, 'static'),
@@ -202,7 +202,7 @@ class Microservice(metaclass=SingletonMeta):
         :return:
         """
         self.application = self.init_app()
-        self.application.config.from_object(self.config)
+        self.application.config.from_object(self.config.to_flask())
         self.application.tracer = None
         self.application.ms = self
 
