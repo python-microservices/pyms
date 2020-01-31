@@ -18,91 +18,74 @@ a simple configuration file could be a config.yaml:
 
 ```yaml
 pyms:
-  requests: true
-  swagger:
-    path: ""
-    file: "swagger.yaml"
-my-ms:
-  DEBUG: true
-  TESTING: false
-  APP_NAME: "Python Microservice"
-  APPLICATION_ROOT: ""
+  services:
+    requests: true
+    swagger:
+      path: ""
+      file: "swagger.yaml"
+  config:
+    debug: true
+    testing: false
+    app_name: "Python Microservice"
+    APPLICATION_ROOT: ""
 ```
 
 or in a config.json:
 
 ```json
 {
-"pyms":{
-  "requests": true,
-  "swagger": {
-    "path": "",
-    "file": "swagger.yaml"
+  "pyms": {
+    "services":{
+      "requests": true,
+      "swagger": {
+        "path": "",
+        "file": "swagger.yaml"
+      }
+    },
+    "config": {
+      "DEBUG": true,
+      "TESTING": true,
+      "APP_NAME": "Python Microservice",
+      "APPLICATION_ROOT": "/",
+      "test_var": "general",
+      "subservice1": {
+        "test": "input"
+      },
+      "subservice2": {
+        "test": "output"
+      }
     }
-  },
-"my-ms": {
-  "DEBUG": true,
-  "TESTIN": false,
-  "APP_NAME": "Python Microservice",
-  "APPLICATION_ROOT": ""
   }
 }
 ```
 
 This file could contains this keywords:
 
-## pyms block
+## pyms - services block
 
 ```pyms```: all subsets inside this keyword are the settings of this library. Each keyword will be a service of our
 [Microservice class](ms_class.md). For example, we declare our microservice class as:
 
 ```python
 from pyms.flask.app import Microservice
-ms = Microservice(service="my-ms", path=__file__)
+ms = Microservice(path=__file__)
 ```
 and a `config.yaml` file:
 
 ```yaml
 pyms:
-  requests: true
+  services:
+    requests: true
 ```
 
 our object `ms` has an attribute `requests` that is a instance of our service [requests](services.md). 
 
-## Our microservice block
+## pyms - config block
 This part contains all keywords of a [Flask Configuration Handling](http://flask.pocoo.org/docs/1.0/config/) and our 
 constants of the enviroments (local configuration, staging configuration...). Keep in mind that a Flask configuration needs
-the keywords to be declared as uppercase.
+the keywords to be declared as uppercase. If you defined a variable like `app_name`, you will get this with 
+`current_app.config["APP_NAME"]`
 
-The name of this block is defined when you create the object of [Microservice class](ms_class.md):
-
-### Example 1
-```python
-from pyms.flask.app import Microservice
-ms = Microservice(service="my-personal-microservice", path=__file__)
-```
-and a `config.yaml` file:
-
-```yaml
-my-personal-microservice:
-  DEBUG: true
-  TESTING: false
-```
-
-### Example 2
-```python
-from pyms.flask.app import Microservice
-ms = Microservice(service="ms1-api", path=__file__)
-```
-and a `config.yaml` file:
-
-```yaml
-ms1-api:
-  DEBUG: true
-  TESTING: false
-```
-
-You can set this keyword with the environment var **CONFIGMAP_SERVICE**.
 
 ## Import Configuration
 With pyms, all configuration is stored as flask configuration and it can be acceded from:
@@ -149,9 +132,6 @@ API = Api(
 )
 ```
 
-**IMPORTANT:** If you use this method to get configuration out of context, you must set the `CONFIGMAP_SERVICE` or set 
-the default key `ms` for your configuration block in your config.yml
-
 
 ## Looking for Configuration file with Kubernetes Configmaps
 By default, Microservice class search a config.yml in the same path. You can set a different route or set a json file.
@@ -184,3 +164,5 @@ spec:
           configMap:
             name: my-microservice-configmap
 ```
+
+See [Routing](routing.md) and [Examples](examples.md) to continue with this tutorial

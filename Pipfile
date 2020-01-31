@@ -15,18 +15,18 @@ flask-opentracing = "*"
 opentracing = ">=2.1"
 opentracing-instrumentation = "==3.2.1"
 prometheus_client = ">=0.7.1"
+
 [dev-packages]
 requests-mock = "*"
-coverage = "==4.4.0"
+coverage = "==4.5.4"
 pytest = "*"
 pytest-cov = "*"
 pylint = "*"
 flake8 = "*"
 tox = "*"
-safety = "*"
 bandit = "*"
 mkdocs = "*"
-lightstep = "==4.1.0"
+lightstep = "==4.3.0"
 
 [requires]
 python_version = "3.6"

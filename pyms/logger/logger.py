@@ -32,8 +32,8 @@ class CustomJsonFormatter(jsonlogger.JsonFormatter):
             log_record["trace"] = headers.get('X-B3-TraceId', "")
             log_record["span"] = headers.get('X-B3-SpanId', "")
             log_record["parent"] = headers.get('X-B3-ParentSpanId', "")
-        except Exception as ex:
-            logger.error("Tracer error {}".format(ex))
+        except Exception as ex:  # pragma: no cover
+            logger.error("Tracer error: {}".format(ex))
 
     def add_service_name(self, project_name):
         self.service_name = project_name.lower()

@@ -25,14 +25,15 @@ if __name__ == '__main__':
 
 config.yml
 ```yaml
-pyms: # 1.2
-  requests:
-    data: {}
-ms: # 1.3
-  DEBUG: true
-  APP_NAME: business-glossary
-  APPLICATION_ROOT : ""
-  SECRET_KEY: "gjr39dkjn344_!67#"
+pyms: 
+	services: # 1.2
+		requests:
+			data: {}
+	config: # 1.3
+		DEBUG: true
+		APP_NAME: business-glossary
+		APPLICATION_ROOT : ""
+		SECRET_KEY: "gjr39dkjn344_!67#"
 ```
 
 ## So what did that code do?
@@ -46,4 +47,4 @@ if it was defined in the pyms configuration block, create a tracer, add health-c
 
 
 
-See [Configuration](configuration.md) and [Examples](examples.md) to continue with this tutorial
+See [Configuration](configuration.md), [Routing](routing.md) and [Examples](examples.md) to continue with this tutorial

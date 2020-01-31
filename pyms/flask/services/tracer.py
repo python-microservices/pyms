@@ -1,7 +1,7 @@
 import logging
 
 import opentracing
-from flask import current_app, request
+from flask import current_app, request, has_request_context
 from jaeger_client.metrics.prometheus import PrometheusMetricsFactory
 from opentracing_instrumentation import get_current_span
 
@@ -9,6 +9,7 @@ from pyms.config.conf import get_conf
 from pyms.constants import LOGGER_NAME
 from pyms.flask.services.driver import DriverService
 from pyms.utils import check_package_exists, import_package, import_from
+from pyms.utils.utils import get_service_name
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -19,18 +20,20 @@ DEFAULT_CLIENT = JAEGER_CLIENT
 
 
 def inject_span_in_headers(headers):
-    # FLASK https://github.com/opentracing-contrib/python-flask
-    tracer = current_app.tracer
-    # Add traces
-    span = None
-    if tracer:
-        span = tracer.get_span(request=request)
-        if not span:  # pragma: no cover
-            span = get_current_span()
-            if not span:
-                span = tracer.tracer.start_span()
-    context = span.context if span else None
-    tracer.tracer.inject(context, opentracing.Format.HTTP_HEADERS, headers)
+    if has_request_context():
+        # FLASK https://github.com/opentracing-contrib/python-flask
+        tracer = current_app.tracer if getattr(current_app, "tracer") else None
+        # Add traces
+        span = None
+        current_app.app_context()
+        if tracer:
+            span = tracer.get_span(request=request)
+            if not span:  # pragma: no cover
+                span = get_current_span()
+                if not span:
+                    span = tracer.tracer.start_span()
+        context = span.context if span else None
+        tracer.tracer.inject(context, opentracing.Format.HTTP_HEADERS, headers)
     return headers
 
 
@@ -65,7 +68,7 @@ class Service(DriverService):
                     'reporting_host': self.host
                 }
             }
-        metrics_config = get_conf(service="pyms.metrics", empty_init=True, memoize=False)
+        metrics_config = get_conf(service=get_service_name(service="metrics"), empty_init=True)
         metrics = ""
         if metrics_config:
             service_name = self.component_name.lower().replace("-", "_").replace(" ", "_")

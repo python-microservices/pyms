@@ -15,7 +15,7 @@ logger = logging.getLogger(LOGGER_NAME)
 
 DEFAULT_RETRIES = 3
 
-DEFAULTstatus_retries = (500, 502, 504)
+DEFAULT_STATUS_RETRIES = (500, 502, 504)
 
 
 def retry(f):
@@ -41,20 +41,12 @@ def retry(f):
 class Service(DriverService):
     service = "requests"
     default_values = {
-        "data": ""
+        "data": "",
+        "retries": DEFAULT_RETRIES,
+        "status_retries": DEFAULT_STATUS_RETRIES,
+        "propagate_headers": False,
     }
     tracer = None
-    retries = DEFAULT_RETRIES
-    status_retries = DEFAULTstatus_retries
-    _propagate_headers = False
-
-    def __init__(self, service, *args, **kwargs):
-        """Initialization for trace headers propagation"""
-        super().__init__(service, *args, **kwargs)
-        if self.exists_config():
-            self.retries = self.config.retries or DEFAULT_RETRIES
-            self.status_retries = self.config.status_retries or DEFAULTstatus_retries
-            self._propagate_headers = self.config.propagate_headers
 
     def requests(self, session: requests.Session):
         """
@@ -89,12 +81,12 @@ class Service(DriverService):
 
         try:
             headers = inject_span_in_headers(headers)
-        except Exception as ex:
+        except Exception as ex:  # pragma: no cover
             logger.debug("Tracer error {}".format(ex))
         return headers
 
     @staticmethod
-    def propagate_headers(headers: dict) -> dict:
+    def set_propagate_headers(headers: dict) -> dict:
         for k, v in request.headers:
             if not headers.get(k):
                 headers.update({k: v})
@@ -112,7 +104,7 @@ class Service(DriverService):
             headers = {}
 
         if self._propagate_headers or propagate_headers:
-            headers = self.propagate_headers(headers)
+            headers = self.set_propagate_headers(headers)
         return headers
 
     @staticmethod
@@ -137,8 +129,8 @@ class Service(DriverService):
 
         try:
             data = response.json()
-            if self.config.data:
-                data = data.get(self.config.data, {})
+            if self.data:
+                data = data.get(self.data, {})
             return data
         except ValueError:
             logger.warning("Response.content is not a valid json {}".format(response.content))

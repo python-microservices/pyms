@@ -6,8 +6,6 @@ install:
   - pip install -U tox coverage==4.0.3 coveralls==1.8.2
 
 script:
-  - pipenv install --dev
-  - pipenv run pip freeze > requirements-tests.txt
   - coverage erase
   - tox
 after_success:
