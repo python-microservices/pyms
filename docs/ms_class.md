@@ -37,19 +37,19 @@ Each keyword in our configuration block, can be accessed in our Microservice obj
 ```yaml
 # Config.yml
 pyms:
-	config:
-		app_name: "Python Microservice"
-		foo: "var"
-		multiplevars:
-			config1: "test1"
-			config2: "test2"
+  config:
+    app_name: "Python Microservice"
+      foo: "var"
+        multiplevars:
+          config1: "test1"
+          config2: "test2"
   
 ```
 ```python
 #app.py
 from pyms.flask.app import Microservice
 
-ms = Microservice(service="example-config", path=__file__)
+ms = Microservice(path=__file__)
 print(ms.config.APP_NAME) 
 # >> "Python Microservice"
 print(ms.config.app_name) 
