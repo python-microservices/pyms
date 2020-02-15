@@ -4,8 +4,10 @@ import unittest
 from unittest import mock
 
 from pyms.config import get_conf, ConfFile
+from pyms.config.conf import validate_conf
 from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT, LOGGER_NAME, CONFIG_BASE
-from pyms.exceptions import AttrDoesNotExistException, ConfigDoesNotFoundException, ServiceDoesNotExistException
+from pyms.exceptions import AttrDoesNotExistException, ConfigDoesNotFoundException, ServiceDoesNotExistException, \
+    ConfigErrorException
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -99,6 +101,7 @@ class ConfTests(unittest.TestCase):
 
 class ConfCacheTests(unittest.TestCase):
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
     def test_get_cache(self):
         config = ConfFile(path=os.path.join(self.BASE_DIR, "config-tests-cache.yml"))
         config.set_path(os.path.join(self.BASE_DIR, "config-tests-cache2.yml"))
@@ -148,3 +151,24 @@ class GetConfig(unittest.TestCase):
     def test_without_params(self, mock_confile):
         with self.assertRaises(ServiceDoesNotExistException):
             get_conf()
+
+
+class ConfValidateTests(unittest.TestCase):
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+    def test_get_conf(self):
+        config = ConfFile(path=os.path.join(self.BASE_DIR, "config-tests-cache.yml"))
+        config.set_path(os.path.join(self.BASE_DIR, "config-tests-cache2.yml"))
+        self.assertEqual(config.pyms.config.my_cache, 1234)
+
+    def test_wrong_block_no_pyms(self):
+        with self.assertRaises(ConfigErrorException):
+            validate_conf(path=os.path.join(self.BASE_DIR, "config-tests-bad-structure.yml"))
+
+    def test_wrong_block_no_config(self):
+        with self.assertRaises(ConfigErrorException):
+            validate_conf(path=os.path.join(self.BASE_DIR, "config-tests-bad-structure2.yml"))
+
+    def test_wrong_block_not_valid_structure(self):
+        with self.assertRaises(ConfigErrorException):
+            validate_conf(path=os.path.join(self.BASE_DIR, "config-tests-bad-structure3.yml"))

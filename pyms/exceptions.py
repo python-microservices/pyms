@@ -16,6 +16,8 @@ class ServiceDoesNotExistException(Exception):
 class ConfigDoesNotFoundException(Exception):
     pass
 
+class ConfigErrorException(Exception):
+    pass
 
 class PackageNotExists(Exception):
     pass
