@@ -40,7 +40,7 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Framework :: Flask',
         "Intended Audience :: Developers",
         "Natural Language :: English",

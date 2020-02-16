@@ -9,3 +9,5 @@ pyms:
        test: input
     subservice2:
        test: output
+    subservice_flask:
+       test: flask

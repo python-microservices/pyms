@@ -68,10 +68,11 @@ class Service(DriverService):
                     'reporting_host': self.host
                 }
             }
-        metrics_config = get_conf(service=get_service_name(service="metrics"), empty_init=True, memoize=False)
+        metrics_config = get_conf(service=get_service_name(service="metrics"), empty_init=True)
         metrics = ""
         if metrics_config:
-            metrics = PrometheusMetricsFactory()
+            service_name = self.component_name.lower().replace("-", "_").replace(" ", "_")
+            metrics = PrometheusMetricsFactory(service_name_label=service_name)
         config = Config(
             config={
                 **{
