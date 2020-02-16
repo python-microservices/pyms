@@ -1,6 +1,7 @@
 """Module to read yaml or json conf"""
 import logging
 import re
+
 import anyconfig
 
 from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT, LOGGER_NAME, DEFAULT_CONFIGMAP_FILENAME

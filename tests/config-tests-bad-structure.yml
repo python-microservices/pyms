@@ -1,0 +1,10 @@
+config:
+  debug: true
+  testing: true
+  app_name: "Python Microservice"
+  application_root: /
+  test_var: general
+  subservice1:
+     test: input
+  subservice2:
+     test: output
