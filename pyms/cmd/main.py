@@ -8,7 +8,7 @@ import sys
 from pyms.utils.crypt import Crypt
 
 
-class Command(object):
+class Command:
     config = None
 
     parser = None
@@ -51,15 +51,16 @@ class Command(object):
             else:
                 self.print_error("ERROR")
 
-    def get_input(self, msg):
-        return input(msg)
+    @staticmethod
+    def get_input(msg):
+        return input(msg)  # nosec
 
     def run(self):
         crypt = Crypt()
         if self.create_key:
-            path = crypt._loader.get_or_setpath()
+            path = crypt._loader.get_or_setpath()  # pylint: disable=protected-access
             pwd = self.get_input('Type a password to generate the key file: ')
-            generate_file = self.get_input('Do you want to generate a file in ? [Y/n]'.format(path))
+            generate_file = self.get_input('Do you want to generate a file in {}? [Y/n]'.format(path))
             generate_file = generate_file.lower() != "n"
             key = crypt.generate_key(pwd, generate_file)
             if generate_file:
@@ -69,6 +70,7 @@ class Command(object):
         if self.encrypt:
             encrypted = crypt.encrypt(self.encrypt)
             self.print_ok("Encrypted OK: {}".format(encrypted))
+        return True
 
     @staticmethod
     def print_ok(msg=""):
