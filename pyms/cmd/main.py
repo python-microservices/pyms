@@ -18,7 +18,7 @@ class Command:
     def __init__(self, *args, **kwargs):
         arguments = kwargs.get("arguments", False)
         autorun = kwargs.get("autorun", True)
-        if not arguments:
+        if not arguments:  # pragma: no cover
             arguments = sys.argv[1:]
 
         parser = argparse.ArgumentParser(description='Python Microservices')

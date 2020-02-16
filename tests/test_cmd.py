@@ -38,3 +38,13 @@ class TestCmd(unittest.TestCase):
         cmd = Command(arguments=arguments, autorun=False)
         cmd.run()
         crypt.delete_key()
+
+    @patch('pyms.cmd.main.Command.get_input', return_value='n')
+    def test_output_key(self, input):
+        crypt = Crypt()
+        arguments = ["create-key", ]
+        cmd = Command(arguments=arguments, autorun=False)
+        cmd.run()
+        with pytest.raises(FileNotFoundError) as excinfo:
+            crypt.delete_key()
+        assert ("[Errno 2] No such file or directory: 'key.key'") in str(excinfo.value)
