@@ -44,7 +44,7 @@ class Command:
         except AttributeError:
             self.encrypt = ""
         self.verbose = len(args.verbose)
-        if autorun:
+        if autorun:  # pragma: no cover
             result = self.run()
             if result:
                 self.exit_ok("OK")
@@ -52,7 +52,7 @@ class Command:
                 self.print_error("ERROR")
 
     @staticmethod
-    def get_input(msg):
+    def get_input(msg):  # pragma: no cover
         return input(msg)  # nosec
 
     def run(self):
@@ -76,19 +76,19 @@ class Command:
     def print_ok(msg=""):
         print('\033[92m\033[1m ' + msg + ' \033[0m\033[0m')
 
-    def print_verbose(self, msg=""):
+    def print_verbose(self, msg=""):  # pragma: no cover
         if self.verbose:
             print(msg)
 
     @staticmethod
-    def print_error(msg=""):
+    def print_error(msg=""):  # pragma: no cover
         print('\033[91m\033[1m ' + msg + ' \033[0m\033[0m')
 
-    def exit_with_error(self, msg=""):
+    def exit_with_error(self, msg=""):  # pragma: no cover
         self.print_error(msg)
         sys.exit(2)
 
-    def exit_ok(self, msg=""):
+    def exit_ok(self, msg=""):  # pragma: no cover
         self.print_ok(msg)
         sys.exit(0)
 
