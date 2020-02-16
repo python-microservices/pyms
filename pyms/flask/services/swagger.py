@@ -13,6 +13,13 @@ PROJECT_DIR = "project"
 
 
 class Service(DriverService):
+    """The parameters you can add to your config are:
+    * **path:** The relative or absolute route to your swagger yaml file. The default value is the current directory
+    * **file:** The name of you swagger yaml file. The default value is `swagger.yaml`
+    * **url:** The url where swagger run in your server. The default value is `/ui/`.
+    * **project_dir:** Relative path of the project folder to automatic routing,
+    see [this link for more info](https://github.com/zalando/connexion#automatic-routing). The default value is `project`
+    """
     service = "swagger"
     default_values = {
         "path": SWAGGER_PATH,

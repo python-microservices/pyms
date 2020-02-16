@@ -6,6 +6,7 @@ from flask import Flask
 from flask_opentracing import FlaskTracing
 
 from pyms.config import get_conf
+from pyms.config.conf import validate_conf
 from pyms.constants import LOGGER_NAME, CONFIG_BASE
 from pyms.flask.healthcheck import healthcheck_blueprint
 from pyms.flask.services.driver import ServicesManager
@@ -56,8 +57,6 @@ class Microservice(metaclass=SingletonMeta):
     Environments variables of PyMS:
     **CONFIGMAP_FILE**: The path to the configuration file. By default, PyMS search the configuration file in your
     actual folder with the name "config.yml"
-    **CONFIGMAP_SERVICE**: the name of the keyword that define the block of key-value of [Flask Configuration Handling](http://flask.pocoo.org/docs/1.0/config/)
-    and your own configuration (see the next section to more  info)
 
     ## Create configuration
     Each microservice needs a config file in yaml or json format to work with it. This configuration contains
@@ -99,6 +98,7 @@ class Microservice(metaclass=SingletonMeta):
 
     def __init__(self, *args, **kwargs):
         self.path = os.path.dirname(kwargs.get("path", __file__))
+        validate_conf()
         self.config = get_conf(service=CONFIG_BASE)
         self.init_services()
 
