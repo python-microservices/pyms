@@ -15,6 +15,7 @@ flask-opentracing = "*"
 opentracing = ">=2.1"
 opentracing-instrumentation = "==3.2.1"
 prometheus_client = ">=0.7.1"
+cryptography = "*"
 
 [dev-packages]
 requests-mock = "*"

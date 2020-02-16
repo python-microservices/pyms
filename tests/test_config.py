@@ -4,8 +4,9 @@ import unittest
 from unittest import mock
 
 from pyms.config import get_conf, ConfFile
-from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT, LOGGER_NAME, CONFIG_BASE
+from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT, LOGGER_NAME, CONFIG_BASE, CRYPT_FILE_KEY_ENVIRONMENT
 from pyms.exceptions import AttrDoesNotExistException, ConfigDoesNotFoundException, ServiceDoesNotExistException
+from pyms.utils.crypt import Crypt
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -97,20 +98,6 @@ class ConfTests(unittest.TestCase):
         self.assertEqual(config.pyms.config.test_var, "general")
 
 
-class ConfCacheTests(unittest.TestCase):
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    def test_get_cache(self):
-        config = ConfFile(path=os.path.join(self.BASE_DIR, "config-tests-cache.yml"))
-        config.set_path(os.path.join(self.BASE_DIR, "config-tests-cache2.yml"))
-        self.assertEqual(config.pyms.config.my_cache, 1234)
-
-    def test_get_cache_and_reload(self):
-        config = ConfFile(path=os.path.join(self.BASE_DIR, "config-tests-cache.yml"))
-        config.set_path(os.path.join(self.BASE_DIR, "config-tests-cache2.yml"))
-        config.reload()
-        self.assertEqual(config.pyms.config.my_cache, 12345678)
-
-
 class ConfNotExistTests(unittest.TestCase):
     def test_empty_conf(self):
         config = ConfFile(empty_init=True)
@@ -148,3 +135,22 @@ class GetConfig(unittest.TestCase):
     def test_without_params(self, mock_confile):
         with self.assertRaises(ServiceDoesNotExistException):
             get_conf()
+
+
+class GetConfigEncrypted(unittest.TestCase):
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+    def setUp(self):
+        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(self.BASE_DIR, "config-tests-encrypted.yml")
+        os.environ[CRYPT_FILE_KEY_ENVIRONMENT] = os.path.join(self.BASE_DIR, "key.key")
+
+    def tearDown(self):
+        del os.environ[CONFIGMAP_FILE_ENVIRONMENT]
+        del os.environ[CRYPT_FILE_KEY_ENVIRONMENT]
+
+    def test_encrypt_conf(self):
+        crypt = Crypt(path=self.BASE_DIR)
+        crypt._loader.put_file(b"9IXx2F5d5Ob-h5xdCnFSUXhuFKLGRibvLfSbixpcfCw=", "wb")
+        config = get_conf(service=CONFIG_BASE, uppercase=True)
+        crypt.delete_key()
+        assert config.database_url == "http://database-url"
