@@ -32,6 +32,9 @@ pyms:
 ```
 Check [Configuration](configuration.md) section to know how to create a configuration file.
 
+`Microservice` class search for a `config.yml` in the directory you pass in `path` parameter or search the file in
+`CONFIGMAP_FILE` env var.
+
 Each keyword in our configuration block, can be accessed in our Microservice object through the attribute `config`.
 
 ```yaml

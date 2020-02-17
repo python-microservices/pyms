@@ -10,7 +10,8 @@ microservices with Python which handles cross-cutting concerns:
 - Metrics
 - Distributed tracing
 
-PyMS is powered by [Flask](https://flask.palletsprojects.com/en/1.1.x/), [Connexion](https://github.com/zalando/connexion) and [Opentracing](https://opentracing.io/).
+PyMS is powered by [Flask](https://flask.palletsprojects.com/en/1.1.x/), [Connexion](https://github.com/zalando/connexion) 
+and [Opentracing](https://opentracing.io/).
 
 Get started with [Installation](installation.md) and then get an overview with the [Quickstart](quickstart.md). 
 
