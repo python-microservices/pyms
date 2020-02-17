@@ -314,10 +314,10 @@
         },
         "zipp": {
             "hashes": [
-                "sha256:5c56e330306215cd3553342cfafc73dda2c60792384117893f3a83f8a1209f50",
-                "sha256:d65287feb793213ffe11c0f31b81602be31448f38aeb8ffc2eb286c4f6f6657e"
+                "sha256:6f181bdb1a8c8019f8c11517680f7c1a836a7274c40de9165abfd6da228e54f2",
+                "sha256:fddb41c555ab338cdf27bc1d92cc6e3c05db8d1f1e7ba89d9646976702367333"
             ],
-            "version": "==2.2.0"
+            "version": "==2.2.1"
         }
     },
     "develop": {
@@ -602,11 +602,11 @@
         },
         "mkdocs-material": {
             "hashes": [
-                "sha256:1d486635b03f5a2ec87325842f7b10c7ae7daa0eef76b185572eece6a6ea212c",
-                "sha256:7f3afa0a09c07d0b89a6a9755fdb00513aee8f0cec3538bb903325c80f66f444"
+                "sha256:73d3f5e23db9191e9a9d02278c71444c6ac35a8107d02001c31d2c184c0f105f",
+                "sha256:df0d460a67447c3f5753fe02e07ce67b42a5107957bebb1b19bb0bca9449ce84"
             ],
             "index": "pypi",
-            "version": "==4.6.3"
+            "version": "==5.0.0b1"
         },
         "more-itertools": {
             "hashes": [
@@ -874,10 +874,10 @@
         },
         "zipp": {
             "hashes": [
-                "sha256:5c56e330306215cd3553342cfafc73dda2c60792384117893f3a83f8a1209f50",
-                "sha256:d65287feb793213ffe11c0f31b81602be31448f38aeb8ffc2eb286c4f6f6657e"
+                "sha256:6f181bdb1a8c8019f8c11517680f7c1a836a7274c40de9165abfd6da228e54f2",
+                "sha256:fddb41c555ab338cdf27bc1d92cc6e3c05db8d1f1e7ba89d9646976702367333"
             ],
-            "version": "==2.2.0"
+            "version": "==2.2.1"
         }
     }
 }
