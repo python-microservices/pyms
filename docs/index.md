@@ -10,7 +10,8 @@ microservices with Python which handles cross-cutting concerns:
 - Metrics
 - Distributed tracing
 
-PyMS is powered by [Flask](https://flask.palletsprojects.com/en/1.1.x/), [Connexion](https://github.com/zalando/connexion) and [Opentracing](https://opentracing.io/).
+PyMS is powered by [Flask](https://flask.palletsprojects.com/en/1.1.x/), [Connexion](https://github.com/zalando/connexion) 
+and [Opentracing](https://opentracing.io/).
 
 Get started with [Installation](installation.md) and then get an overview with the [Quickstart](quickstart.md). 
 
@@ -35,16 +36,13 @@ microservices architecture.
 Nowadays, is not perfect and we have a looong roadmap, but we hope this library could help other felas and friends ;) 
 
 
-## Index:
+## Index
 * [Installation](installation.md)
 * [Quickstart](quickstart.md)
 * [Configuration](configuration.md)
-* [Routing](routing.md)
 * [Services](services.md)
 * [PyMS structure](structure.md)
 * [Microservice class](ms_class.md)
-* [Quick start and examples](examples.md)
+* [Examples](examples.md)
+* [Routing](routing.md)
 * [Structure of a microservice project](structure_project.md)
-* Swagger and connexion
-* Tracing requests
-* [Services of PyMS](structure.md)

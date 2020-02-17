@@ -5,5 +5,14 @@ repo_name: GitHub
 site_author: Alberto Vara
 nav:
     - Home: index.md
+    - Installation: installation.md
+    - Quickstart: quickstart.md
+    - Configuration: configuration.md
+    - Services: services.md
     - Structure: structure.md
-theme: readthedocs
+    - Microservice class: ms_class.md
+    - Examples: examples.md
+    - Routing: installation.md
+    - Structure of a microservice project: structure_project.md
+theme:
+  name: 'material'
