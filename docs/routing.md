@@ -17,6 +17,12 @@ If you want to know more about configure swagger service, see [Service section](
 
 Now, you can create a `swagger.yaml` file with [OpenAPI Specification](https://swagger.io/specification/). 
 
+# Examples of routing
+
+You can see how structure a project or OpenAPI Specification in 
+[PyMS examples](https://github.com/python-microservices/pyms/tree/master/examples/microservice_swagger) or in 
+[Microservice Scaffold](https://github.com/python-microservices/microservices-scaffold)
+
 ## Routing to files
 
 This section is equal from [Zalando Connexion](https://github.com/zalando/connexion#automatic-routing), because PyMS use
@@ -118,9 +124,3 @@ def foo_get(message):
 In this example, Connexion automatically recognizes that your view
 function expects an argument named ``message`` and assigns the value
 of the endpoint parameter ``message`` to your view function.
-
-# Examples of routing
-
-You can see how structure a project or OpenAPI Specification in 
-[PyMS examples](https://github.com/python-microservices/pyms/tree/master/examples/microservice_swagger) or in 
-[Microservice Scaffold](https://github.com/python-microservices/microservices-scaffold)
