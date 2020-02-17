@@ -38,19 +38,24 @@ class LoadFile:
         return self._get_conf_from_file(fn)
 
     def _get_conf_from_file(self, fn=None):
-        if not self.path or not os.path.isfile(self.path):
-            logger.debug("File {} NOT FOUND".format(self.path))
+        path = self.path
+
+        if path and os.path.isdir(path):
+            path = os.path.join(path, self.default_file)
+
+        if not path or not os.path.isfile(path):
+            logger.debug("File {} NOT FOUND".format(path))
             return {}
-        if self.path not in files_cached:
-            logger.debug("[CONF] Configmap {} found".format(self.path))
+        if path not in files_cached:
+            logger.debug("[CONF] Configmap {} found".format(path))
             if fn:
-                files_cached[self.path] = fn(self.path)
+                files_cached[path] = fn(path)
             else:
-                file_to_read = open(self.path, 'rb')
+                file_to_read = open(path, 'rb')
                 content = file_to_read.read()  # The key will be type bytes
                 file_to_read.close()
-                files_cached[self.path] = content
-        return files_cached[self.path]
+                files_cached[path] = content
+        return files_cached[path]
 
     def reload(self, fn=None):
         files_cached.pop(self.path, None)

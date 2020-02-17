@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "202ec3deff30d8c4b65ba37d8244ef5b350bd9d0508697e84ce4ed61107d1820"
+            "sha256": "b240135d1529558346e1da859a0fb45340c7bf7b6896e1e47f3e24f3d70ca1a0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -511,17 +511,17 @@
         },
         "gitdb2": {
             "hashes": [
-                "sha256:0a84c85d07166cefaf10fa4b728a8a1b847a7f0d081e2fbe083185462158c126",
-                "sha256:51380b9d8b977b42ac9fc3a8e17af90a56ffc573ca9c6b79f99033b04f29f457"
+                "sha256:0375d983fd887d03c8942e81b1b0abc6c320cfb500cd3fe0d9c0eac87fbf2b52",
+                "sha256:b2b3a67090c17dc61f8407ca485e79ae811225ab5ebcd98ac5ee01448e8987b5"
             ],
-            "version": "==3.0.0"
+            "version": "==3.0.2"
         },
         "gitpython": {
             "hashes": [
-                "sha256:99c77677f31f255e130f3fed4c8e0eebb35f1a09df98ff965fff6774f71688cf",
-                "sha256:99cd0403cecd8a13b95d2e045b9fcaa7837137fcc5ec3105f2c413305d82c143"
+                "sha256:620b3c729bbc143b498cfea77e302999deedc55faec5b1067086c9ef90e101bc",
+                "sha256:a43a5d88a5bbc3cf32bb5223e4b4e68fd716db5e9996cad6e561bbfee6e5f4af"
             ],
-            "version": "==3.0.7"
+            "version": "==3.0.8"
         },
         "googleapis-common-protos": {
             "hashes": [
@@ -668,11 +668,11 @@
         },
         "mkdocs-material": {
             "hashes": [
-                "sha256:1d486635b03f5a2ec87325842f7b10c7ae7daa0eef76b185572eece6a6ea212c",
-                "sha256:7f3afa0a09c07d0b89a6a9755fdb00513aee8f0cec3538bb903325c80f66f444"
+                "sha256:73d3f5e23db9191e9a9d02278c71444c6ac35a8107d02001c31d2c184c0f105f",
+                "sha256:df0d460a67447c3f5753fe02e07ce67b42a5107957bebb1b19bb0bca9449ce84"
             ],
             "index": "pypi",
-            "version": "==4.6.3"
+            "version": "==5.0.0b1"
         },
         "more-itertools": {
             "hashes": [
@@ -878,11 +878,11 @@
         },
         "tox": {
             "hashes": [
-                "sha256:5c45d08f1dcc9bc97cdea3e5a69c8f4ad042cc37cbe6cf53e126f4a9005b7d3b",
-                "sha256:73e2ade68cd71a2765ee739ecc27c8c92e9b9c09acbad0f2c5307b20214e0d13"
+                "sha256:0cbe98369081fa16bd6f1163d3d0b2a62afa29d402ccfad2bd09fb2668be0956",
+                "sha256:676f1e3e7de245ad870f956436b84ea226210587d1f72c8dfb8cd5ac7b6f0e70"
             ],
             "index": "pypi",
-            "version": "==3.14.4"
+            "version": "==3.14.5"
         },
         "typed-ast": {
             "hashes": [
