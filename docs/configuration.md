@@ -4,8 +4,8 @@
 
 **CONFIGMAP_FILE**: The path to the configuration file. By default, PyMS search the configuration file in your
 actual folder with the name "config.yml"
-**CONFIGMAP_SERVICE**: the name of the keyword that define the block of key-value of [Flask Configuration Handling](http://flask.pocoo.org/docs/1.0/config/)
-and your own configuration (see the next section to more  info)
+**KEY_FILE**: The path to the key file to decrypt your configuration. By default, PyMS search the configuration file in your
+actual folder with the name "key.key"
 
 ## Create configuration
 Each microservice needs a config file in yaml or json format to work with it. This configuration contains
