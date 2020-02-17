@@ -1,6 +1,7 @@
 """Module to read yaml or json conf"""
 import logging
 import re
+from typing import Dict, Union, Text, Tuple, Generator, Iterable
 
 import anyconfig
 
@@ -16,7 +17,9 @@ class ConfFile(dict):
     """Recursive get configuration from dictionary, a config file in JSON or YAML format from a path or
     `CONFIGMAP_FILE` environment variable.
     **Atributes:**
+    * path: Path to find the `DEFAULT_CONFIGMAP_FILENAME` and `DEFAULT_KEY_FILENAME` if use encrypted vars
     * empty_init: Allow blank variables
+    * config: Allow to pass a dictionary to ConfFile without use a file
     """
     _empty_init = False
 
@@ -47,27 +50,40 @@ class ConfFile(dict):
 
         super(ConfFile, self).__init__(config)
 
-    def to_flask(self):
+    def to_flask(self) -> Dict:
         return ConfFile(config={k.upper(): v for k, v in self.items()})
 
-    def set_config(self, config):
+    def set_config(self, config: Dict) -> Dict:
+        """
+        Set a dictionary as attributes of ConfFile. This attributes could be access as `ConfFile["attr"]` or
+        ConfFile.attr
+        :param config: a dictionary from `config.yml`
+        :return:
+        """
         config = dict(self.normalize_config(config))
+        pop_encripted_keys = []
         for k, v in config.items():
             if k.lower().startswith("enc_"):
                 k_not_crypt = re.compile(re.escape('enc_'), re.IGNORECASE)
                 setattr(self, k_not_crypt.sub('', k), self._crypt.decrypt(v))
+                pop_encripted_keys.append(k)
             else:
                 setattr(self, k, v)
+
+        # Delete encrypted keys to prevent decrypt multiple times a element
+        for x in pop_encripted_keys:
+            config.pop(x)
+
         return config
 
-    def normalize_config(self, config):
+    def normalize_config(self, config: Dict) -> Iterable[Tuple[Text, Union[Dict, Text, bool]]]:
         for key, item in config.items():
             if isinstance(item, dict):
                 item = ConfFile(config=item, empty_init=self._empty_init)
             yield self.normalize_keys(key), item
 
     @staticmethod
-    def normalize_keys(key):
+    def normalize_keys(key: Text) -> Text:
         """The keys will be transformed to a attribute. We need to replace the charactes not valid"""
         key = key.replace("-", "_")
         return key
@@ -90,6 +106,10 @@ class ConfFile(dict):
             raise AttrDoesNotExistException("Variable {} not exist in the config file".format(name))
 
     def reload(self):
+        """
+        Remove file from memoize variable, return again the content of the file and set the configuration again
+        :return: None
+        """
         config_src = self._loader.reload(anyconfig.load)
         self.set_config(config_src)
 
