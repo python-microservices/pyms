@@ -26,6 +26,7 @@ flake8 = "*"
 tox = "*"
 bandit = "*"
 mkdocs = "*"
+mkdocs-material = "*"
 lightstep = "==4.3.0"
 
 [requires]
