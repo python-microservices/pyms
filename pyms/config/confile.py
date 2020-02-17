@@ -1,7 +1,7 @@
 """Module to read yaml or json conf"""
 import logging
 import re
-from typing import Dict, Union, Text, Tuple, Generator, Iterable
+from typing import Dict, Union, Text, Tuple, Iterable
 
 import anyconfig
 
