@@ -11,6 +11,7 @@ actual folder with the name "key.key"
 Each microservice needs a config file in yaml or json format to work with it. This configuration contains
 the Flask settings of your project and the [Services](services.md). With this way to create configuration files, we 
 solve two problems of the [12 Factor apps](https://12factor.net/):
+
 - Store config out of the code
 - Dev/prod parity: the configuration could be injected and not depends of our code, for example, Kubernetes configmaps
 
