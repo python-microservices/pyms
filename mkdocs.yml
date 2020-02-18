@@ -12,7 +12,7 @@ nav:
     - Structure: structure.md
     - Microservice class: ms_class.md
     - Examples: examples.md
-    - Routing: installation.md
+    - Routing: routing.md
     - Structure of a microservice project: structure_project.md
 theme:
   name: 'material'
