@@ -57,7 +57,7 @@ export KEY_FILE=/home/my_user/keys/myproject.key
 
 ## 3. Encrypt your information and put in config
 
-Do you remember the example file `config_pro.yml`? now you can encrypt and decrypt the information, you can run the command
+Do you remember the example file `config_pro.yml`? Now you can encrypt and decrypt the information, you can run the command
 `pyms encrypt [string]` to generate a crypt string, for example:
 
 ```bash
