@@ -32,7 +32,7 @@ use [Vault](https://learn.hashicorp.com/vault) or encrypt the configuration with
  and decrypt your variables.
  
 ## 1. Generate a key
-PyMS have a command line option to create a key file. this key is created with [AES](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard).
+PyMS have a command line option to create a key file. This key is created with [AES](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard).
 You can run the next command in the terminal:
 
 ```bash
