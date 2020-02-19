@@ -40,7 +40,7 @@ pyms create-key
 ```
 
 Then, type a password and it will create a file called `key.key`. This file contains a unique key. If you loose this file
-and re-run the create command, the key hash will be different and your code encrypted with this key can`t be decrypted.
+and re-run the create command, the key hash will be different and your code encrypted with this key won't be able to be decrypted.
 
 Store the key in a secure site, and NOT COMMIT this key to your repository.
 
