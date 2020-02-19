@@ -81,7 +81,7 @@ can find the answer
 
 ## 4. Decrypt from your config file
 
-Pyms knows if a variable is encrypted if this var start with the prefix `enc_` or `ENC_`. PyMS search for your key file
+Pyms knows if a variable is encrypted if this var start with the prefix `enc_` or `ENC_`. PyMS searchs for your key file
 in the `KEY_FILE` env variable and decrypt this value and store it in the same variable without the `enc_` prefix, 
 por example, 
 
