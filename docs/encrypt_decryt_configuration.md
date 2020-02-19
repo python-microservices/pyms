@@ -28,7 +28,7 @@ pyms:
 You can move this file to a [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/), 
 use [Vault](https://learn.hashicorp.com/vault) or encrypt the configuration with [AWS KMS](https://aws.amazon.com/en/kms/)
  or [Google KMS](https://cloud.google.com/kms). We strongly recommended this ways to encrypt/decrypt your configuration,
- but i you want a no vendor locking option or you haven`t the resources to use this methods, we create a way to encrypt
+ but if you want a no vendor locking option or you haven`t the resources to use this methods, we create a way to encrypt
  and decrypt your variables.
  
 ## 1. Generate a key
