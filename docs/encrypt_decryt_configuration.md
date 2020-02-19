@@ -39,7 +39,7 @@ You can run the next command in the terminal:
 pyms create-key
 ```
 
-Type a password and this command create a file called `key.key`. This file contains a unique key. If you lost this file 
+Then, type a password and it will create a file called `key.key`. This file contains a unique key. If you loose this file
 and re-run the create command, the key hash will be different and your code encrypted with this key can`t be decrypted.
 
 Store the key in a secure site, and NOT COMMIT this key to your repository.
