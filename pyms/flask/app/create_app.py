@@ -99,7 +99,7 @@ class Microservice(metaclass=SingletonMeta):
     def __init__(self, *args, **kwargs):
         self.path = os.path.dirname(kwargs.get("path", __file__))
         validate_conf()
-        self.config = get_conf(service=CONFIG_BASE)
+        self.config = get_conf(path=self.path, service=CONFIG_BASE)
         self.init_services()
 
     def init_services(self) -> None:

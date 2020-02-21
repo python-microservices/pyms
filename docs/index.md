@@ -40,6 +40,7 @@ Nowadays, is not perfect and we have a looong roadmap, but we hope this library 
 * [Installation](installation.md)
 * [Quickstart](quickstart.md)
 * [Configuration](configuration.md)
+* [Encrypt/Decrypt Configuration](encrypt_decryt_configuration.md)
 * [Services](services.md)
 * [PyMS structure](structure.md)
 * [Microservice class](ms_class.md)

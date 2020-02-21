@@ -56,5 +56,10 @@ setup(
     install_requires=install_requires,
     tests_require=tests_require,
     include_package_data=True,
+    entry_points={
+        'console_scripts': [
+            'pyms = pyms.cmd.main:Command'
+        ]
+    },
     zip_safe=True,
 )
