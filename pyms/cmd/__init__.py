@@ -1,3 +1,3 @@
-from pyms.cmd.main import Command
+from .main import Command
 
 __all__ = ['Command']
