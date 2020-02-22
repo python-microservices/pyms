@@ -5,7 +5,7 @@ from __future__ import unicode_literals, print_function
 import argparse
 import sys
 
-from pyms.utils import check_package_exists, import_package, import_from
+from pyms.utils import check_package_exists, import_from
 from pyms.utils.crypt import Crypt
 
 
@@ -33,12 +33,13 @@ class Command:
         parser_create_key.add_argument("create_key", action='store_true',
                                        help='Generate a Key to encrypt strings in config')
 
-        parser_startproject = commands.add_parser('startproject', help='Generate a project from https://github.com/python-microservices/microservices-template')
+        parser_startproject = commands.add_parser('startproject',
+                                                  help='Generate a project from https://github.com/python-microservices/microservices-template')
         parser_startproject.add_argument("startproject", action='store_true',
-                                           help='Generate a project from https://github.com/python-microservices/microservices-template')
+                                         help='Generate a project from https://github.com/python-microservices/microservices-template')
 
         parser_startproject.add_argument("-b", "--branch",
-                                           help='Select a branch from https://github.com/python-microservices/microservices-template')
+                                         help='Select a branch from https://github.com/python-microservices/microservices-template')
 
         parser.add_argument("-v", "--verbose", default="", type=str, help="Verbose ")
 

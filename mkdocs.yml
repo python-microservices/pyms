@@ -9,12 +9,14 @@ nav:
     - Quickstart: quickstart.md
     - Configuration: configuration.md
     - Services: services.md
-    - Structure: structure.md
     - Microservice class: ms_class.md
-    - Examples: examples.md
     - Routing: routing.md
-    - Structure of a microservice project: structure_project.md
+    - Encrypt/Decrypt Configuration: encrypt_decryt_configuration.md
     - Command line: command_line.md
+    - Examples: examples.md
+    - PyMS structure: structure.md
+    - Structure of a microservice project: structure_project.md
+
 markdown_extensions:
   - admonition
 theme:
