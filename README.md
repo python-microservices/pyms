@@ -124,17 +124,15 @@ pyms startproject
 this output a lot of options step by step:
 
 ```bash
-full_name [Nick Fury]: 
-email [nick_fury@avengers.com]: 
 project_repo_url [https://github.com/python-microservices/microservices-scaffold]: 
-project_name [Python Microservices Boilerplate]: example project
-project_slug [example_project]: 
+project_name [Python Microservices Boilerplate]: prueba descarga
+project_folder [prueba_descarga]: 
 project_short_description [Python Boilerplate contains all the boilerplate you need to create a Python package.]: 
 create_model_class [y]: 
-application_root [/example_project]: 
-version [0.1.0]: 
-pypi_server []: 
-create_author_file [y]: 
+microservice_with_swagger_and_connexion [y]: 
+microservice_with_traces [y]: 
+microservice_with_metrics [y]: 
+application_root [/prueba_descarga]: 
 Select open_source_license:
 1 - MIT license
 2 - BSD license
