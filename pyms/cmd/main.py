@@ -87,7 +87,7 @@ class Command:
         if self.startproject:
             check_package_exists("cookiecutter")
             cookiecutter = import_from("cookiecutter.main", "cookiecutter")
-            cookiecutter('gh:python-microservices/microservices-template', checkout=self.branch)
+            cookiecutter('gh:python-microservices/cookiecutter-pyms', checkout=self.branch)
             self.print_ok("Created project OK")
         return True
 
