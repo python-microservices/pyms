@@ -125,14 +125,14 @@ this output a lot of options step by step:
 
 ```bash
 project_repo_url [https://github.com/python-microservices/microservices-scaffold]: 
-project_name [Python Microservices Boilerplate]: prueba descarga
-project_folder [prueba_descarga]: 
+project_name [Python Microservices Boilerplate]: example project
+project_folder [example_project]: 
 project_short_description [Python Boilerplate contains all the boilerplate you need to create a Python package.]: 
 create_model_class [y]: 
 microservice_with_swagger_and_connexion [y]: 
 microservice_with_traces [y]: 
 microservice_with_metrics [y]: 
-application_root [/prueba_descarga]: 
+application_root [/example_project]: 
 Select open_source_license:
 1 - MIT license
 2 - BSD license
@@ -143,7 +143,7 @@ Select open_source_license:
 Choose from 1, 2, 3, 4, 5, 6 [1]: 
 ```
 
-When you finish to introduce the options, a project will be created in `project_slug` folder
+When you finish to introduce the options, a project will be created in `[project_folder]` folder
 
 ## How To Contrib
 
