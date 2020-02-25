@@ -47,7 +47,7 @@ There are many problems around Python and microservices and we can`t find anyone
 We start creating these projects to try to solve all the problems we have found in our professional lives about 
 microservices architecture.
 
-Nowadays, is not perfect and we have a looong roadmap, but we hope this library could help other felas and friends ;) 
+Nowadays, is not perfect and we have a looong roadmap, but we hope this library could help other fellas and friends ;) 
 
 ## Installation
 
