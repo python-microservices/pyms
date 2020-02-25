@@ -32,6 +32,3 @@ lightstep = "==4.4.3"
 
 [requires]
 python_version = "3.6"
-
-[pipenv]
-allow_prereleases = true
