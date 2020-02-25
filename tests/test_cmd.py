@@ -7,7 +7,7 @@ from unittest.mock import patch
 import pytest
 
 from pyms.cmd import Command
-from pyms.exceptions import FileDoesNotExistException
+from pyms.exceptions import FileDoesNotExistException, PackageNotExists
 from pyms.utils.crypt import Crypt
 
 
@@ -47,4 +47,11 @@ class TestCmd(unittest.TestCase):
         cmd.run()
         with pytest.raises(FileNotFoundError) as excinfo:
             crypt.delete_key()
-        assert ("[Errno 2] No such file or directory: 'key.key'") in str(excinfo.value)
+        assert "[Errno 2] No such file or directory: 'key.key'" in str(excinfo.value)
+
+    def test_startproject_error(self):
+        arguments = ["startproject"]
+        cmd = Command(arguments=arguments, autorun=False)
+        with pytest.raises(PackageNotExists) as excinfo:
+            cmd.run()
+        assert "cookiecutter is not installed. try with pip install -U cookiecutter" in str(excinfo.value)

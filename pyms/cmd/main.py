@@ -5,6 +5,7 @@ from __future__ import unicode_literals, print_function
 import argparse
 import sys
 
+from pyms.utils import check_package_exists, import_from
 from pyms.utils.crypt import Crypt
 
 
@@ -28,9 +29,17 @@ class Command:
         parser_encrypt = commands.add_parser('encrypt', help='Encrypt a string')
         parser_encrypt.add_argument("encrypt", default='', type=str, help='Encrypt a string')
 
-        parser_create_key = commands.add_parser('create-key', help='Encrypt a string')
+        parser_create_key = commands.add_parser('create-key', help='Generate a Key to encrypt strings in config')
         parser_create_key.add_argument("create_key", action='store_true',
                                        help='Generate a Key to encrypt strings in config')
+
+        parser_startproject = commands.add_parser('startproject',
+                                                  help='Generate a project from https://github.com/python-microservices/microservices-template')
+        parser_startproject.add_argument("startproject", action='store_true',
+                                         help='Generate a project from https://github.com/python-microservices/microservices-template')
+
+        parser_startproject.add_argument("-b", "--branch",
+                                         help='Select a branch from https://github.com/python-microservices/microservices-template')
 
         parser.add_argument("-v", "--verbose", default="", type=str, help="Verbose ")
 
@@ -43,6 +52,11 @@ class Command:
             self.encrypt = args.encrypt
         except AttributeError:
             self.encrypt = ""
+        try:
+            self.startproject = args.startproject
+            self.branch = args.branch
+        except AttributeError:
+            self.startproject = False
         self.verbose = len(args.verbose)
         if autorun:  # pragma: no cover
             result = self.run()
@@ -70,6 +84,11 @@ class Command:
         if self.encrypt:
             encrypted = crypt.encrypt(self.encrypt)
             self.print_ok("Encrypted OK: {}".format(encrypted))
+        if self.startproject:
+            check_package_exists("cookiecutter")
+            cookiecutter = import_from("cookiecutter.main", "cookiecutter")
+            cookiecutter('gh:python-microservices/cookiecutter-pyms', checkout=self.branch)
+            self.print_ok("Created project OK")
         return True
 
     @staticmethod
