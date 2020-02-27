@@ -19,27 +19,24 @@ class LoadFile:
         self.default_file = default_filename
 
     def get_file(self, fn=None):
-        return self._get_conf_from_env(fn) or self._get_conf_from_file(fn)
+        return self._get_conf_from_env(fn) or self._get_conf_from_file(self.path, fn)
 
     def put_file(self, content, mode="w"):
-        self.get_or_setpath()
-        file_to_write = open(self.path, mode)
+        path = self.get_path_from_env()
+        file_to_write = open(path, mode)
         file_to_write.write(content)  # The key is type bytes still
         file_to_write.close()
 
-    def get_or_setpath(self):
+    def get_path_from_env(self):
         config_file = os.environ.get(self.file_env_location, self.default_file)
         logger.debug("Searching file in ENV[{}]: {}...".format(self.file_env_location, config_file))
-        self.path = config_file
-        return self.path
+        return config_file
 
     def _get_conf_from_env(self, fn=None):
-        self.get_or_setpath()
-        return self._get_conf_from_file(fn)
+        path = self.get_path_from_env()
+        return self._get_conf_from_file(path, fn)
 
-    def _get_conf_from_file(self, fn=None):
-        path = self.path
-
+    def _get_conf_from_file(self, path, fn=None):
         if path and os.path.isdir(path):
             path = os.path.join(path, self.default_file)
 
@@ -48,6 +45,7 @@ class LoadFile:
             return {}
         if path not in files_cached:
             logger.debug("[CONF] Configmap {} found".format(path))
+            self.path = path
             if fn:
                 files_cached[path] = fn(path)
             else:

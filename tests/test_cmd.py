@@ -19,7 +19,7 @@ class TestCmd(unittest.TestCase):
         cmd = Command(arguments=arguments, autorun=False)
         with pytest.raises(FileDoesNotExistException) as excinfo:
             cmd.run()
-        assert ("Decrypt key key.key not exists. You must set a correct env var KEY_FILE or run "
+        assert ("Decrypt key None not exists. You must set a correct env var KEY_FILE or run "
                 "`pyms crypt create-key` command") \
                in str(excinfo.value)
 

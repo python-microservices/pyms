@@ -44,7 +44,8 @@ class ConfFile(dict):
             if self._empty_init:
                 config = {}
             else:
-                raise ConfigDoesNotFoundException("Configuration file not found")
+                path = self._loader.path if self._loader.path else ""
+                raise ConfigDoesNotFoundException("Configuration file {}not found".format(path + " "))
 
         config = self.set_config(config)
 
