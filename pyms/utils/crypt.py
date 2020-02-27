@@ -54,4 +54,4 @@ class Crypt:
         return str(decrypted, encoding="utf-8")
 
     def delete_key(self):
-        os.remove(self._loader.get_or_setpath())
+        os.remove(self._loader.get_path_from_env())

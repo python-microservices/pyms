@@ -31,7 +31,7 @@ class CryptUtils(unittest.TestCase):
         crypt = Crypt()
         with pytest.raises(FileDoesNotExistException) as excinfo:
             crypt.read_key()
-        assert ("Decrypt key key.key not exists. You must set a correct env var KEY_FILE or run "
+        assert ("Decrypt key None not exists. You must set a correct env var KEY_FILE or run "
                 "`pyms crypt create-key` command") \
                in str(excinfo.value)
 
