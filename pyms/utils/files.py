@@ -19,7 +19,7 @@ class LoadFile:
         self.default_file = default_filename
 
     def get_file(self, fn=None):
-        return self._get_conf_from_file(fn) or self._get_conf_from_env(fn)
+        return self._get_conf_from_env(fn) or self._get_conf_from_file(fn)
 
     def put_file(self, content, mode="w"):
         self.get_or_setpath()
