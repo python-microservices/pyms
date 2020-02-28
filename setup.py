@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) 2018 by Alberto Vara <albertovara@paradigmadigital.com>
 import codecs
+import json
 import os
 
-import json
 from setuptools import setup, find_packages
 
 author = __import__('pyms').__author__
@@ -14,8 +14,6 @@ if os.path.exists('README.md'):
     long_description = codecs.open('README.md', 'r', 'utf-8').read()
 else:
     long_description = ''
-
-
 
 install_requires = []
 tests_require = []
@@ -52,7 +50,8 @@ setup(
     keywords="",
     url='https://github.com/python-microservices/pyms/',
     test_suite='nose.collector',
-    packages=find_packages(),
+    packages=find_packages(
+        exclude=['*.tests', '*.tests.*', 'tests.*', 'tests', '*.examples', '*.examples.*', 'examples.*', 'examples']),
     install_requires=install_requires,
     tests_require=tests_require,
     include_package_data=True,
