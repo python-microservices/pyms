@@ -1,8 +1,8 @@
 language: python
 python:
-  - "3.5"
-  - "3.6"      # current default Python on Travis CI
+  - "3.6"
   - "3.7"
+  - "3.8"
 install:
   - pip install --upgrade setuptools tox tox-travis coveralls
 script:
