@@ -11,7 +11,7 @@ source venv/bin/activate
 ## Install PyMS
 
 ```
-pip install py-ms
+pip install py-ms[all]
 ```
 
 See [Quickstart](quickstart.md) to continue with this tutorial

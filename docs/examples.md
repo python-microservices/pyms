@@ -1,7 +1,7 @@
 # Examples
 
 ```bash
-pip install py-ms
+pip install py-ms[all]
 ```
 
 config.yml:
