@@ -146,7 +146,7 @@ class Microservice(metaclass=SingletonMeta):
         self.application.logger = logger
         os.environ['WERKZEUG_RUN_MAIN'] = "true"
 
-        formatter = CustomJsonFormatter('(timestamp) (level) (name) (module) (funcName) (lineno) (message)')
+        formatter = CustomJsonFormatter()
         formatter.add_service_name(self.application.config["APP_NAME"])
         log_handler = logging.StreamHandler()
         log_handler.setFormatter(formatter)
