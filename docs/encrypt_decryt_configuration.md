@@ -1,5 +1,11 @@
 # Encrypt Configuration
 
+## Installation
+
+You must install `pyms` with `pip install pyms[all]` or `pip install pyms[cryptography]`
+
+## Configuration
+
 When you work in multiple environments: local, dev, testing, production... you must set critical configuration in your
 variables, like:
 
