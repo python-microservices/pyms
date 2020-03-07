@@ -14,6 +14,7 @@ nosetests.xml
 .coverage
 .tox
 py_ms.egg-info/*
+.eggs/*
 pylintReport.txt
 .scannerwork/
 

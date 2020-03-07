@@ -52,7 +52,7 @@ Nowadays, is not perfect and we have a looong roadmap, but we hope this library 
 ## Installation
 
 ```bash
-pip install py-ms
+pip install py-ms[all]
 ```
 
 # Quickstart

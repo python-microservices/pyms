@@ -20,6 +20,10 @@ Current services are:
 
 Extends the Microservice with [Connexion](https://github.com/zalando/connexion) and [swagger-ui](https://github.com/sveint/flask-swagger-ui).
 
+### Installation
+
+You must install `pyms` with `pip install pyms[all]` or `pip install pyms[swagger]`
+
 ### Configuration
 
 The parameters you can add to your config are:
@@ -48,6 +52,10 @@ pyms:
 Extend the [requests library](http://docs.python-requests.org/en/master/) with trace headers and parsing JSON objects.
 Encapsulate common rest operations between business services propagating trace headers if set up.
 
+### Installation
+
+You must install `pyms` with `pip install pyms[all]` or `pip install pyms[request]`
+
 ### Configuration
 
 The parameters you can add to your config are:
@@ -72,6 +80,10 @@ pyms:
 ## Tracer
 
 Add trace to all executions with [opentracing](https://github.com/opentracing-contrib/python-flask).
+
+### Installation
+
+You must install `pyms` with `pip install pyms[all]` or `pip install pyms[trace]`
 
 ### Configuration
 
@@ -103,6 +115,10 @@ At the moment, the next metrics are available:
   HTTP status
 - Total number of log events divided by level
 - If `tracer` service activated and it's jaeger, it will show its metrics
+
+### Installation
+
+You must install `pyms` with `pip install pyms[all]` or `pip install pyms[metrics]`
 
 ### Example
 

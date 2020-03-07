@@ -1,10 +1,10 @@
 language: python
 python:
-    - '3.6'
+  - "3.6"
+  - "3.7"
+  - "3.8"
 install:
-  - pip install pipenv
-  - pip install -U tox coverage==4.0.3 coveralls==1.8.2
-
+  - pip install --upgrade setuptools tox tox-travis coveralls
 script:
   - coverage erase
   - tox
