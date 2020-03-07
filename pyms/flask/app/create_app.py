@@ -104,7 +104,7 @@ class Microservice(metaclass=SingletonMeta):
 
     def init_services(self) -> None:
         """
-        Set the Attributes of all service defined in config.yml and exists in `pyms.flask.service`
+        Set the Attributes of all service defined in config.yml and exists in `pyms.flask.service` module
         :return: None
         """
         service_manager = ServicesManager()
@@ -114,7 +114,7 @@ class Microservice(metaclass=SingletonMeta):
 
     def delete_services(self) -> None:
         """
-        Set the Attributes of all service defined in config.yml and exists in `pyms.flask.service`
+        Set the Attributes of all service defined in config.yml and exists in `pyms.flask.service` module
         :return: None
         """
         for service_name in self.services:

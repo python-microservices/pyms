@@ -47,7 +47,7 @@ if it was defined in the pyms configuration block, create a tracer, add health-c
 
 # Create a project from scaffold
 
-PyMS have a command line option to create a project template like [Microservices Scaffold](https://github.com/python-microservices/microservices-scaffold).
+PyMS has a command line option to create a project template like [Microservices Scaffold](https://github.com/python-microservices/microservices-scaffold).
 This command use [cookiecutter](https://github.com/cookiecutter/cookiecutter) to download and install this [template](https://github.com/python-microservices/microservices-template)
 
 !!! warning
