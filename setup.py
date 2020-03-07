@@ -19,6 +19,7 @@ install_min_requires = [
     'python-json-logger>=0.1.10',
     'pyyaml>=5.1.2',
     'anyconfig>=0.9.8',
+    'cryptography>=2.8',
 ]
 
 install_request_requires = [
@@ -36,10 +37,6 @@ install_traces_requires = [
     'flask-opentracing>=1.1.0',
     'opentracing>=2.1',
     'opentracing-instrumentation>=3.2.1',
-]
-
-install_cryptography_requires = [
-    'cryptography>=2.8',
 ]
 
 install_metrics_requires = [
@@ -61,8 +58,7 @@ install_tests_requires = [
 ]
 
 install_all_requires = (install_request_requires + install_swagger_requires +
-                        install_traces_requires + install_cryptography_requires +
-                        install_metrics_requires)
+                        install_traces_requires + install_metrics_requires)
 
 setup(
     name="py-ms",
@@ -95,7 +91,6 @@ setup(
         'all': install_all_requires,
         'request': install_request_requires,
         'swagger': install_swagger_requires,
-        'cryptography': install_cryptography_requires,
         'traces': install_traces_requires,
         'metrics': install_metrics_requires,
         'tests': install_tests_requires,
