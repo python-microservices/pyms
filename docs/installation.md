@@ -34,9 +34,5 @@ pip install pyms[metrics]
 ```
 pip install pyms[trace]
 ```
-* Installing cryptography dependencies
-```
-pip install pyms[cryptography]
-```
 
 See [Quickstart](quickstart.md) to continue with this tutorial
