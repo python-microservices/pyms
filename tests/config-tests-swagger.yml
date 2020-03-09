@@ -10,4 +10,4 @@ pyms:
     DEBUG: true
     TESTING: true
     APP_NAME: "Python Microservice Swagger"
-    APPLICATION_ROOT: /
+    APPLICATION_ROOT: "/test-api-path"
