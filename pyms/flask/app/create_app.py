@@ -97,7 +97,12 @@ class Microservice(metaclass=SingletonMeta):
     _singleton = True
 
     def __init__(self, *args, **kwargs):
-        self.path = os.path.dirname(kwargs.get("path", __file__))
+        path = kwargs.get("path", None)
+        if path:
+            self.path = os.path.dirname(path)
+        else:
+            self.path = os.getcwd()
+
         validate_conf()
         self.config = get_conf(path=self.path, service=CONFIG_BASE)
         self.init_services()
