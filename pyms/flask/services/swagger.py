@@ -56,9 +56,10 @@ class Service(DriverService):
         :return: Flask
         """
         check_package_exists("connexion")
-        path = self.path
         if not os.path.isabs(self.path):
             path = os.path.join(path, self.path)
+        else:
+            path = self.path
 
         app = connexion.App(__name__,
                             specification_dir=path,
