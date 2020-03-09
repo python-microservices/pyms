@@ -30,15 +30,25 @@ class Service(DriverService):
 
     def init_app(self, config, path):
         check_package_exists("connexion")
+        if not os.path.isabs(self.path):
+            path = os.path.join(path, self.path)
+        else:
+            path = self.path
+
         app = connexion.App(__name__,
-                            specification_dir=os.path.join(path, self.path),
+                            specification_dir=path,
                             resolver=RestyResolver(self.project_dir))
-        app.add_api(
-            self.file,
-            arguments={'title': config.APP_NAME},
-            base_path=config.APPLICATION_ROOT,
-            options={"swagger_url": self.url}
-        )
+
+        params = {
+            "specification": self.file,
+            "arguments": {'title': config.APP_NAME},
+            "options": {"swagger_url": self.url},
+        }
+        # Fix Connexion issue https://github.com/zalando/connexion/issues/1135
+        if config.APPLICATION_ROOT and config.APPLICATION_ROOT != "/":
+            params["base_path"] = config.APPLICATION_ROOT
+
+        app.add_api(**params)
         # Invert the objects, instead connexion with a Flask object, a Flask object with
         application = app.app
         application.connexion_app = app
