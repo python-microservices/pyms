@@ -56,13 +56,12 @@ class Service(DriverService):
         :return: Flask
         """
         check_package_exists("connexion")
+        specification_dir = self.path
         if not os.path.isabs(self.path):
-            path = os.path.join(path, self.path)
-        else:
-            path = self.path
-
+            specification_dir = os.path.join(path, self.path)
+         
         app = connexion.App(__name__,
-                            specification_dir=path,
+                            specification_dir=specification_dir,
                             resolver=RestyResolver(self.project_dir))
 
         params = {
