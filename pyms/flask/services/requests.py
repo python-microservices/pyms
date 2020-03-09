@@ -39,6 +39,11 @@ def retry(f):
 
 
 class Service(DriverService):
+    """
+    Extend the [requests library](http://docs.python-requests.org/en/master/) with trace headers and parsing JSON objects.
+    Encapsulate common rest operations between business services propagating trace headers if set up.
+    All default values keys are created as class attributes in `DriverService`
+    """
     service = "requests"
     default_values = {
         "data": "",

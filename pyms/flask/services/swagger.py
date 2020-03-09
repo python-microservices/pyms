@@ -18,7 +18,10 @@ class Service(DriverService):
     * **file:** The name of you swagger yaml file. The default value is `swagger.yaml`
     * **url:** The url where swagger run in your server. The default value is `/ui/`.
     * **project_dir:** Relative path of the project folder to automatic routing,
-    see [this link for more info](https://github.com/zalando/connexion#automatic-routing). The default value is `project`
+      see [this link for more info](https://github.com/zalando/connexion#automatic-routing).
+      The default value is `project`
+
+    All default values keys are created as class attributes in `DriverService`
     """
     service = "swagger"
     default_values = {
@@ -29,6 +32,29 @@ class Service(DriverService):
     }
 
     def init_app(self, config, path):
+        """
+        Initialize Connexion App. See more info in [Connexion Github](https://github.com/zalando/connexion)
+        :param config: The Flask configuration defined in the config.yaml:
+        ```yaml
+        pyms:
+          services:
+            requests: true
+            swagger:
+              path: ""
+              file: "swagger.yaml"
+          config: <!--
+            DEBUG: true
+            TESTING: false
+            APP_NAME: "Python Microservice"
+            APPLICATION_ROOT: ""
+        ```
+        :param path: The current path where is instanciated Microservice class:
+        ```
+        Microservice(path=__file__)
+                     ^^^^--- This param
+        ```
+        :return: Flask
+        """
         check_package_exists("connexion")
         if not os.path.isabs(self.path):
             path = os.path.join(path, self.path)
