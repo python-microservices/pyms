@@ -48,7 +48,7 @@ class Service(DriverService):
             APP_NAME: "Python Microservice"
             APPLICATION_ROOT: ""
         ```
-        :param path: The current path where is instanciated Microservice class:
+        :param path: The current path where is instantiated Microservice class:
         ```
         Microservice(path=__file__)
                      ^^^^--- This param
