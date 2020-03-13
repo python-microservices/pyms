@@ -1,0 +1,13 @@
+pyms:
+  services:
+    metrics:
+      enabled: false
+    swagger:
+      path: "swagger_for_tests"
+      file: "swagger.yaml"
+      url: "ws-doc2/"
+  config:
+    DEBUG: true
+    TESTING: true
+    APP_NAME: "Python Microservice Swagger2"
+    APPLICATION_ROOT: "/test-api-path2"

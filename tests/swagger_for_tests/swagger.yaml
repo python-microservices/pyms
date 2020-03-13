@@ -1,0 +1,48 @@
+---
+swagger: "2.0"
+info:
+  description: "This is a sample server Test server"
+  version: "1.0.0"
+  title: "Swagger Test list"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "apiteam@swagger.io"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+tags:
+- name: "colors"
+  description: "Everything about your colors"
+  externalDocs:
+    description: "Find out more"
+    url: "http://swagger.io"
+- name: "store"
+  description: "Example endpoint  list of colors"
+- name: "user"
+  description: "Operations about user"
+  externalDocs:
+    description: "Find out more about our store"
+    url: "http://swagger.io"
+schemes:
+- "http"
+paths:
+  /no-abs-path:
+    get:
+      tags:
+      - "test"
+      summary: "Example endpoint"
+      description: ""
+      operationId: "home"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Example"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "tests.test_flask"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
