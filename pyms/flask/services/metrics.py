@@ -26,7 +26,7 @@ class FlaskMetricsWrapper():
     def __init__(self, app_name):
         self.app_name = app_name
 
-    def before_request(self):
+    def before_request(self):  # pylint: disable=R0201
         request.start_time = time.time()
 
     def after_request(self, response):
