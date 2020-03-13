@@ -186,7 +186,7 @@ class Microservice(metaclass=SingletonMeta):
                 self.application.logger,
                 self.application.config["APP_NAME"]
             )
-            self.metrics.monitor(self.application)
+            self.metrics.monitor(self.application.config["APP_NAME"], self.application)
 
     def reload_conf(self):
         self.delete_services()
