@@ -97,7 +97,17 @@ class Microservice(metaclass=SingletonMeta):
     _singleton = True
 
     def __init__(self, *args, **kwargs):
-        self.path = os.path.dirname(kwargs.get("path", __file__))
+        """
+        You can get the relative path from the current directory with `__file__` in path param. The path must be
+        the folder where PyMS search for default config file, default swagger definition and encrypt key.
+        :param args:
+        :param kwargs: "path", optional, the current directory where `Microservice` class is instanciated
+        """
+        path = kwargs.get("path", None)
+        self.path = os.path.abspath("")
+        if path:
+            self.path = os.path.dirname(os.path.abspath(path))
+
         validate_conf()
         self.config = get_conf(path=self.path, service=CONFIG_BASE)
         self.init_services()
