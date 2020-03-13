@@ -35,6 +35,9 @@ def after_request(response):
 
 
 class Service(DriverService):
+    """
+    Adds [Prometheus](https://prometheus.io/) metrics using the [Prometheus Client Library](https://github.com/prometheus/client_python).
+    """
     service = "metrics"
 
     def __init__(self, *args, **kwargs):

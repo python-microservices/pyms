@@ -38,6 +38,10 @@ def inject_span_in_headers(headers):
 
 
 class Service(DriverService):
+    """
+    Add trace to all executions with [opentracing](https://github.com/opentracing-contrib/python-flask).
+    All default values keys are created as class attributes in `DriverService`
+    """
     service = "tracer"
     default_values = {
         "client": DEFAULT_CLIENT,

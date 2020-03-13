@@ -18,7 +18,10 @@ class Service(DriverService):
     * **file:** The name of you swagger yaml file. The default value is `swagger.yaml`
     * **url:** The url where swagger run in your server. The default value is `/ui/`.
     * **project_dir:** Relative path of the project folder to automatic routing,
-    see [this link for more info](https://github.com/zalando/connexion#automatic-routing). The default value is `project`
+      see [this link for more info](https://github.com/zalando/connexion#automatic-routing).
+      The default value is `project`
+
+    All default values keys are created as class attributes in `DriverService`
     """
     service = "swagger"
     default_values = {
@@ -29,16 +32,48 @@ class Service(DriverService):
     }
 
     def init_app(self, config, path):
+        """
+        Initialize Connexion App. See more info in [Connexion Github](https://github.com/zalando/connexion)
+        :param config: The Flask configuration defined in the config.yaml:
+        ```yaml
+        pyms:
+          services:
+            requests: true
+            swagger:
+              path: ""
+              file: "swagger.yaml"
+          config: <!--
+            DEBUG: true
+            TESTING: false
+            APP_NAME: "Python Microservice"
+            APPLICATION_ROOT: ""
+        ```
+        :param path: The current path where is instantiated Microservice class:
+        ```
+        Microservice(path=__file__)
+                     ^^^^--- This param
+        ```
+        :return: Flask
+        """
         check_package_exists("connexion")
+        specification_dir = self.path
+        if not os.path.isabs(self.path):
+            specification_dir = os.path.join(path, self.path)
+
         app = connexion.App(__name__,
-                            specification_dir=os.path.join(path, self.path),
+                            specification_dir=specification_dir,
                             resolver=RestyResolver(self.project_dir))
-        app.add_api(
-            self.file,
-            arguments={'title': config.APP_NAME},
-            base_path=config.APPLICATION_ROOT,
-            options={"swagger_url": self.url}
-        )
+
+        params = {
+            "specification": self.file,
+            "arguments": {'title': config.APP_NAME},
+            "options": {"swagger_url": self.url},
+        }
+        # Fix Connexion issue https://github.com/zalando/connexion/issues/1135
+        if config.APPLICATION_ROOT and config.APPLICATION_ROOT != "/":
+            params["base_path"] = config.APPLICATION_ROOT
+
+        app.add_api(**params)
         # Invert the objects, instead connexion with a Flask object, a Flask object with
         application = app.app
         application.connexion_app = app
