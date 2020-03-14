@@ -16,6 +16,7 @@ nav:
     - Examples: examples.md
     - PyMS structure: structure.md
     - Structure of a microservice project: structure_project.md
+    - Tutorials: tutorials.md
 
 markdown_extensions:
   - admonition

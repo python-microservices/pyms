@@ -46,5 +46,7 @@ Nowadays, is not perfect and we have a looong roadmap, but we hope this library 
 * [Encrypt/Decrypt Configuration](encrypt_decryt_configuration.md)
 * [Command line](command_line.md)
 * [Examples](examples.md)
+* [Tutorials](tutorials.md)
+  * [Tutorial: Propagate traces](tutorial_propagate_traces.md)
 * [PyMS structure](structure.md)
 * [Structure of a microservice project](structure_project.md)

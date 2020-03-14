@@ -79,7 +79,8 @@ pyms:
 
 ## Tracer
 
-Add trace to all executions with [opentracing](https://github.com/opentracing-contrib/python-flask).
+Add trace to all executions with [opentracing](https://github.com/opentracing-contrib/python-flask). This service
+solves the problem of [distributed tracing](https://microservices.io/patterns/observability/distributed-tracing.html)
 
 ### Installation
 
