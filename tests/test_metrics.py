@@ -20,23 +20,23 @@ class TestMetricsFlask(unittest.TestCase):
     def test_metrics_latency(self):
         self.client.get("/")
         self.client.get("/metrics")
-        generated_latency_root = b'flask_request_latency_seconds_bucket{endpoint="/",le="0.005",method="GET"}'
-        generated_latency_metrics = b'flask_request_latency_seconds_bucket{endpoint="/metrics",le="0.005",method="GET"}'
+        generated_latency_root = b'http_server_requests_seconds_bucket{le="0.005",method="GET",service="Python Microservice",status="200",uri="/"}'
+        generated_latency_metrics = b'http_server_requests_seconds_bucket{le="0.005",method="GET",service="Python Microservice with Jaeger",status="200",uri="/metrics"}'
         assert generated_latency_root in generate_latest()
         assert generated_latency_metrics in generate_latest()
 
     def test_metrics_count(self):
         self.client.get("/")
         self.client.get("/metrics")
-        generated_count_root = b'flask_request_count_total{endpoint="/",http_status="404",method="GET"}'
-        generated_count_metrics = b'flask_request_count_total{endpoint="/metrics",http_status="200",method="GET"}'
+        generated_count_root = b'http_server_requests_count_total{method="GET",service="Python Microservice",status="200",uri="/"}'
+        generated_count_metrics = b'http_server_requests_count_total{method="GET",service="Python Microservice with Jaeger",status="200",uri="/metrics"}'
         assert generated_count_root in generate_latest()
         assert generated_count_metrics in generate_latest()
 
     def test_metrics_logger(self):
         self.client.get("/")
         self.client.get("/metrics")
-        generated_logger = b'python_logging_messages_total{level="DEBUG",service="Python Microservice with Jaeger"}'
+        generated_logger = b'logger_messages_total{level="DEBUG",service="Python Microservice with Jaeger"}'
         assert generated_logger in generate_latest()
 
     def test_metrics_jaeger(self):

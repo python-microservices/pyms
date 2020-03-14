@@ -9,29 +9,32 @@ from pyms.flask.services.driver import DriverService
 # and https://github.com/korfuri/python-logging-prometheus/
 
 FLASK_REQUEST_LATENCY = Histogram(
-    "flask_request_latency_seconds", "Flask Request Latency", ["method", "endpoint"]
+    "http_server_requests_seconds", "Flask Request Latency", ["service", "method", "uri", "status"]
 )
 FLASK_REQUEST_COUNT = Counter(
-    "flask_request_count", "Flask Request Count", ["method", "endpoint", "http_status"]
+    "http_server_requests_count", "Flask Request Count", ["service", "method", "uri", "status"]
 )
 
 LOGGER_TOTAL_MESSAGES = Counter(
-    "python_logging_messages_total",
+    "logger_messages_total",
     "Count of log entries by service and level.",
     ["service", "level"],
 )
 
 
-def before_request():
-    request.start_time = time.time()
+class FlaskMetricsWrapper():
+    def __init__(self, app_name):
+        self.app_name = app_name
 
+    def before_request(self):  # pylint: disable=R0201
+        request.start_time = time.time()
 
-def after_request(response):
-    request_latency = time.time() - request.start_time
-    FLASK_REQUEST_LATENCY.labels(request.method, request.path).observe(request_latency)
-    FLASK_REQUEST_COUNT.labels(request.method, request.path, response.status_code).inc()
+    def after_request(self, response):
+        request_latency = time.time() - request.start_time
+        FLASK_REQUEST_LATENCY.labels(self.app_name, request.method, request.path, response.status_code).observe(request_latency)
+        FLASK_REQUEST_COUNT.labels(self.app_name, request.method, request.path, response.status_code).inc()
 
-    return response
+        return response
 
 
 class Service(DriverService):
@@ -46,9 +49,10 @@ class Service(DriverService):
         self.serve_metrics()
 
     @staticmethod
-    def monitor(app):
-        app.before_request(before_request)
-        app.after_request(after_request)
+    def monitor(app_name, app):
+        metric = FlaskMetricsWrapper(app_name)
+        app.before_request(metric.before_request)
+        app.after_request(metric.after_request)
 
     def serve_metrics(self):
         @self.metrics_blueprint.route("/metrics", methods=["GET"])
