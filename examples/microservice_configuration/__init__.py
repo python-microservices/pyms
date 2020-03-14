@@ -1,3 +1,3 @@
 from pyms.flask.app import Microservice
 
-ms = Microservice(path=__file__)
+ms = Microservice()

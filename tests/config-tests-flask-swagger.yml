@@ -6,7 +6,7 @@ pyms:
   config:
     DEBUG: true
     TESTING: true
-    APP_NAME: "Python Microservice With Flask"
+    APP_NAME: "Python Microservice With Flask in tests"
     APPLICATION_ROOT: /
     test_var: general
     subservice1:

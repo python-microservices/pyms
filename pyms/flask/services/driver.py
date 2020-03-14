@@ -13,24 +13,25 @@ class DriverService:
     """All services must inherit from this class. This set the configuration. If we have got his config file:
     ```
     pyms:
-      metrics: true
-      requests:
-        data: data
-      swagger:
-        path: ""
-        file: "swagger.yaml"
-      tracer:
-        client: "jaeger"
-        host: "localhost"
-        component_name: "Python Microservice"
-    my-ms:
-      DEBUG: true
-      TESTING: true
+      services:
+        metrics: true
+        requests:
+          data: data
+        swagger:
+          path: ""
+          file: "swagger.yaml"
+        tracer:
+          client: "jaeger"
+          host: "localhost"
+          component_name: "Python Microservice"
+      config:
+        DEBUG: true
+        TESTING: true
     ```
-    * `pyms` block is the default key to load in the pyms.flask.app.create_app.Microservice class.
-        * `metrics`: is set as the service `pyms.metrics`
-        * `swagger`: is set as the service `pyms.swagger`
-        * `tracer`: is set as the service `pyms.tracer`
+    * `pyms.services` block is the default key to load in the pyms.flask.app.create_app.Microservice class.
+        * `metrics`: is set as the service `pyms.services.metrics`
+        * `swagger`: is set as the service `pyms.services.swagger`
+        * `tracer`: is set as the service `pyms.services.tracer`
     """
     service = ""
     config = None

@@ -6,10 +6,24 @@
 [![Requirements Status](https://requires.io/github/python-microservices/pyms/requirements.svg?branch=master)](https://requires.io/github/python-microservices/pyms/requirements/?branch=master)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/python-microservices/pyms.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/python-microservices/pyms/alerts/)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/python-microservices/pyms.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/python-microservices/pyms/context:python)
+[![Documentation Status](https://readthedocs.org/projects/py-ms/badge/?version=latest)](https://py-ms.readthedocs.io/en/latest/?badge=latest)
 [![Gitter](https://img.shields.io/gitter/room/DAVFoundation/DAV-Contributors.svg)](https://gitter.im/python-microservices/pyms)
 
 
-PyMS, Python MicroService, is a collections of libraries, best practices and recommended ways to build  microservices with Python.
+PyMS, Python MicroService, is a [Microservice chassis pattern](https://microservices.io/patterns/microservice-chassis.html) 
+like Spring Boot (Java) or Gizmo (Golang). PyMS is a collection of libraries, best practices and recommended ways to build 
+microservices with Python which handles cross-cutting concerns: 
+
+- Externalized configuration
+- Logging
+- Health checks
+- Metrics
+- Distributed tracing
+
+PyMS is powered by [Flask](https://flask.palletsprojects.com/en/1.1.x/), [Connexion](https://github.com/zalando/connexion) 
+and [Opentracing](https://opentracing.io/).
+
+Get started with [Installation](installation.md) and then get an overview with the [Quickstart](quickstart.md).
 
 ## Documentation
 
@@ -25,20 +39,20 @@ nothing to create professional projects. Most articles say:
 - (Sometimes) "Create a swagger specs"
 - "TA-DA! you have a microservice"
 
-But... what happens with our configuration out of code like Kubernetes configmap? what happens with transactionality?
+But... what happens with our configuration out of code like Kubernetes configmap? what happens with transactionality? 
 If we have many microservices, what happens with traces?.
 
 There are many problems around Python and microservices and we can`t find anyone to give a solution.
 
-We start creating these projects to try to solve all the problems we have found in our professional lives about
+We start creating these projects to try to solve all the problems we have found in our professional lives about 
 microservices architecture.
 
-Nowadays, is not perfect and we have a looong roadmap, but we hope this library could help other felas and friends ;)
+Nowadays, is not perfect and we have a looong roadmap, but we hope this library could help other fellas and friends ;) 
 
 ## Installation
 
 ```bash
-pip install py-ms
+pip install py-ms[all]
 ```
 
 # Quickstart
@@ -52,7 +66,7 @@ from flask import jsonify
 
 from pyms.flask.app import Microservice
 
-ms = Microservice(path=__file__) # 1.1
+ms = Microservice() # 1.1
 app = ms.create_app() # 2.1
 
 
@@ -95,6 +109,41 @@ override it.
 3. `create_app` return the flask instance and you can interact with it as a typical flask app
 
 See [Documentation](https://py-ms.readthedocs.io/en/latest/) to learn more.
+
+## Create a project from scaffold
+
+PyMS has a command line option to create a project template like [Microservices Scaffold](https://github.com/python-microservices/microservices-scaffold).
+This command use [cookiecutter](https://github.com/cookiecutter/cookiecutter) to download and install this [template](https://github.com/python-microservices/microservices-template)
+
+**[Warning]** You must run first `pip install cookiecutter==1.7.0`
+
+```bash
+pyms startproject
+```
+
+this output a lot of options step by step:
+
+```bash
+project_repo_url [https://github.com/python-microservices/microservices-scaffold]: 
+project_name [Python Microservices Boilerplate]: example project
+project_folder [example_project]: 
+project_short_description [Python Boilerplate contains all the boilerplate you need to create a Python package.]: 
+create_model_class [y]: 
+microservice_with_swagger_and_connexion [y]: 
+microservice_with_traces [y]: 
+microservice_with_metrics [y]: 
+application_root [/example_project]: 
+Select open_source_license:
+1 - MIT license
+2 - BSD license
+3 - ISC license
+4 - Apache Software License 2.0
+5 - GNU General Public License v3
+6 - Not open source
+Choose from 1, 2, 3, 4, 5, 6 [1]: 
+```
+
+When you finish to introduce the options, a project will be created in `[project_folder]` folder
 
 ## How To Contrib
 

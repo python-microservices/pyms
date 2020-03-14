@@ -1,5 +1,5 @@
 """Init file
 """
-from pyms.logger.logger import CustomJsonFormatter
+from .logger import CustomJsonFormatter
 
 __all__ = ['CustomJsonFormatter', ]

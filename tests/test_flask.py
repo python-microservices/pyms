@@ -23,7 +23,7 @@ class HomeWithFlaskTests(unittest.TestCase):
     def setUp(self):
         os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                                               "config-tests-flask.yml")
-        ms = MyMicroservice(path=__file__)
+        ms = MyMicroservice()
         ms.reload_conf()
         self.app = ms.create_app()
         self.client = self.app.test_client()
@@ -54,7 +54,7 @@ class FlaskWithSwaggerTests(unittest.TestCase):
         ms = MyMicroservice(path=__file__)
         self.app = ms.create_app()
         self.client = self.app.test_client()
-        self.assertEqual("Python Microservice With Flask", self.app.config["APP_NAME"])
+        self.assertEqual("Python Microservice With Flask in tests", self.app.config["APP_NAME"])
 
     def test_healthcheck(self):
         response = self.client.get('/healthcheck')

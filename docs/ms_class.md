@@ -96,19 +96,60 @@ Microservice class initialize the libraries and other process by this way:
         return self.application
 ```
 
-Create a class that inherit from `pyms.flask.app.Microservice` and create and override methods with your own configuration.
-The next example show how to create your own logger and innit a lib like [Flask Babel](https://pythonhosted.org/Flask-Babel/)
+## Example 1: Basic Example
+
+Create a class that inherit from `pyms.flask.app.Microservice` and override methods with your own configuration.
+The next example show how to innit a lib like [Flask Babel](https://pythonhosted.org/Flask-Babel/)
 
 ```python
-class MyMicroservice(Microservice):
-    def init_tracer(self):
-        pass # Disabled tracer
+from flask_babel import Babel
+from pyms.flask.app import Microservice
 
+class MyMicroservice(Microservice):
     def init_libs(self):
         babel = Babel(self.application)
 
         return self.application
+        
+ms = MyMicroservice(path=__file__)
+app = ms.create_app()
+```
 
+## Example 2: Initialize SQLAlchemy
+
+The next example show how to innit a lib like [Flask SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/2.x/)
+
+```python
+from flask_sqlalchemy import SQLAlchemy
+from pyms.flask.app import Microservice
+
+DB = SQLAlchemy()
+
+
+class MyMicroservice(Microservice):
+    def init_libs(self):
+        self.application.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+            'pool_size': 10,
+            'pool_recycle': 120,
+            'pool_pre_ping': True
+        }
+        DB.init_app(self.application)
+
+ms = MyMicroservice(path=__file__)
+app = ms.create_app()
+```
+
+## Example 3: Create your logger
+
+The next example show how to create a personal logger for your application
+
+```python
+import logging.config
+
+from pyms.flask.app import Microservice
+
+
+class MyMicroservice(Microservice):
     def init_logger(self):
         level = "INFO"
         LOGGING = {
@@ -141,13 +182,11 @@ class MyMicroservice(Microservice):
                 },
             }
         }
-
         logging.config.dictConfig(LOGGING)
-        
+
 ms = MyMicroservice(path=__file__)
 app = ms.create_app()
 ```
-
 
 
 Check more examples in [this Github page](https://github.com/python-microservices/pyms/tree/master/examples)

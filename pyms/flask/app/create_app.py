@@ -97,14 +97,24 @@ class Microservice(metaclass=SingletonMeta):
     _singleton = True
 
     def __init__(self, *args, **kwargs):
-        self.path = os.path.dirname(kwargs.get("path", __file__))
+        """
+        You can get the relative path from the current directory with `__file__` in path param. The path must be
+        the folder where PyMS search for default config file, default swagger definition and encrypt key.
+        :param args:
+        :param kwargs: "path", optional, the current directory where `Microservice` class is instanciated
+        """
+        path = kwargs.get("path", None)
+        self.path = os.path.abspath("")
+        if path:
+            self.path = os.path.dirname(os.path.abspath(path))
+
         validate_conf()
-        self.config = get_conf(service=CONFIG_BASE)
+        self.config = get_conf(path=self.path, service=CONFIG_BASE)
         self.init_services()
 
     def init_services(self) -> None:
         """
-        Set the Attributes of all service defined in config.yml and exists in `pyms.flask.service`
+        Set the Attributes of all service defined in config.yml and exists in `pyms.flask.service` module
         :return: None
         """
         service_manager = ServicesManager()
@@ -114,7 +124,7 @@ class Microservice(metaclass=SingletonMeta):
 
     def delete_services(self) -> None:
         """
-        Set the Attributes of all service defined in config.yml and exists in `pyms.flask.service`
+        Set the Attributes of all service defined in config.yml and exists in `pyms.flask.service` module
         :return: None
         """
         for service_name in self.services:
@@ -146,7 +156,7 @@ class Microservice(metaclass=SingletonMeta):
         self.application.logger = logger
         os.environ['WERKZEUG_RUN_MAIN'] = "true"
 
-        formatter = CustomJsonFormatter('(timestamp) (level) (name) (module) (funcName) (lineno) (message)')
+        formatter = CustomJsonFormatter()
         formatter.add_service_name(self.application.config["APP_NAME"])
         log_handler = logging.StreamHandler()
         log_handler.setFormatter(formatter)
