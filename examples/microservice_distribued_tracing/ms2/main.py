@@ -1,4 +1,4 @@
-from flask import jsonify, current_app, request
+from flask import jsonify, request
 
 from pyms.flask.app import Microservice
 

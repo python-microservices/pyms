@@ -37,6 +37,7 @@ install_traces_requires = [
     'flask-opentracing>=1.1.0',
     'opentracing>=2.1',
     'opentracing-instrumentation>=3.2.1',
+    'tornado>=4.3,<6.0'
 ]
 
 install_metrics_requires = [
