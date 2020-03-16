@@ -1,0 +1,21 @@
+---
+openapi: 3.0.2
+info:
+  title: Testing
+  version: 1.0.0
+  description: Testing
+  termsOfService: http://swagger.io/terms/
+  contact:
+    name: Testing
+    email: test@test.com
+servers:
+- url: http://localhost:8080/test/path/
+  description: ""
+paths:
+  /test-url:
+    summary: get test
+    get:
+      responses:
+        "200":
+          description: OK
+      operationId: "tests.test_flask.home"

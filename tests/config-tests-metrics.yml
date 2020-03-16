@@ -9,4 +9,4 @@ pyms:
     DEBUG: true
     TESTING: true
     APP_NAME: "Python Microservice with Jaeger"
-    APPLICATION_ROOT: /
+    APPLICATION_ROOT: "/"

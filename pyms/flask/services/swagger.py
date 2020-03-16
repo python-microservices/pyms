@@ -3,6 +3,7 @@ import os
 import connexion
 from connexion.resolver import RestyResolver
 
+from pyms.exceptions import AttrDoesNotExistException
 from pyms.flask.services.driver import DriverService
 from pyms.utils import check_package_exists
 
@@ -31,6 +32,14 @@ class Service(DriverService):
         "project_dir": PROJECT_DIR
     }
 
+    @staticmethod
+    def _get_application_root(config):
+        try:
+            application_root = config.APPLICATION_ROOT
+        except AttrDoesNotExistException:
+            application_root = "/"
+        return application_root
+
     def init_app(self, config, path):
         """
         Initialize Connexion App. See more info in [Connexion Github](https://github.com/zalando/connexion)
@@ -57,6 +66,7 @@ class Service(DriverService):
         """
         check_package_exists("connexion")
         specification_dir = self.path
+        application_root = self._get_application_root(config)
         if not os.path.isabs(self.path):
             specification_dir = os.path.join(path, self.path)
 
@@ -67,11 +77,13 @@ class Service(DriverService):
         params = {
             "specification": self.file,
             "arguments": {'title': config.APP_NAME},
+            "base_path": application_root,
             "options": {"swagger_url": self.url},
         }
+
         # Fix Connexion issue https://github.com/zalando/connexion/issues/1135
-        if config.APPLICATION_ROOT and config.APPLICATION_ROOT != "/":
-            params["base_path"] = config.APPLICATION_ROOT
+        if application_root == "/":
+            params["base_path"] = ""
 
         app.add_api(**params)
         # Invert the objects, instead connexion with a Flask object, a Flask object with

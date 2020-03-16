@@ -3,7 +3,6 @@ pyms:
     DEBUG: true
     TESTING: true
     APP_NAME: "Python Microservice With Flask"
-    APPLICATION_ROOT: /
     test_var: general
     subservice1:
        test: input
