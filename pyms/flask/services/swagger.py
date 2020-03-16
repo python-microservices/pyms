@@ -32,7 +32,8 @@ class Service(DriverService):
         "project_dir": PROJECT_DIR
     }
 
-    def _get_application_root(self, config):
+    @staticmethod
+    def _get_application_root(config):
         try:
             application_root = config.APPLICATION_ROOT
         except AttrDoesNotExistException:
@@ -83,7 +84,6 @@ class Service(DriverService):
         # Fix Connexion issue https://github.com/zalando/connexion/issues/1135
         if application_root == "/":
             params["base_path"] = ""
-
 
         app.add_api(**params)
         # Invert the objects, instead connexion with a Flask object, a Flask object with
