@@ -4,7 +4,7 @@ import unittest.mock
 from prometheus_client import generate_latest
 
 from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT
-from tests.common import MyMicroservice
+from tests.common import MyMicroserviceNoSingleton
 
 
 class TestMetricsFlask(unittest.TestCase):
@@ -12,7 +12,7 @@ class TestMetricsFlask(unittest.TestCase):
 
     def setUp(self):
         os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(self.BASE_DIR, "config-tests-metrics.yml")
-        ms = MyMicroservice(path=__file__)
+        ms = MyMicroserviceNoSingleton(path=__file__)
         ms.reload_conf()
         self.app = ms.create_app()
         self.client = self.app.test_client()
