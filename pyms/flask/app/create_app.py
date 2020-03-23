@@ -3,7 +3,6 @@ import os
 from typing import Text
 
 from flask import Flask
-from flask_opentracing import FlaskTracing
 
 from pyms.config import get_conf
 from pyms.config.conf import validate_conf
@@ -11,7 +10,7 @@ from pyms.constants import LOGGER_NAME, CONFIG_BASE
 from pyms.flask.healthcheck import healthcheck_blueprint
 from pyms.flask.services.driver import ServicesManager
 from pyms.logger import CustomJsonFormatter
-from pyms.utils import check_package_exists
+from pyms.utils import check_package_exists, import_from
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -145,6 +144,7 @@ class Microservice(metaclass=SingletonMeta):
         :return: None
         """
         if self._exists_service("tracer"):
+            FlaskTracing = import_from("flask_opentracing", "FlaskTracing")
             client = self.tracer.get_client()
             self.application.tracer = FlaskTracing(client, True, self.application)
 
