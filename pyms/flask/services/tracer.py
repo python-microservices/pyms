@@ -2,17 +2,17 @@ import logging
 
 try:
     import opentracing
-except ModuleNotFoundError:
+except ModuleNotFoundError:  # pragma: no cover
     opentracing = None
 try:
     from jaeger_client.metrics.prometheus import PrometheusMetricsFactory
-except ModuleNotFoundError:
+except ModuleNotFoundError:  # pragma: no cover
     PrometheusMetricsFactory = None
-
 try:
     from opentracing_instrumentation import get_current_span
-except ModuleNotFoundError:
+except ModuleNotFoundError:  # pragma: no cover
     get_current_span = None
+
 from flask import current_app, request, has_request_context
 
 from pyms.config.conf import get_conf
