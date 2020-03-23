@@ -7,48 +7,13 @@ from flask import Flask
 from pyms.config import get_conf
 from pyms.config.conf import validate_conf
 from pyms.constants import LOGGER_NAME, CONFIG_BASE
+from pyms.flask.app.utils import SingletonMeta, ReverseProxied
 from pyms.flask.healthcheck import healthcheck_blueprint
 from pyms.flask.services.driver import ServicesManager
 from pyms.logger import CustomJsonFormatter
 from pyms.utils import check_package_exists, import_from
 
 logger = logging.getLogger(LOGGER_NAME)
-
-
-class SingletonMeta(type):
-    """
-    The Singleton class can be implemented in different ways in Python. Some
-    possible methods include: base class, decorator, metaclass. We will use the
-    metaclass because it is best suited for this purpose.
-    """
-    _instances = {}
-    _singleton = True
-
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances or not cls._singleton:
-            cls._instances[cls] = super(SingletonMeta, cls).__call__(*args, **kwargs)
-        else:
-            cls._instances[cls].__init__(*args, **kwargs)
-
-        return cls._instances[cls]
-
-
-class ReverseProxied(object):
-    def __init__(self, app):
-        self.app = app
-
-    def __call__(self, environ, start_response):
-        script_name = environ.get('HTTP_X_SCRIPT_NAME', '')
-        if script_name:
-            environ['SCRIPT_NAME'] = script_name
-            path_info = environ['PATH_INFO']
-            if path_info.startswith(script_name):
-                environ['PATH_INFO'] = path_info[len(script_name):]
-
-        scheme = environ.get('HTTP_X_SCHEME', '')
-        if scheme:
-            environ['wsgi.url_scheme'] = scheme
-        return self.app(environ, start_response)
 
 
 class Microservice(metaclass=SingletonMeta):
