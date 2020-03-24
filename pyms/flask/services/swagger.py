@@ -78,7 +78,7 @@ class Service(DriverService):
             "specification": self.file,
             "arguments": {'title': config.APP_NAME},
             "base_path": application_root,
-            "options": {"swagger_url": self.url, "static_url_path": "/prueba/asdasd/"},
+            "options": {"swagger_url": self.url},
         }
 
         # Fix Connexion issue https://github.com/zalando/connexion/issues/1135
