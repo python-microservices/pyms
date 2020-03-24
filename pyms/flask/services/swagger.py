@@ -24,7 +24,7 @@ class Service(DriverService):
 
     All default values keys are created as class attributes in `DriverService`
     """
-    service = "swagger"
+    config_resource = "swagger"
     default_values = {
         "path": SWAGGER_PATH,
         "file": SWAGGER_FILE,

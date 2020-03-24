@@ -44,7 +44,7 @@ class Service(DriverService):
     Encapsulate common rest operations between business services propagating trace headers if set up.
     All default values keys are created as class attributes in `DriverService`
     """
-    service = "requests"
+    config_resource = "requests"
     default_values = {
         "data": "",
         "retries": DEFAULT_RETRIES,

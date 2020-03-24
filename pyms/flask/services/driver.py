@@ -2,6 +2,7 @@ import logging
 from typing import Text, Tuple
 
 from pyms.config import get_conf, ConfFile
+from pyms.config.resource import ConfigResource
 from pyms.constants import SERVICE_BASE, LOGGER_NAME
 from pyms.utils import import_from
 from pyms.utils.utils import get_service_name
@@ -9,7 +10,7 @@ from pyms.utils.utils import get_service_name
 logger = logging.getLogger(LOGGER_NAME)
 
 
-class DriverService:
+class DriverService(ConfigResource):
     """All services must inherit from this class. This set the configuration. If we have got his config file:
     ```
     pyms:
@@ -33,13 +34,12 @@ class DriverService:
         * `swagger`: is set as the service `pyms.services.swagger`
         * `tracer`: is set as the service `pyms.services.tracer`
     """
-    service = ""
     config = None
     enabled = True
 
     def __init__(self, *args, **kwargs):
-        self.service = get_service_name(service=self.service)
-        self.config = get_conf(service=self.service, empty_init=True)
+        self.config_resource = get_service_name(service=self.config_resource)
+        super().__init__(*args, **kwargs)
 
     def __getattr__(self, attr, *args, **kwargs):
         config_attribute = getattr(self.config, attr)
@@ -53,14 +53,11 @@ class DriverService:
         return self.config is not None and isinstance(self.config, ConfFile)
 
 
-class ServicesManager:
+class ServicesResource(ConfigResource):
     """This class works between `pyms.flask.create_app.Microservice` and `pyms.flask.services.[THESERVICE]`. Search
     for a file with the name you want to load, set the configuration and return a instance of the class you want
     """
-    service = SERVICE_BASE
-
-    def __init__(self):
-        self.config = get_conf(service=self.service, empty_init=True, uppercase=False)
+    config_resource = SERVICE_BASE
 
     def get_services(self) -> Tuple[Text, DriverService]:
         for k in self.config.__dict__.keys():

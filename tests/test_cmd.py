@@ -8,7 +8,7 @@ import pytest
 
 from pyms.cmd import Command
 from pyms.exceptions import FileDoesNotExistException, PackageNotExists
-from pyms.utils.crypt import Crypt
+from pyms.crypt.fernet import Crypt
 
 
 class TestCmd(unittest.TestCase):

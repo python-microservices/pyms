@@ -41,7 +41,7 @@ class Service(DriverService):
     """
     Adds [Prometheus](https://prometheus.io/) metrics using the [Prometheus Client Library](https://github.com/prometheus/client_python).
     """
-    service = "metrics"
+    config_resource = "metrics"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -6,17 +6,18 @@ from flask import Flask
 
 from pyms.config import get_conf
 from pyms.config.conf import validate_conf
+from pyms.config.resource import ConfigResource
 from pyms.constants import LOGGER_NAME, CONFIG_BASE
 from pyms.flask.app.utils import SingletonMeta, ReverseProxied
 from pyms.flask.healthcheck import healthcheck_blueprint
-from pyms.flask.services.driver import ServicesManager
+from pyms.flask.services.driver import ServicesResource
 from pyms.logger import CustomJsonFormatter
 from pyms.utils import check_package_exists, import_from
 
 logger = logging.getLogger(LOGGER_NAME)
 
 
-class Microservice(metaclass=SingletonMeta):
+class Microservice(ConfigResource, metaclass=SingletonMeta):
     """The class Microservice is the core of all microservices built with PyMS.
     You can create a simple microservice such as:
     ```python
@@ -70,7 +71,7 @@ class Microservice(metaclass=SingletonMeta):
 
     Current services are swagger, request, tracer, metrics
     """
-    service = None
+    config_resource = CONFIG_BASE
     services = []
     application = None
     swagger = False
@@ -91,7 +92,7 @@ class Microservice(metaclass=SingletonMeta):
             self.path = os.path.dirname(os.path.abspath(path))
 
         validate_conf()
-        self.config = get_conf(path=self.path, service=CONFIG_BASE)
+        super().__init__(*args, **kwargs)
         self.init_services()
 
     def init_services(self) -> None:
@@ -99,7 +100,7 @@ class Microservice(metaclass=SingletonMeta):
         Set the Attributes of all service defined in config.yml and exists in `pyms.flask.service` module
         :return: None
         """
-        service_manager = ServicesManager()
+        service_manager = ServicesResource()
         for service_name, service in service_manager.get_services():
             self.services.append(service_name)
             setattr(self, service_name, service)

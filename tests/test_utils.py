@@ -7,7 +7,7 @@ import pytest
 
 from pyms.exceptions import PackageNotExists, FileDoesNotExistException
 from pyms.utils import check_package_exists, import_package
-from pyms.utils.crypt import Crypt
+from pyms.crypt.fernet import Crypt
 
 
 class ConfUtils(unittest.TestCase):

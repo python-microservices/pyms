@@ -8,7 +8,7 @@ from pyms.config.conf import validate_conf
 from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT, LOGGER_NAME, CONFIG_BASE, CRYPT_FILE_KEY_ENVIRONMENT
 from pyms.exceptions import AttrDoesNotExistException, ConfigDoesNotFoundException, ServiceDoesNotExistException, \
     ConfigErrorException
-from pyms.utils.crypt import Crypt
+from pyms.crypt.fernet import Crypt
 
 logger = logging.getLogger(LOGGER_NAME)
 

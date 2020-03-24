@@ -6,8 +6,8 @@ from typing import Dict, Union, Text, Tuple, Iterable
 import anyconfig
 
 from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT, LOGGER_NAME, DEFAULT_CONFIGMAP_FILENAME
+from pyms.crypt.fernet import Crypt
 from pyms.exceptions import AttrDoesNotExistException, ConfigDoesNotFoundException
-from pyms.utils.crypt import Crypt
 from pyms.utils.files import LoadFile
 
 logger = logging.getLogger(LOGGER_NAME)
