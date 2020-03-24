@@ -8,6 +8,7 @@ from pyms.config import get_conf
 from pyms.config.conf import validate_conf
 from pyms.config.resource import ConfigResource
 from pyms.constants import LOGGER_NAME, CONFIG_BASE
+from pyms.crypt.driver import CryptResource
 from pyms.flask.app.utils import SingletonMeta, ReverseProxied
 from pyms.flask.healthcheck import healthcheck_blueprint
 from pyms.flask.services.driver import ServicesResource
@@ -92,7 +93,8 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
             self.path = os.path.dirname(os.path.abspath(path))
 
         validate_conf()
-        super().__init__(*args, **kwargs)
+        self.init_crypt()
+        super().__init__(crypt=self.crypt, *args, **kwargs)
         self.init_services()
 
     def init_services(self) -> None:
@@ -100,10 +102,18 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         Set the Attributes of all service defined in config.yml and exists in `pyms.flask.service` module
         :return: None
         """
-        service_manager = ServicesResource()
-        for service_name, service in service_manager.get_services():
+        services_resources = ServicesResource()
+        for service_name, service in services_resources.get_services():
             self.services.append(service_name)
             setattr(self, service_name, service)
+
+    def init_crypt(self) -> None:
+        """
+        Set the Attributes of all service defined in config.yml and exists in `pyms.flask.service` module
+        :return: None
+        """
+        crypt_object = CryptResource()
+        self.crypt = crypt_object
 
     def delete_services(self) -> None:
         """

@@ -1,4 +1,4 @@
-from pyms.crypt.base import CryptAbstract
+from pyms.crypt.driver import CryptAbstract
 from pyms.utils import check_package_exists, import_package
 
 

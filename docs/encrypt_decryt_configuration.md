@@ -70,6 +70,8 @@ pyms encrypt 'mysql+mysqlconnector://important_user:****@localhost/my_schema'
 And put this string in your `config_pro.yml`:
 ```yaml
 pyms:
+  crypt:
+    method: "fernet"
   config:
     DEBUG: true
     TESTING: true

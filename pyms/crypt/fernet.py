@@ -8,7 +8,7 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 from pyms.constants import CRYPT_FILE_KEY_ENVIRONMENT, DEFAULT_KEY_FILENAME
-from pyms.crypt.base import CryptAbstract
+from pyms.crypt.driver import CryptAbstract
 from pyms.exceptions import FileDoesNotExistException
 from pyms.utils.files import LoadFile
 

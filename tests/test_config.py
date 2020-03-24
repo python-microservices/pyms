@@ -169,6 +169,6 @@ class GetConfigEncrypted(unittest.TestCase):
     def test_encrypt_conf(self):
         crypt = Crypt(path=self.BASE_DIR)
         crypt._loader.put_file(b"9IXx2F5d5Ob-h5xdCnFSUXhuFKLGRibvLfSbixpcfCw=", "wb")
-        config = get_conf(service=CONFIG_BASE, uppercase=True)
+        config = get_conf(service=CONFIG_BASE, uppercase=True, crypt=Crypt)
         crypt.delete_key()
         assert config.database_url == "http://database-url"

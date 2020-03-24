@@ -6,7 +6,6 @@ from typing import Dict, Union, Text, Tuple, Iterable
 import anyconfig
 
 from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT, LOGGER_NAME, DEFAULT_CONFIGMAP_FILENAME
-from pyms.crypt.fernet import Crypt
 from pyms.exceptions import AttrDoesNotExistException, ConfigDoesNotFoundException
 from pyms.utils.files import LoadFile
 
@@ -22,6 +21,7 @@ class ConfFile(dict):
     * config: Allow to pass a dictionary to ConfFile without use a file
     """
     _empty_init = False
+    _crypt = None
 
     def __init__(self, *args, **kwargs):
         """
@@ -35,7 +35,9 @@ class ConfFile(dict):
         ```
         """
         self._loader = LoadFile(kwargs.get("path"), CONFIGMAP_FILE_ENVIRONMENT, DEFAULT_CONFIGMAP_FILENAME)
-        self._crypt = Crypt(path=kwargs.get("path"))
+        self._crypt_cls = kwargs.get("crypt")
+        if self._crypt_cls:
+            self._crypt = self._crypt_cls(path=kwargs.get("path"))
         self._empty_init = kwargs.get("empty_init", False)
         config = kwargs.get("config")
         if config is None:
@@ -80,7 +82,7 @@ class ConfFile(dict):
     def normalize_config(self, config: Dict) -> Iterable[Tuple[Text, Union[Dict, Text, bool]]]:
         for key, item in config.items():
             if isinstance(item, dict):
-                item = ConfFile(config=item, empty_init=self._empty_init)
+                item = ConfFile(config=item, empty_init=self._empty_init, crypt=self._crypt_cls)
             yield self.normalize_keys(key), item
 
     @staticmethod

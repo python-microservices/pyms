@@ -1,4 +1,6 @@
 pyms:
+  crypt:
+    method: "fernet"
   services:
     metrics: true
     requests:

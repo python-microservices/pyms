@@ -12,4 +12,6 @@ CONFIG_BASE = "pyms.config"
 
 SERVICE_BASE = "pyms.services"
 
+CRYPT_BASE = "pyms.crypt"
+
 PYMS_CONFIG_WHITELIST_KEYWORDS = ["config", "services"]

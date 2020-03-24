@@ -1,13 +1,16 @@
 import logging
 from typing import Text, Tuple
 
-from pyms.config import get_conf, ConfFile
+from pyms.config import ConfFile
 from pyms.config.resource import ConfigResource
 from pyms.constants import SERVICE_BASE, LOGGER_NAME
 from pyms.utils import import_from
-from pyms.utils.utils import get_service_name
 
 logger = logging.getLogger(LOGGER_NAME)
+
+
+def get_service_name(service_base=SERVICE_BASE, service=""):
+    return ".".join([service_base, service])
 
 
 class DriverService(ConfigResource):
@@ -34,7 +37,6 @@ class DriverService(ConfigResource):
         * `swagger`: is set as the service `pyms.services.swagger`
         * `tracer`: is set as the service `pyms.services.tracer`
     """
-    config = None
     enabled = True
 
     def __init__(self, *args, **kwargs):
