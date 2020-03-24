@@ -24,6 +24,7 @@ class ReverseProxied:
     gateway redirect traffic to the microservice with a specific path like yourdomian.com/my-ms-a/my-endpoint/.
     This class understand this path if the gateway send a specific header
     """
+
     def __init__(self, app):
         self.app = app
 
@@ -42,7 +43,9 @@ class ReverseProxied:
         path = environ.get('HTTP_X_SCRIPT_NAME', '')
         if not path:
             # Get path from Zuul
-            path = environ.get('HTTP_X_FORWARDER_PREFIX', '')
+            path = environ.get('HTTP_X_FORWARDED_PREFIX', '')
+        if path and not path.startswith("/"):
+            path = "/" + path
         return path
 
     def __call__(self, environ, start_response):
