@@ -16,6 +16,7 @@ from pyms.utils.files import LoadFile
 class Crypt(CryptAbstract):
     def __init__(self, *args, **kwargs):
         self._loader = LoadFile(kwargs.get("path"), CRYPT_FILE_KEY_ENVIRONMENT, DEFAULT_KEY_FILENAME)
+        super().__init__(*args, **kwargs)
 
     def generate_key(self, password: Text, write_to_file: bool = False):
         password = password.encode()  # Convert to type bytes
