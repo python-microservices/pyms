@@ -4,7 +4,6 @@ from typing import Text
 
 from flask import Flask
 
-from pyms.config import get_conf
 from pyms.config.conf import validate_conf
 from pyms.config.resource import ConfigResource
 from pyms.constants import LOGGER_NAME, CONFIG_BASE
