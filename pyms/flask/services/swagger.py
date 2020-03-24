@@ -83,7 +83,7 @@ class Service(DriverService):
 
         # Fix Connexion issue https://github.com/zalando/connexion/issues/1135
         if application_root == "/":
-            params["base_path"] = ""
+            del params["base_path"]
 
         app.add_api(**params)
         # Invert the objects, instead connexion with a Flask object, a Flask object with

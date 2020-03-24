@@ -7,7 +7,7 @@ from flask import current_app
 from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT
 from pyms.flask.app import Microservice, config
 from pyms.flask.services.driver import DriverService
-from tests.common import MyMicroserviceNoSingleton, MyMicroservice
+from tests.common import MyMicroservice
 
 
 def home():
@@ -72,6 +72,18 @@ class FlaskWithSwaggerTests(unittest.TestCase):
         with pytest.raises(AttributeError) as excinfo:
             self.assertTrue(isinstance(self.app.ms.metrics, DriverService))
         assert "'MyMicroservice' object has no attribute 'metrics'" in str(excinfo.value)
+
+    def test_reverse_proxy(self):
+        response = self.client.get('/my-proxy-path/ui/', headers={"X-Script-Name": "/my-proxy-path"})
+        self.assertEqual(200, response.status_code)
+
+    def test_reverse_proxy_no_slash(self):
+        response = self.client.get('/my-proxy-path/ui/', headers={"X-Script-Name": "my-proxy-path"})
+        self.assertEqual(200, response.status_code)
+
+    def test_reverse_proxy_zuul(self):
+        response = self.client.get('/my-proxy-path-zuul/ui/', headers={"X-Forwarded-Prefix": "my-proxy-path-zuul"})
+        self.assertEqual(200, response.status_code)
 
 
 class MicroserviceTest(unittest.TestCase):
