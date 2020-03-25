@@ -16,6 +16,7 @@ class SwaggerTests(unittest.TestCase):
     def setUp(self):
         os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(self.BASE_DIR, "config-tests-swagger.yml")
         ms = MyMicroserviceNoSingleton(path=__file__)
+        ms.reload_conf()
         self.app = ms.create_app()
         self.client = self.app.test_client()
         self.assertEqual("Python Microservice Swagger", self.app.config["APP_NAME"])
@@ -38,6 +39,7 @@ class SwaggerNoAbsPathTests(unittest.TestCase):
     def setUp(self):
         os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(self.BASE_DIR, "config-tests-swagger_no_abs_path.yml")
         ms = MyMicroserviceNoSingleton(path=__file__)
+        ms.reload_conf()
         self.app = ms.create_app()
         self.client = self.app.test_client()
         self.assertEqual("Python Microservice Swagger2", self.app.config["APP_NAME"])
@@ -60,6 +62,7 @@ class SwaggerOpenapi3Tests(unittest.TestCase):
     def setUp(self):
         os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(self.BASE_DIR, "config-tests-swagger_3.yml")
         ms = MyMicroserviceNoSingleton(path=__file__)
+        ms.reload_conf()
         self.app = ms.create_app()
         self.client = self.app.test_client()
         self.assertEqual("Python Microservice Swagger Openapi 3", self.app.config["APP_NAME"])
@@ -82,6 +85,7 @@ class SwaggerOpenapi3NoAbsPathTests(unittest.TestCase):
     def setUp(self):
         os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(self.BASE_DIR, "config-tests-swagger_3_no_abs_path.yml")
         ms = MyMicroserviceNoSingleton(path=__file__)
+        ms.reload_conf()
         self.app = ms.create_app()
         self.client = self.app.test_client()
         self.assertEqual("Python Microservice Swagger Openapi 3 No abspath", self.app.config["APP_NAME"])

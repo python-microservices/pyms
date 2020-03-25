@@ -20,6 +20,7 @@ class RequestServiceNoDataTests(unittest.TestCase):
     def setUp(self):
         os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(self.BASE_DIR, "config-tests-requests-no-data.yml")
         ms = Microservice(path=__file__)
+        ms.reload_conf()
         self.app = ms.create_app()
         self.request = ms.requests
 
@@ -47,6 +48,7 @@ class RequestServiceTests(unittest.TestCase):
     def setUp(self):
         os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(self.BASE_DIR, "config-tests-requests.yml")
         ms = Microservice(path=__file__)
+        ms.reload_conf()
         self.app = ms.create_app()
         self.request = ms.requests
 

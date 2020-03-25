@@ -103,8 +103,9 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         """
         services_resources = ServicesResource()
         for service_name, service in services_resources.get_services():
-            self.services.append(service_name)
-            setattr(self, service_name, service)
+            if service_name not in self.services:
+                self.services.append(service_name)
+                setattr(self, service_name, service)
 
     def init_crypt(self, *args, **kwargs) -> None:
         """
@@ -197,6 +198,7 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
     def reload_conf(self):
         self.delete_services()
         self.config.reload()
+        self.services = []
         self.init_services()
         self.crypt.config.reload()
         self.create_app()

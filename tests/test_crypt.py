@@ -34,15 +34,13 @@ class CryptTests(unittest.TestCase):
         assert "Can't instantiate abstract class MockDecrypt with abstract methods decrypt, encrypt" in str(
             excinfo.value)
 
-    @staticmethod
-    def test_ko_encrypt():
+    def test_ko_encrypt(self):
         crypt = MockDecrypt2()
         with pytest.raises(NotImplementedError) as excinfo:
             crypt.encrypt("test")
         assert "" == str(excinfo.value)
 
-    @staticmethod
-    def test_ko_decrypt():
+    def test_ko_decrypt(self):
         crypt = MockDecrypt2()
         with pytest.raises(NotImplementedError) as excinfo:
             crypt.decrypt("test")
