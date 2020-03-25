@@ -86,14 +86,14 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         :param args:
         :param kwargs: "path", optional, the current directory where `Microservice` class is instanciated
         """
-        path = kwargs.get("path", None)
+        path = kwargs.pop("path") if kwargs.get("path") else None
         self.path = os.path.abspath("")
         if path:
             self.path = os.path.dirname(os.path.abspath(path))
 
         validate_conf()
-        self.init_crypt()
-        super().__init__(crypt=self.crypt, *args, **kwargs)
+        self.init_crypt(path=self.path, *args, **kwargs)
+        super().__init__(path=self.path, crypt=self.crypt, *args, **kwargs)
         self.init_services()
 
     def init_services(self) -> None:
@@ -106,12 +106,12 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
             self.services.append(service_name)
             setattr(self, service_name, service)
 
-    def init_crypt(self) -> None:
+    def init_crypt(self, *args, **kwargs) -> None:
         """
         Set the Attributes of all service defined in config.yml and exists in `pyms.flask.service` module
         :return: None
         """
-        crypt_object = CryptResource()
+        crypt_object = CryptResource(*args, **kwargs)
         self.crypt = crypt_object
 
     def delete_services(self) -> None:
@@ -198,6 +198,7 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         self.delete_services()
         self.config.reload()
         self.init_services()
+        self.crypt.config.reload()
         self.create_app()
 
     def create_app(self):

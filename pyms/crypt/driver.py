@@ -7,6 +7,8 @@ from pyms.utils import import_from
 
 logger = logging.getLogger(LOGGER_NAME)
 
+CRYPT_RESOURCES_CLASS = "Crypt"
+
 
 class CryptAbstract(ABC):
 
@@ -39,9 +41,9 @@ class CryptResource(ConfigResource):
 
     def get_crypt(self, *args, **kwargs) -> CryptAbstract:
         if self.config.method == "fernet":
-            crypt_object = import_from("pyms.crypt.fernet", "Crypt")
+            crypt_object = import_from("pyms.crypt.fernet", CRYPT_RESOURCES_CLASS)
         elif self.config.method == "aws_kms":
-            crypt_object = import_from("pyms.cloud.aws.kms", "Crypt")
+            crypt_object = import_from("pyms.cloud.aws.kms", CRYPT_RESOURCES_CLASS)
         else:
             crypt_object = CryptNone
         logger.debug("Init crypt {}".format(crypt_object))

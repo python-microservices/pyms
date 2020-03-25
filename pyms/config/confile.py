@@ -54,7 +54,7 @@ class ConfFile(dict):
         super(ConfFile, self).__init__(config)
 
     def to_flask(self) -> Dict:
-        return ConfFile(config={k.upper(): v for k, v in self.items()})
+        return ConfFile(config={k.upper(): v for k, v in self.items()}, crypt=self._crypt_cls)
 
     def set_config(self, config: Dict) -> Dict:
         """
@@ -65,10 +65,14 @@ class ConfFile(dict):
         """
         config = dict(self.normalize_config(config))
         pop_encripted_keys = []
+        add_decripted_keys = []
         for k, v in config.items():
             if k.lower().startswith("enc_"):
                 k_not_crypt = re.compile(re.escape('enc_'), re.IGNORECASE)
-                setattr(self, k_not_crypt.sub('', k), self._crypt.decrypt(v))
+                decrypted_key = k_not_crypt.sub('', k)
+                decrypted_value = self._crypt.decrypt(v) if self._crypt else None
+                setattr(self, decrypted_key, decrypted_value)
+                add_decripted_keys.append((decrypted_key, decrypted_value))
                 pop_encripted_keys.append(k)
             else:
                 setattr(self, k, v)
@@ -76,6 +80,9 @@ class ConfFile(dict):
         # Delete encrypted keys to prevent decrypt multiple times a element
         for x in pop_encripted_keys:
             config.pop(x)
+
+        for k, v in add_decripted_keys:
+            config[k] = v
 
         return config
 
@@ -105,7 +112,7 @@ class ConfFile(dict):
             return aux_dict
         except KeyError:
             if self._empty_init:
-                return ConfFile(config={}, empty_init=self._empty_init)
+                return ConfFile(config={}, empty_init=self._empty_init, crypt=self._crypt_cls)
             raise AttrDoesNotExistException("Variable {} not exist in the config file".format(name))
 
     def reload(self):

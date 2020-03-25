@@ -1,0 +1,24 @@
+pyms:
+  services:
+    metrics: true
+    requests:
+      data: data
+    swagger:
+      path: ""
+      file: "swagger.yaml"
+    tracer:
+      client: "jaeger"
+      host: "localhost"
+      component_name: "Python Microservice With Flask encrypted None"
+  config:
+    debug: true
+    testing: true
+    app_name: "Python Microservice With Flask encrypted None"
+    application_root: /
+    test_var: general
+    subservice1:
+       test: input
+    subservice2:
+       test: output
+    enc_database_url: "http://database-url"
+    ENC_SQLALCHEMY_DATABASE_URI: "http://database-url"
