@@ -13,7 +13,7 @@ CRYPT_RESOURCES_CLASS = "Crypt"
 class CryptAbstract(ABC):
 
     def __init__(self, *args, **kwargs):
-        self.config = kwargs.get("config", {})
+        self.config = kwargs.get("config")
 
     @abstractmethod
     def encrypt(self, message):

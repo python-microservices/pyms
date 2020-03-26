@@ -7,7 +7,6 @@ from pyms.utils import check_package_exists, import_package
 class Crypt(CryptAbstract):
     encryption_algorithm = "SYMMETRIC_DEFAULT"  # 'SYMMETRIC_DEFAULT' | 'RSAES_OAEP_SHA_1' | 'RSAES_OAEP_SHA_256'
     key_id = ""
-    grant_tokens = []
 
     def __init__(self, *args, **kwargs):
         check_package_exists("boto3")
@@ -20,11 +19,21 @@ class Crypt(CryptAbstract):
         encrypted = message
         return encrypted
 
-    def decrypt(self, encrypted):
-        blob_text = base64.b64decode(encrypted)
+    def _aws_decrypt(self, blob_text):
         response = self.client.decrypt(
             CiphertextBlob=blob_text,
             KeyId=self.config.key_id,
             EncryptionAlgorithm=self.encryption_algorithm
         )
         return str(response['Plaintext'], encoding="UTF-8")
+
+    def decrypt(self, encrypted):
+        blob_text = bytes(encrypted, encoding="utf-8")
+        try:
+            if self.config.base64:
+                blob_text = base64.b64decode(encrypted)
+        except AttributeError:
+            pass
+        decrypted = self._aws_decrypt(blob_text)
+
+        return decrypted
