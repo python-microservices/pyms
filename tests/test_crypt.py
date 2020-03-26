@@ -97,8 +97,9 @@ class GetConfigEncryptedAWS(unittest.TestCase):
     def tearDown(self):
         del os.environ[CONFIGMAP_FILE_ENVIRONMENT]
 
+    @patch.object(CryptAws, '_init_boto')
     @patch.object(CryptAws, '_aws_decrypt')
-    def test_encrypt_conf(self, mock_aws_decrypt):
+    def test_encrypt_conf(self, mock_aws_decrypt, mock_init_boto):
         mock_aws_decrypt.return_value = "http://database-url"
         crypt = CryptResource()
         config = get_conf(service=CONFIG_BASE, uppercase=True, crypt=crypt)

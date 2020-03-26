@@ -9,15 +9,18 @@ class Crypt(CryptAbstract):
     key_id = ""
 
     def __init__(self, *args, **kwargs):
-        check_package_exists("boto3")
-        boto3 = import_package("boto3")
-        boto3.set_stream_logger(name='botocore')
-        self.client = boto3.client('kms')
+        self._init_boto()
         super().__init__(*args, **kwargs)
 
     def encrypt(self, message):
         encrypted = message
         return encrypted
+
+    def _init_boto(self):
+        check_package_exists("boto3")
+        boto3 = import_package("boto3")
+        boto3.set_stream_logger(name='botocore')
+        self.client = boto3.client('kms')
 
     def _aws_decrypt(self, blob_text):
         response = self.client.decrypt(
