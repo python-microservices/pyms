@@ -1,0 +1,15 @@
+pyms:
+  crypt:
+    method: "aws_kms"
+    key_id: "alias/prueba-avara"
+    base64: true
+  config:
+    DEBUG: true
+    TESTING: false
+    SWAGGER: true
+    APP_NAME: business-glossary
+    APPLICATION_ROOT : ""
+    SECRET_KEY: "gjr39dkjn344_!67#"
+    enc_encrypted_key: "AQICAHiALhLQv4eW8jqUccFSnkyDkBAWLAm97Lr2qmdItkUCIAHDcZMEagUYqrB5Zd7fK4zPAAAA
+                        bDBqBgkqhkiG9w0BBwagXTBbAgEAMFYGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMkFXtzD5L
+                        4p9EY2OMAgEQgCnW5boCtlwF2ZLwUEX7xo6feuXte7MBijtmSPKfc5xOYBgihOKa/s5+jA=="

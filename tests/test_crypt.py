@@ -3,6 +3,7 @@ import os
 import unittest
 
 import pytest
+from moto import mock_kms
 
 from pyms.config import get_conf
 from pyms.constants import LOGGER_NAME, CONFIGMAP_FILE_ENVIRONMENT, CRYPT_FILE_KEY_ENVIRONMENT, CONFIG_BASE
@@ -137,3 +138,23 @@ class FlaskWithEncryptedNoneTests(unittest.TestCase):
     def test_fask_none_sqlalchemy(self):
         assert self.app.ms.config.SQLALCHEMY_DATABASE_URI == "http://database-url"
         assert self.app.config["SQLALCHEMY_DATABASE_URI"] == "http://database-url"
+
+
+class FlaskWithEncryptedAwsTests(unittest.TestCase):
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+    def setUp(self):
+        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                                              "config-tests-flask-encrypted-aws.yml")
+        ms = MyMicroserviceNoSingleton(path=__file__)
+        ms.reload_conf()
+        self.app = ms.create_app()
+        self.client = self.app.test_client()
+        self.assertEqual("Python Microservice With Flask encrypted AWS", self.app.config["APP_NAME"])
+
+    def tearDown(self):
+        del os.environ[CONFIGMAP_FILE_ENVIRONMENT]
+
+    @mock_kms
+    def test_fask_aws(self):
+        assert self.app.ms.config.encrypted_key == "texto a cifrar"

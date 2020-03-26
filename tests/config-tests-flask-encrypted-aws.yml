@@ -1,0 +1,29 @@
+pyms:
+  crypt:
+    method: "aws_kms"
+    key_id: "alias/prueba-avara"
+    base64: true
+  services:
+    metrics: true
+    requests:
+      data: data
+    swagger:
+      path: ""
+      file: "swagger.yaml"
+    tracer:
+      client: "jaeger"
+      host: "localhost"
+      component_name: "Python Microservice With Flask encrypted AWS"
+  config:
+    debug: true
+    testing: true
+    app_name: "Python Microservice With Flask encrypted AWS"
+    application_root: /
+    test_var: general
+    subservice1:
+       test: input
+    subservice2:
+       test: output
+    enc_encrypted_key: "AQICAHiALhLQv4eW8jqUccFSnkyDkBAWLAm97Lr2qmdItkUCIAHDcZMEagUYqrB5Zd7fK4zPAAAA
+                        bDBqBgkqhkiG9w0BBwagXTBbAgEAMFYGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMkFXtzD5L
+                        4p9EY2OMAgEQgCnW5boCtlwF2ZLwUEX7xo6feuXte7MBijtmSPKfc5xOYBgihOKa/s5+jA=="

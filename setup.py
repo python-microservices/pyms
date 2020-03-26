@@ -22,6 +22,15 @@ install_min_requires = [
     'cryptography>=2.8',
 ]
 
+install_crypt_requires = [
+    'cryptography>=2.8',
+]
+
+install_aws_requires = [
+    'boto3==1.12.30',
+]
+
+
 install_request_requires = [
     'requests>=2.23.0',
 ]
@@ -56,10 +65,12 @@ install_tests_requires = [
     'mkdocs>=1.1',
     'mkdocs-material>=4.6.3',
     'lightstep>=4.4.3',
+    'moto==1.3.14',
 ]
 
 install_all_requires = (install_request_requires + install_swagger_requires +
-                        install_traces_requires + install_metrics_requires)
+                        install_traces_requires + install_metrics_requires + install_crypt_requires +
+                        install_aws_requires)
 
 setup(
     name="py-ms",
@@ -94,6 +105,8 @@ setup(
         'swagger': install_swagger_requires,
         'traces': install_traces_requires,
         'metrics': install_metrics_requires,
+        'crypt': install_crypt_requires,
+        'aws': install_aws_requires,
         'tests': install_tests_requires,
     },
     tests_require=install_all_requires + install_tests_requires,

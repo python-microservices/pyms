@@ -13,7 +13,7 @@ CRYPT_RESOURCES_CLASS = "Crypt"
 class CryptAbstract(ABC):
 
     def __init__(self, *args, **kwargs):
-        pass
+        self.config = kwargs.get("config", {})
 
     @abstractmethod
     def encrypt(self, message):
@@ -47,7 +47,7 @@ class CryptResource(ConfigResource):
         else:
             crypt_object = CryptNone
         logger.debug("Init crypt {}".format(crypt_object))
-        return crypt_object(*args, **kwargs)
+        return crypt_object(config=self.config, *args, **kwargs)
 
     def __call__(self, *args, **kwargs):
         return self.get_crypt(*args, **kwargs)
