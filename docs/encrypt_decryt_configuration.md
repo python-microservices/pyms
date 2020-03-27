@@ -100,3 +100,76 @@ SQLALCHEMY_DATABASE_URI: mysql+mysqlconnector://user_of_db:user_of_db@localhost/
 ```
 
 And you can access to this var with `current_app.config["SQLALCHEMY_DATABASE_URI"]`
+
+## 1. Encrypt your information with AWS KMS and base64
+
+Configure aws:
+
+```bash
+aws configure
+```
+
+Cypher a string with this command:
+
+```bash
+aws kms encrypt --key-id alias/prueba-avara --plaintext "mysql+mysqlconnector://important_user:****@localhost/my_schema" --query CiphertextBlob --output text | base64 -d | base64
+>>  AQICAHiALhLQv4eW8jqUccFSnkyDkBAWLAm97Lr2qmdItkUCIAGBuPtu9v1N8oy2fhZ605VuAAAA
+oDCBnQYJKoZIhvcNAQcGoIGPMIGMAgEAMIGGBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDL60
+NbDqbBIOJUHCQQIBEIBZALpJXqZwqQb++8BxGTN1/gkAp4WQv6w34t07S/6lcfCYrBNtdkTX2th9
+cGJcIvg4+lLnyFzirOrhovVUsS7O5v5wofSqlUevX5BIowGZKWK9TqaXqZ/CS18=
+
+```
+
+And put this string in your `config_pro.yml`:
+```yaml
+pyms:
+  crypt:
+    method: "aws_kms"
+    key_id: "alias/your-kms-key"
+    base64: true
+  config:
+    DEBUG: true
+    TESTING: true
+    APPLICATION_ROOT : ""
+    SECRET_KEY: "gjr39dkjn344_!67#"
+    ENC_SQLALCHEMY_DATABASE_URI: "AQICAHiALhLQv4eW8jqUccFSnkyDkBAWLAm97Lr2qmdItkUCIAGBuPtu9v1N8oy2fhZ605VuAAAA
+oDCBnQYJKoZIhvcNAQcGoIGPMIGMAgEAMIGGBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDL60
+NbDqbBIOJUHCQQIBEIBZALpJXqZwqQb++8BxGTN1/gkAp4WQv6w34t07S/6lcfCYrBNtdkTX2th9
+cGJcIvg4+lLnyFzirOrhovVUsS7O5v5wofSqlUevX5BIowGZKWK9TqaXqZ/CS18=
+"
+```
+
+## 2. Encrypt your information with AWS KMS without base64
+
+Configure aws:
+
+```bash
+aws configure
+```
+
+Cypher a string with this command:
+
+```bash
+aws kms encrypt --key-id alias/prueba-avara --plaintext "mysql+mysqlconnector://important_user:****@localhost/my_schema" --query CiphertextBlob --output text
+>>  AQICAHiALhLQv4eW8jqUccFSnkyDkBAWLAm97Lr2qmdItkUCIAF+P4u/uqzu8KRT74PsnQXhAAAAoDCBnQYJKoZIhvcNAQcGoIGPMIGMAgEAMIGGBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDPo+k3ZxoI9XVKtHgQIBEIBZmp7UUVjNWd6qKrLVK8oBNczY0CfLH6iAZE3UK5Ofs4+nZFi0PL3SEW8M15VgTpQoC/b0YxDPHjF0V6NHUJcWirSAqKkP5Sz5eSTk91FTuiwDpvYQ2q9aY6w=
+
+```
+
+And put this string in your `config_pro.yml`:
+```yaml
+pyms:
+  crypt:
+    method: "aws_kms"
+    key_id: "alias/your-kms-key"
+    base64: false
+  config:
+    DEBUG: true
+    TESTING: true
+    APPLICATION_ROOT : ""
+    SECRET_KEY: "gjr39dkjn344_!67#"
+    ENC_SQLALCHEMY_DATABASE_URI: "AQICAHiALhLQv4eW8jqUccFSnkyDkBAWLAm97Lr2qmdItkUCIAF+P4u/uqzu8KRT74PsnQXhAAAAoDCBnQYJKoZIhvcNAQcGoIGPMIGMAgEAMIGGBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDPo+k3ZxoI9XVKtHgQIBEIBZmp7UUVjNWd6qKrLVK8oBNczY0CfLH6iAZE3UK5Ofs4+nZFi0PL3SEW8M15VgTpQoC/b0YxDPHjF0V6NHUJcWirSAqKkP5Sz5eSTk91FTuiwDpvYQ2q9aY6w=
+"
+```
+
+Do you see the difference between `ENC_SQLALCHEMY_DATABASE_URI` and `SQLALCHEMY_DATABASE_URI`? In the next step you
+can find the answer
