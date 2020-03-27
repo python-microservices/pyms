@@ -65,7 +65,6 @@ install_tests_requires = [
     'mkdocs>=1.1',
     'mkdocs-material>=4.6.3',
     'lightstep>=4.4.3',
-    'moto==1.3.14',
 ]
 
 install_all_requires = (install_request_requires + install_swagger_requires +

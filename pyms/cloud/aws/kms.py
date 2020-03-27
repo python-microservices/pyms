@@ -16,13 +16,13 @@ class Crypt(CryptAbstract):
         encrypted = message
         return encrypted
 
-    def _init_boto(self):
+    def _init_boto(self):  # pragma: no cover
         check_package_exists("boto3")
         boto3 = import_package("boto3")
         boto3.set_stream_logger(name='botocore')
         self.client = boto3.client('kms')
 
-    def _aws_decrypt(self, blob_text):
+    def _aws_decrypt(self, blob_text):  # pragma: no cover
         response = self.client.decrypt(
             CiphertextBlob=blob_text,
             KeyId=self.config.key_id,
