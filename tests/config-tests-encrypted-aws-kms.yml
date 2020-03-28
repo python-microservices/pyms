@@ -2,7 +2,6 @@ pyms:
   crypt:
     method: "aws_kms"
     key_id: "alias/prueba-avara"
-    base64: true
   services:
     metrics: true
     requests:
