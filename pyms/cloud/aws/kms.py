@@ -12,9 +12,12 @@ class Crypt(CryptAbstract):
         self._init_boto()
         super().__init__(*args, **kwargs)
 
-    def encrypt(self, message):
-        encrypted = message
-        return encrypted
+    def encrypt(self, message):   # pragma: no cover
+        ciphertext = self.client.encrypt(
+            KeyId=self.config.key_id,
+            Plaintext=bytes(message, encoding="UTF-8"),
+        )
+        return base64.b64encode(ciphertext["CiphertextBlob"])
 
     def _init_boto(self):  # pragma: no cover
         check_package_exists("boto3")
@@ -31,7 +34,7 @@ class Crypt(CryptAbstract):
         return str(response['Plaintext'], encoding="UTF-8")
 
     def _parse_encrypted(self, encrypted):
-        blob_text = bytes(encrypted, encoding="utf-8")
+        blob_text = bytes(encrypted, encoding="UTF-8")
         if self.config.base64:
             blob_text = base64.b64decode(encrypted)
         return blob_text
