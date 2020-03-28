@@ -30,13 +30,14 @@ class Crypt(CryptAbstract):
         )
         return str(response['Plaintext'], encoding="UTF-8")
 
-    def decrypt(self, encrypted):
+    def _parse_encrypted(self, encrypted):
         blob_text = bytes(encrypted, encoding="utf-8")
-        try:
-            if self.config.base64:
-                blob_text = base64.b64decode(encrypted)
-        except AttributeError:
-            pass
+        if self.config.base64:
+            blob_text = base64.b64decode(encrypted)
+        return blob_text
+
+    def decrypt(self, encrypted):
+        blob_text = self._parse_encrypted(encrypted)
         decrypted = self._aws_decrypt(blob_text)
 
         return decrypted

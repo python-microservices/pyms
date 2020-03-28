@@ -106,6 +106,24 @@ class GetConfigEncryptedAWS(unittest.TestCase):
         assert config.encrypted_key == "http://database-url"
 
 
+class GetConfigEncryptedAWSBase64(unittest.TestCase):
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+    def setUp(self):
+        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(self.BASE_DIR, "config-tests-encrypted-aws-kms-base64.yml")
+
+    def tearDown(self):
+        del os.environ[CONFIGMAP_FILE_ENVIRONMENT]
+
+    @patch.object(CryptAws, '_init_boto')
+    @patch.object(CryptAws, '_aws_decrypt')
+    def test_encrypt_conf(self, mock_aws_decrypt, mock_init_boto):
+        mock_aws_decrypt.return_value = "http://database-url"
+        crypt = CryptResource()
+        config = get_conf(service=CONFIG_BASE, uppercase=True, crypt=crypt)
+        assert config.encrypted_key == "http://database-url"
+
+
 class FlaskWithEncryptedFernetTests(unittest.TestCase):
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
