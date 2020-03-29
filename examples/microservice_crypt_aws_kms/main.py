@@ -4,7 +4,7 @@ from flask import jsonify
 
 from pyms.flask.app import Microservice
 
-ms = Microservice(path=__file__)
+ms = Microservice()
 app = ms.create_app()
 
 
