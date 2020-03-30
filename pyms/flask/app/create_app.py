@@ -4,19 +4,20 @@ from typing import Text
 
 from flask import Flask
 
-from pyms.config import get_conf
 from pyms.config.conf import validate_conf
+from pyms.config.resource import ConfigResource
 from pyms.constants import LOGGER_NAME, CONFIG_BASE
+from pyms.crypt.driver import CryptResource
 from pyms.flask.app.utils import SingletonMeta, ReverseProxied
 from pyms.flask.healthcheck import healthcheck_blueprint
-from pyms.flask.services.driver import ServicesManager
+from pyms.flask.services.driver import ServicesResource
 from pyms.logger import CustomJsonFormatter
 from pyms.utils import check_package_exists, import_from
 
 logger = logging.getLogger(LOGGER_NAME)
 
 
-class Microservice(metaclass=SingletonMeta):
+class Microservice(ConfigResource, metaclass=SingletonMeta):
     """The class Microservice is the core of all microservices built with PyMS.
     You can create a simple microservice such as:
     ```python
@@ -70,7 +71,7 @@ class Microservice(metaclass=SingletonMeta):
 
     Current services are swagger, request, tracer, metrics
     """
-    service = None
+    config_resource = CONFIG_BASE
     services = []
     application = None
     swagger = False
@@ -85,13 +86,14 @@ class Microservice(metaclass=SingletonMeta):
         :param args:
         :param kwargs: "path", optional, the current directory where `Microservice` class is instanciated
         """
-        path = kwargs.get("path", None)
+        path = kwargs.pop("path") if kwargs.get("path") else None
         self.path = os.path.abspath("")
         if path:
             self.path = os.path.dirname(os.path.abspath(path))
 
         validate_conf()
-        self.config = get_conf(path=self.path, service=CONFIG_BASE)
+        self.init_crypt(path=self.path, *args, **kwargs)
+        super().__init__(path=self.path, crypt=self.crypt, *args, **kwargs)
         self.init_services()
 
     def init_services(self) -> None:
@@ -99,10 +101,19 @@ class Microservice(metaclass=SingletonMeta):
         Set the Attributes of all service defined in config.yml and exists in `pyms.flask.service` module
         :return: None
         """
-        service_manager = ServicesManager()
-        for service_name, service in service_manager.get_services():
-            self.services.append(service_name)
-            setattr(self, service_name, service)
+        services_resources = ServicesResource()
+        for service_name, service in services_resources.get_services():
+            if service_name not in self.services:
+                self.services.append(service_name)
+                setattr(self, service_name, service)
+
+    def init_crypt(self, *args, **kwargs) -> None:
+        """
+        Set the Attributes of all service defined in config.yml and exists in `pyms.flask.service` module
+        :return: None
+        """
+        crypt_object = CryptResource(*args, **kwargs)
+        self.crypt = crypt_object
 
     def delete_services(self) -> None:
         """
@@ -187,7 +198,9 @@ class Microservice(metaclass=SingletonMeta):
     def reload_conf(self):
         self.delete_services()
         self.config.reload()
+        self.services = []
         self.init_services()
+        self.crypt.config.reload()
         self.create_app()
 
     def create_app(self):

@@ -2,6 +2,9 @@
 
 ## Configuration
 
+# Method 1: Encrypt and decrypt with key file and Fernet
+
+
 When you work in multiple environments: local, dev, testing, production... you must set critical configuration in your
 variables, like:
 
@@ -70,6 +73,8 @@ pyms encrypt 'mysql+mysqlconnector://important_user:****@localhost/my_schema'
 And put this string in your `config_pro.yml`:
 ```yaml
 pyms:
+  crypt:
+    method: "fernet"
   config:
     DEBUG: true
     TESTING: true
@@ -98,3 +103,45 @@ SQLALCHEMY_DATABASE_URI: mysql+mysqlconnector://user_of_db:user_of_db@localhost/
 ```
 
 And you can access to this var with `current_app.config["SQLALCHEMY_DATABASE_URI"]`
+
+# Method 2: Encrypt and decrypt with AWS KMS
+
+## 1. Configure AWS
+
+Pyms knows if a variable is encrypted if this var start with the prefix `enc_` or `ENC_`. PyMS uses boto3 and
+aws cli to decrypt this value and store it in the same variable without the `enc_` prefix.
+
+First, configure aws your aws account credentials:
+
+```bash
+aws configure
+```
+
+## 2. Encrypt with KMS
+
+Cypher a string with this command:
+
+```bash
+aws kms encrypt --key-id alias/prueba-avara --plaintext "mysql+mysqlconnector://important_user:****@localhost/my_schema" --query CiphertextBlob --output text
+>>  AQICAHiALhLQv4eW8jqUccFSnkyDkBAWLAm97Lr2qmdItkUCIAF+P4u/uqzu8KRT74PsnQXhAAAAoDCBnQYJKoZIhvcNAQcGoIGPMIGMAgEAMIGGBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDPo+k3ZxoI9XVKtHgQIBEIBZmp7UUVjNWd6qKrLVK8oBNczY0CfLH6iAZE3UK5Ofs4+nZFi0PL3SEW8M15VgTpQoC/b0YxDPHjF0V6NHUJcWirSAqKkP5Sz5eSTk91FTuiwDpvYQ2q9aY6w=
+
+```
+
+## 3. Decrypt from your config file
+
+And put this string in your `config_pro.yml`:
+```yaml
+pyms:
+  crypt:
+    method: "aws_kms"
+    key_id: "alias/your-kms-key"
+  config:
+    DEBUG: true
+    TESTING: true
+    APPLICATION_ROOT : ""
+    SECRET_KEY: "gjr39dkjn344_!67#"
+    ENC_SQLALCHEMY_DATABASE_URI: "AQICAHiALhLQv4eW8jqUccFSnkyDkBAWLAm97Lr2qmdItkUCIAF+P4u/uqzu8KRT74PsnQXhAAAAoDCBnQYJKoZIhvcNAQcGoIGPMIGMAgEAMIGGBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDPo+k3ZxoI9XVKtHgQIBEIBZmp7UUVjNWd6qKrLVK8oBNczY0CfLH6iAZE3UK5Ofs4+nZFi0PL3SEW8M15VgTpQoC/b0YxDPHjF0V6NHUJcWirSAqKkP5Sz5eSTk91FTuiwDpvYQ2q9aY6w=
+"
+```
+
+

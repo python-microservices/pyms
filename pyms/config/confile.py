@@ -7,7 +7,6 @@ import anyconfig
 
 from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT, LOGGER_NAME, DEFAULT_CONFIGMAP_FILENAME
 from pyms.exceptions import AttrDoesNotExistException, ConfigDoesNotFoundException
-from pyms.utils.crypt import Crypt
 from pyms.utils.files import LoadFile
 
 logger = logging.getLogger(LOGGER_NAME)
@@ -22,6 +21,7 @@ class ConfFile(dict):
     * config: Allow to pass a dictionary to ConfFile without use a file
     """
     _empty_init = False
+    _crypt = None
 
     def __init__(self, *args, **kwargs):
         """
@@ -35,7 +35,9 @@ class ConfFile(dict):
         ```
         """
         self._loader = LoadFile(kwargs.get("path"), CONFIGMAP_FILE_ENVIRONMENT, DEFAULT_CONFIGMAP_FILENAME)
-        self._crypt = Crypt(path=kwargs.get("path"))
+        self._crypt_cls = kwargs.get("crypt")
+        if self._crypt_cls:
+            self._crypt = self._crypt_cls(path=kwargs.get("path"))
         self._empty_init = kwargs.get("empty_init", False)
         config = kwargs.get("config")
         if config is None:
@@ -52,7 +54,7 @@ class ConfFile(dict):
         super(ConfFile, self).__init__(config)
 
     def to_flask(self) -> Dict:
-        return ConfFile(config={k.upper(): v for k, v in self.items()})
+        return ConfFile(config={k.upper(): v for k, v in self.items()}, crypt=self._crypt_cls)
 
     def set_config(self, config: Dict) -> Dict:
         """
@@ -63,10 +65,14 @@ class ConfFile(dict):
         """
         config = dict(self.normalize_config(config))
         pop_encripted_keys = []
+        add_decripted_keys = []
         for k, v in config.items():
             if k.lower().startswith("enc_"):
                 k_not_crypt = re.compile(re.escape('enc_'), re.IGNORECASE)
-                setattr(self, k_not_crypt.sub('', k), self._crypt.decrypt(v))
+                decrypted_key = k_not_crypt.sub('', k)
+                decrypted_value = self._crypt.decrypt(v) if self._crypt else None
+                setattr(self, decrypted_key, decrypted_value)
+                add_decripted_keys.append((decrypted_key, decrypted_value))
                 pop_encripted_keys.append(k)
             else:
                 setattr(self, k, v)
@@ -75,12 +81,15 @@ class ConfFile(dict):
         for x in pop_encripted_keys:
             config.pop(x)
 
+        for k, v in add_decripted_keys:
+            config[k] = v
+
         return config
 
     def normalize_config(self, config: Dict) -> Iterable[Tuple[Text, Union[Dict, Text, bool]]]:
         for key, item in config.items():
             if isinstance(item, dict):
-                item = ConfFile(config=item, empty_init=self._empty_init)
+                item = ConfFile(config=item, empty_init=self._empty_init, crypt=self._crypt_cls)
             yield self.normalize_keys(key), item
 
     @staticmethod
@@ -103,7 +112,7 @@ class ConfFile(dict):
             return aux_dict
         except KeyError:
             if self._empty_init:
-                return ConfFile(config={}, empty_init=self._empty_init)
+                return ConfFile(config={}, empty_init=self._empty_init, crypt=self._crypt_cls)
             raise AttrDoesNotExistException("Variable {} not exist in the config file".format(name))
 
     def reload(self):

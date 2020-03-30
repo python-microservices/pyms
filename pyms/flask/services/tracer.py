@@ -17,9 +17,8 @@ from flask import current_app, request, has_request_context
 
 from pyms.config.conf import get_conf
 from pyms.constants import LOGGER_NAME
-from pyms.flask.services.driver import DriverService
+from pyms.flask.services.driver import DriverService, get_service_name
 from pyms.utils import check_package_exists, import_package, import_from
-from pyms.utils.utils import get_service_name
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -52,7 +51,7 @@ class Service(DriverService):
     Add trace to all executions with [opentracing](https://github.com/opentracing-contrib/python-flask).
     All default values keys are created as class attributes in `DriverService`
     """
-    service = "tracer"
+    config_resource = "tracer"
     default_values = {
         "client": DEFAULT_CLIENT,
     }

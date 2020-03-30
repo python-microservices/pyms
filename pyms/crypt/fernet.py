@@ -8,13 +8,15 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 from pyms.constants import CRYPT_FILE_KEY_ENVIRONMENT, DEFAULT_KEY_FILENAME
+from pyms.crypt.driver import CryptAbstract
 from pyms.exceptions import FileDoesNotExistException
 from pyms.utils.files import LoadFile
 
 
-class Crypt:
+class Crypt(CryptAbstract):
     def __init__(self, *args, **kwargs):
         self._loader = LoadFile(kwargs.get("path"), CRYPT_FILE_KEY_ENVIRONMENT, DEFAULT_KEY_FILENAME)
+        super().__init__(*args, **kwargs)
 
     def generate_key(self, password: Text, write_to_file: bool = False):
         password = password.encode()  # Convert to type bytes

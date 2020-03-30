@@ -6,7 +6,7 @@ import argparse
 import sys
 
 from pyms.utils import check_package_exists, import_from
-from pyms.utils.crypt import Crypt
+from pyms.crypt.fernet import Crypt
 
 
 class Command:
