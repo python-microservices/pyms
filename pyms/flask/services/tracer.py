@@ -41,8 +41,8 @@ def inject_span_in_headers(headers):
                 span = get_current_span()
                 if not span:
                     span = tracer.tracer.start_span()
-        context = span.context if span else None
-        tracer.tracer.inject(context, opentracing.Format.HTTP_HEADERS, headers)
+            context = span.context if span else None
+            tracer.tracer.inject(context, opentracing.Format.HTTP_HEADERS, headers)
     return headers
 
 
