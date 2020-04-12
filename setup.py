@@ -15,11 +15,11 @@ else:
     long_description = ''
 
 install_min_requires = [
-    'flask>=1.1.1',
+    'flask>=1.1.2',
     'python-json-logger>=0.1.10',
-    'pyyaml>=5.1.2',
+    'pyyaml>=5.3.1',
     'anyconfig>=0.9.8',
-    'cryptography>=2.8',
+    'cryptography>=2.9',
 ]
 
 install_crypt_requires = [
@@ -27,7 +27,7 @@ install_crypt_requires = [
 ]
 
 install_aws_requires = [
-    'boto3==1.12.30',
+    'boto3==1.15.39',
 ]
 
 
@@ -55,16 +55,17 @@ install_metrics_requires = [
 
 install_tests_requires = [
     'requests-mock>=1.7.0',
-    'coverage>=5.0.3',
+    'coverage>=5.0.4',
     'pytest>=5.3.5',
     'pytest-cov>=2.8.1',
     'pylint>=2.4.4',
     'flake8>=3.7.9',
-    'tox>=3.14.5',
+    'tox>=3.14.6',
     'bandit>=1.6.2',
     'mkdocs>=1.1',
     'mkdocs-material>=4.6.3',
     'lightstep>=4.4.3',
+    'safety==1.8.7'
 ]
 
 install_all_requires = (install_request_requires + install_swagger_requires +
