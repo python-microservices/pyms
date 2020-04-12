@@ -27,7 +27,7 @@ install_crypt_requires = [
 ]
 
 install_aws_requires = [
-    'boto3==1.15.39',
+    'boto3==1.12.39',
 ]
 
 
