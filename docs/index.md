@@ -17,7 +17,7 @@ Get started with [Installation](installation.md) and then get an overview with t
 
 ## Motivation
 
-When we started to create microservice with no idea, we were looking for tutorials, guides, best practices, but we found
+When we started to create a microservice with no previous knowledge, we started looking for tutorials, guides, best practices, but we found
 nothing to create professional projects. Most articles say:
 
 - "Install flask"
@@ -25,10 +25,10 @@ nothing to create professional projects. Most articles say:
 - (Sometimes) "Create a swagger specs"
 - "TA-DA! you have a microservice"
 
-But... what happens with our configuration out of code like Kubernetes configmap? what happens with transactionality? 
+But... what happens when we want our configuration out of the code, such as a Kubernetes configmap? what happens with transactionality? 
 If we have many microservices, what happens with traces?.
 
-There are many problems around Python and microservices and we can`t find anyone to give a solution.
+There are many problems around Python and microservices and we couldn't find anyone to give us a solution.
 
 We start creating these projects to try to solve all the problems we have found in our professional lives about 
 microservices architecture.

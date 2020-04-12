@@ -1,6 +1,6 @@
 # Microservices class
 
-The class Microservice is the core of all microservices built with PyMS. 
+The Microservice class is the core of all microservices built with PyMS. 
 
 
 You can create a simple microservice such as:
@@ -30,9 +30,9 @@ pyms:
 	config:
   	APP_NAME: "Python Microservice"
 ```
-Check [Configuration](configuration.md) section to know how to create a configuration file.
+Check the [Configuration](configuration.md) section to learn how to create a configuration file.
 
-`Microservice` class search for a `config.yml` in the directory you pass in `path` parameter or search the file in
+The `Microservice` class searches for a `config.yml` in the directory you pass in `path` parameter or looks fot the file in
 `CONFIGMAP_FILE` env var.
 
 Each keyword in our configuration block, can be accessed in our Microservice object through the attribute `config`.
@@ -67,7 +67,7 @@ print(ms.config.multiplevars.config2)
 
 ## Personalize your microservices
 
-Microservice class initialize the libraries and other process by this way:
+The Microservice class initializes libraries and other process in the following way:
 
 ```python
 		...
@@ -97,4 +97,4 @@ Microservice class initialize the libraries and other process by this way:
 ```
 
 
-Check more examples in [this Github page](https://github.com/python-microservices/pyms/tree/master/examples)
+Check for more examples in [this Github page](https://github.com/python-microservices/pyms/tree/master/examples)

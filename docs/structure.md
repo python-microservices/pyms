@@ -4,8 +4,8 @@
 Module to read yaml or json configuration from a dictionary or a path.
 
 ### pyms/flask/app
-With the function `create_app` initialize the Flask app, register [blueprints](http://flask.pocoo.org/docs/0.12/blueprints/)
-and initialize all libraries such as Swagger, database, trace system, custom logger format, etc.
+With the function `create_app` we initialize the Flask app, register [blueprints](http://flask.pocoo.org/docs/0.12/blueprints/)
+and initialize all other libraries such as Swagger, database, trace system, custom logger format, etc.
 
 ### pyms/flask/services
 Integrations and wrappers over common libs like request, swagger, connexion or metrics.

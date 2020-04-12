@@ -42,7 +42,7 @@ Open in your browser http://localhost:5000/
 
 ## Example 2: Create your Microservice class
 
-Create a class that inherit from `pyms.flask.app.Microservice` and override methods with your own configuration.
+Create a class that inherits from `pyms.flask.app.Microservice` and overrides methods with your own configuration.
 The next example show how to innit a lib like [Flask Babel](https://pythonhosted.org/Flask-Babel/)
 
 main.py:
@@ -63,7 +63,7 @@ app = ms.create_app()
 
 ## Example 2: Initialize SQLAlchemy
 
-The next example show how to innit a lib like [Flask SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/2.x/)
+The next example shows us how to innit a lib like [Flask SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/2.x/)
 
 config.yml:
 
@@ -99,7 +99,7 @@ app = ms.create_app()
 
 ## Example 3: Create your logger
 
-The next example show how to create a personal logger for your application
+The next example shows us how to create a personal logger for your application
 
 ```python
 import logging.config
@@ -146,4 +146,4 @@ ms = MyMicroservice(path=__file__)
 app = ms.create_app()
 ```
 
-See [this Github page](https://github.com/python-microservices/pyms/tree/master/examples) to see a examples
+See [this Github page](https://github.com/python-microservices/pyms/tree/master/examples) to see more examples

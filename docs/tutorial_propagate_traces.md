@@ -1,12 +1,12 @@
 # Tutorial 1: Propagate Traces
 
-With this tutorial you can solve the problem of the [distributed tracing](https://microservices.io/patterns/observability/distributed-tracing.html)
+With this tutorial you can solve the problem of [distributed tracing](https://microservices.io/patterns/observability/distributed-tracing.html)
 
 You have applied the Microservice architecture pattern. Requests often span multiple services. 
 Each service handles a request by performing one or more operations, e.g. database queries, publishes messages, etc.
 
 PyMS injects a unique request ID with [opentracing](https://github.com/opentracing-contrib/python-flask) and
-passes the external request id to all services that are involved in handling the request with the [service request](services.md)
+passes the external request id to all services that are involved in handling the current request with the [service request](services.md)
 
 ## 1. Simple Trace
 
@@ -58,7 +58,7 @@ Run this script with:
 python main.py
 ```
 
-In other terminal, run this command:
+In another terminal, run this command:
 
 ```bash
 curl 'http://localhost:5000/'
@@ -120,10 +120,10 @@ if __name__ == '__main__':
     app.run(port=5001)
 ```
 
-Now, run this script and the first script, you will have the first in `http://localhost:5000/` and this new in
+Now, run both this script and the first script. You should have the first one running on `http://localhost:5000/` and this new one on
 `http://localhost:5001/`
 
-In other terminal, run this command:
+In another terminal, run this command:
 
 ```bash
 curl 'http://localhost:5001/'
@@ -134,7 +134,7 @@ curl 'http://localhost:5001/'
 
 ![Terminal](imgs/multiple-ms.png)
 
-The second MS print this logs:
+The second MS will print these logs:
 
 ```json
 {"message": "There are my headers: \nHost: localhost:5001\r\nUser-Agent: curl/7.58.0\r\nAccept: */*\r\n\r\n", 
@@ -177,15 +177,15 @@ And the first MS return:
 "parent": "c92e9babb0d002de"}
 ```
 
-As you can see, the two microservice have `"trace": "bb785b88d0456d69"`.
+As you can see, both microservices have `"trace": "bb785b88d0456d69"`.
 
 ## Flow
 
-You can see the flow of this requests in this diagram:
+You can see the flow of these requests in this diagram:
 
 ![Distributed tracing](imgs/PyMSdistributedtracing.png)
 
 ## Code
 
-You can check this example in See [this Github page](https://github.com/python-microservices/pyms/tree/master/examples/microservice_distribued_tracing)
+You can check this example on [this Github page](https://github.com/python-microservices/pyms/tree/master/examples/microservice_distribued_tracing)
 
