@@ -1,5 +1,3 @@
-from base64 import b64decode
-
 from flask import jsonify
 
 from pyms.flask.app import Microservice
