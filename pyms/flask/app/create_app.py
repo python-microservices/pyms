@@ -103,7 +103,7 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         """
         services_resources = ServicesResource()
         for service_name, service in services_resources.get_services():
-            if service_name not in self.services:
+            if service_name not in self.services or not getattr(self, service_name, False):
                 self.services.append(service_name)
                 setattr(self, service_name, service)
 
