@@ -146,6 +146,5 @@ Choose from 1, 2, 3, 4, 5, 6 [1]:
 When you finish to introduce the options, a project will be created in `[project_folder]` folder
 
 ## How To Contrib
-
 We appreciate opening issues and pull requests to make PyMS even more stable & useful! See [This doc](CONTRIBUTING.md)
 for more details.

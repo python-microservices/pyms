@@ -12,27 +12,27 @@ source venv/bin/activate
 
 **Installing pyms with all dependencies**
 ```
-pip install pyms[all]
+pip install py-ms[all]
 ```
 * Installing minimun dependencies
 ```
-pip install pyms
+pip install py-ms
 ```
 * Installing request dependencies
 ```
-pip install pyms[request]
+pip install py-ms[request]
 ```
 * Installing swagger dependencies
 ```
-pip install pyms[swagger]
+pip install py-ms[swagger]
 ```
 * Installing metrics dependencies
 ```
-pip install pyms[metrics]
+pip install py-ms[metrics]
 ```
 * Installing trace dependencies
 ```
-pip install pyms[trace]
+pip install py-ms[trace]
 ```
 
 See [Quickstart](quickstart.md) to continue with this tutorial

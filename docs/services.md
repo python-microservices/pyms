@@ -22,7 +22,7 @@ Extends the Microservice with [Connexion](https://github.com/zalando/connexion) 
 
 ### Installation
 
-You must install `pyms` with `pip install pyms[all]` or `pip install pyms[swagger]`
+You must install `pyms` with `pip install py-ms[all]` or `pip install py-ms[swagger]`
 
 ### Configuration
 
@@ -54,7 +54,7 @@ Encapsulate common rest operations between business services propagating trace h
 
 ### Installation
 
-You must install `pyms` with `pip install pyms[all]` or `pip install pyms[request]`
+You must install `pyms` with `pip install py-ms[all]` or `pip install py-ms[request]`
 
 ### Configuration
 
@@ -119,7 +119,7 @@ At the moment, the next metrics are available:
 
 ### Installation
 
-You must install `pyms` with `pip install pyms[all]` or `pip install pyms[metrics]`
+You must install `pyms` with `pip install py-ms[all]` or `pip install py-ms[metrics]`
 
 ### Example
 
