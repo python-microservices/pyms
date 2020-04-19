@@ -356,7 +356,6 @@
             ],
             "version": "==2.23.0"
         },
-<<<<<<< HEAD
         "semver": {
             "hashes": [
                 "sha256:095c3cba6d5433f21451101463b22cf831fe6996fcc8a603407fd8bea54f116b",
@@ -364,14 +363,13 @@
             ],
             "index": "pypi",
             "version": "==2.9.1"
-=======
+        },
         "s3transfer": {
             "hashes": [
                 "sha256:2482b4259524933a022d59da830f51bd746db62f047d6eb213f2f8855dcb8a13",
                 "sha256:921a37e2aefc64145e7b73d50c71bb4f26f46e4c9f414dc648c6245ff92cf7db"
             ],
             "version": "==0.3.3"
->>>>>>> 4a13881616b3f3370df6ac34e6675725d671255f
         },
         "six": {
             "hashes": [
@@ -1014,7 +1012,6 @@
             ],
             "version": "==1.7.0"
         },
-<<<<<<< HEAD
         "semver": {
             "hashes": [
                 "sha256:095c3cba6d5433f21451101463b22cf831fe6996fcc8a603407fd8bea54f116b",
@@ -1022,14 +1019,13 @@
             ],
             "index": "pypi",
             "version": "==2.9.1"
-=======
+        },
         "safety": {
             "hashes": [
                 "sha256:05f77773bbab834502328b29ed013677aa53ed0c22b6e330aef7d2a7e1dfd838",
                 "sha256:3016631e0dd17193d6cf12e8ed1af92df399585e8ee0e4b1300d9e7e32b54903"
             ],
             "version": "==1.8.7"
->>>>>>> 4a13881616b3f3370df6ac34e6675725d671255f
         },
         "six": {
             "hashes": [
