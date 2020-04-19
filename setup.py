@@ -39,6 +39,8 @@ install_swagger_requires = [
     'connexion[swagger-ui]>=2.6.0',
     'swagger-ui-bundle>=0.0.6',
     'anyconfig>=0.9.8',
+    'semver>=2.9.1',
+    'prance>=0.18.2',
 ]
 
 install_traces_requires = [

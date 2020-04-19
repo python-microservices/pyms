@@ -1,7 +1,11 @@
 import os
+from pathlib import Path
+from typing import Dict, Any
 
 import connexion
 from connexion.resolver import RestyResolver
+
+import prance
 
 from pyms.exceptions import AttrDoesNotExistException
 from pyms.flask.services.driver import DriverService
@@ -40,6 +44,13 @@ class Service(DriverService):
             application_root = "/"
         return application_root
 
+    @staticmethod
+    def get_bundled_specs(main_file: Path) -> Dict[str, Any]:
+        parser = prance.ResolvingParser(str(main_file.absolute()),
+                                        lazy=True, backend='openapi-spec-validator')
+        parser.parse()
+        return parser.specification
+
     def init_app(self, config, path):
         """
         Initialize Connexion App. See more info in [Connexion Github](https://github.com/zalando/connexion)
@@ -75,7 +86,7 @@ class Service(DriverService):
                             resolver=RestyResolver(self.project_dir))
 
         params = {
-            "specification": self.file,
+            "specification": self.get_bundled_specs(Path(os.path.join(specification_dir, self.file))),
             "arguments": {'title': config.APP_NAME},
             "base_path": application_root,
             "options": {"swagger_url": self.url},
