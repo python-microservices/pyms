@@ -5,7 +5,10 @@ from typing import Dict, Any
 import connexion
 from connexion.resolver import RestyResolver
 
-import prance
+try:
+    import prance
+except ModuleNotFoundError:  # pragma: no cover
+    prance = None
 
 from pyms.exceptions import AttrDoesNotExistException
 from pyms.flask.services.driver import DriverService
@@ -86,7 +89,8 @@ class Service(DriverService):
                             resolver=RestyResolver(self.project_dir))
 
         params = {
-            "specification": self.get_bundled_specs(Path(os.path.join(specification_dir, self.file))),
+            "specification": self.get_bundled_specs(
+                Path(os.path.join(specification_dir, self.file))) if prance else self.file,
             "arguments": {'title': config.APP_NAME},
             "base_path": application_root,
             "options": {"swagger_url": self.url},
