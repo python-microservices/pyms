@@ -1,6 +1,7 @@
 """Test common rest operations wrapper.
 """
 import os
+from pathlib import Path
 import unittest
 from unittest.mock import patch
 
@@ -9,6 +10,7 @@ import pytest
 from pyms.cmd import Command
 from pyms.exceptions import FileDoesNotExistException, PackageNotExists
 from pyms.crypt.fernet import Crypt
+from pyms.flask.services.swagger import get_bundled_specs
 
 
 class TestCmd(unittest.TestCase):
@@ -55,6 +57,12 @@ class TestCmd(unittest.TestCase):
         with pytest.raises(PackageNotExists) as excinfo:
             cmd.run()
         assert "cookiecutter is not installed. try with pip install -U cookiecutter" in str(excinfo.value)
+
+    def test_get_bundled_specs(self):
+        specs = get_bundled_specs(Path("tests/swagger_for_tests/swagger.yaml"))
+        self.assertEqual(specs.get('swagger'), "2.0")
+        self.assertEqual(specs.get('info').get('version'), "1.0.0")
+        self.assertEqual(specs.get('info').get('contact').get('email'), "apiteam@swagger.io")
 
     def test_merge_swagger_ok(self):
         arguments = ["merge-swagger", "--file", "tests/swagger_for_tests/swagger.yaml", ]

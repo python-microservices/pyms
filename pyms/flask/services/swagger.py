@@ -78,13 +78,6 @@ class Service(DriverService):
             application_root = "/"
         return application_root
 
-    @staticmethod
-    def get_bundled_specs(main_file: Path) -> Dict[str, Any]:
-        parser = prance.ResolvingParser(str(main_file.absolute()),
-                                        lazy=True, backend='openapi-spec-validator')
-        parser.parse()
-        return parser.specification
-
     def init_app(self, config, path):
         """
         Initialize Connexion App. See more info in [Connexion Github](https://github.com/zalando/connexion)
