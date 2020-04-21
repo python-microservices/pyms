@@ -55,3 +55,14 @@ class TestCmd(unittest.TestCase):
         with pytest.raises(PackageNotExists) as excinfo:
             cmd.run()
         assert "cookiecutter is not installed. try with pip install -U cookiecutter" in str(excinfo.value)
+
+    def test_merge_swagger_ok(self):
+        arguments = ["merge-swagger", "--file", "tests/swagger_for_tests/swagger.yaml", ]
+        cmd = Command(arguments=arguments, autorun=False)
+        assert cmd.run()
+        os.remove("tests/swagger_for_tests/swagger-complete.yaml")
+
+    def test_merge_swagger_error(self):
+        arguments = ["merge-swagger", ]
+        cmd = Command(arguments=arguments, autorun=False)
+        assert not cmd.run()

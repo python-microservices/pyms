@@ -7,6 +7,7 @@ from connexion.resolver import RestyResolver
 
 try:
     import prance
+    from prance.util import formats, fs
 except ModuleNotFoundError:  # pragma: no cover
     prance = None
 
@@ -18,6 +19,35 @@ SWAGGER_PATH = "swagger"
 SWAGGER_FILE = "swagger.yaml"
 SWAGGER_URL = "ui/"
 PROJECT_DIR = "project"
+
+
+def get_bundled_specs(main_file: Path) -> Dict[str, Any]:
+    """
+    Get bundled specs
+    :param main_file: Swagger file path
+    :return:
+    """
+    parser = prance.ResolvingParser(str(main_file.absolute()),
+                                    lazy=True, backend='openapi-spec-validator')
+    parser.parse()
+    return parser.specification
+
+
+def merge_swagger_file(main_file: str):
+    """
+    Generate swagger into a single file
+    :param main_file: Swagger file path
+    :return:
+    """
+    input_file = Path(main_file)
+    output_file = Path(input_file.parent, 'swagger-complete.yaml')
+
+    contents = formats.serialize_spec(
+        specs=get_bundled_specs(input_file).__str__(),
+        filename=output_file)
+    fs.write_file(filename=output_file,
+                  contents=contents,
+                  encoding='utf-8')
 
 
 class Service(DriverService):
@@ -46,13 +76,6 @@ class Service(DriverService):
         except AttrDoesNotExistException:
             application_root = "/"
         return application_root
-
-    @staticmethod
-    def get_bundled_specs(main_file: Path) -> Dict[str, Any]:
-        parser = prance.ResolvingParser(str(main_file.absolute()),
-                                        lazy=True, backend='openapi-spec-validator')
-        parser.parse()
-        return parser.specification
 
     def init_app(self, config, path):
         """
@@ -89,7 +112,7 @@ class Service(DriverService):
                             resolver=RestyResolver(self.project_dir))
 
         params = {
-            "specification": self.get_bundled_specs(
+            "specification": get_bundled_specs(
                 Path(os.path.join(specification_dir, self.file))) if prance else self.file,
             "arguments": {'title': config.APP_NAME},
             "base_path": application_root,
