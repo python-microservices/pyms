@@ -43,8 +43,9 @@ def merge_swagger_file(main_file: str):
     output_file = Path(input_file.parent, 'swagger-complete.yaml')
 
     contents = formats.serialize_spec(
-        specs=get_bundled_specs(input_file).__str__(),
-        filename=output_file)
+        specs=get_bundled_specs(input_file),
+        filename=output_file,
+    )
     fs.write_file(filename=output_file,
                   contents=contents,
                   encoding='utf-8')
