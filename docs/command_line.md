@@ -84,10 +84,7 @@ optional arguments:
   -f FILE, --file FILE  Swagger file path
 ```
 
-This command use [prance](https://github.com/jfinkhaeuser/prance) to validate the API specification and generate a single YAML file. Has an optional argument to indicate the main file path of the API specification.
-
-!!! warning
-    You must run first `pip install prance==0.18.2`
+This command uses [prance](https://github.com/jfinkhaeuser/prance) to validate the API specification and generate a single YAML file. It has an optional argument to indicate the main file path of the API specification.
 
 ```bash
 pyms merge-swagger --file 'app/swagger/swagger.yaml'
