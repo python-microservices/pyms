@@ -8,7 +8,8 @@ pyms -h
 Show you a list of options and help instructions to use this command like:
 
 ```bash
-usage: main.py [-h] [-v VERBOSE] {encrypt,create-key,startproject} ...
+usage: main.py [-h] [-v VERBOSE]
+               {encrypt,create-key,startproject,merge-swagger} ...
 
 Python Microservices
 
@@ -20,11 +21,12 @@ optional arguments:
 Commands:
   Available commands
 
-  {encrypt,create-key,startproject}
+  {encrypt,create-key,startproject,merge-swagger}
     encrypt             Encrypt a string
     create-key          Generate a Key to encrypt strings in config
     startproject        Generate a project from https://github.com/python-
                         microservices/microservices-template
+    merge-swagger       Merge swagger into a single file
 
 ```
 
@@ -67,3 +69,28 @@ pyms encrypt 'mysql+mysqlconnector://important_user:****@localhost/my_schema'
 ```
 
 See [Encrypt/Decrypt Configuration](encrypt_decryt_configuration.md) for more information
+
+## Merge swagger into a single file
+
+Command: 
+
+```bash
+pyms merge-swagger [-h] [-f FILE]
+```
+
+```bash
+optional arguments:
+  -h, --help            show this help message and exit
+  -f FILE, --file FILE  Swagger file path
+```
+
+This command use [prance](https://github.com/jfinkhaeuser/prance) to validate the API specification and generate a single YAML file. Has an optional argument to indicate the main file path of the API specification.
+
+!!! warning
+    You must run first `pip install prance==0.18.2`
+
+```bash
+pyms merge-swagger --file 'app/swagger/swagger.yaml'
+>>  Swagger file generated [swagger-complete.yaml] 
+>>  OK
+```
