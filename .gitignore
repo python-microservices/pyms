@@ -6,7 +6,6 @@ venv
 tmp
 *.sqlite3
 
-
 # Test&converage
 htmlcov/
 coverage.xml
@@ -17,9 +16,6 @@ py_ms.egg-info/*
 .eggs/*
 pylintReport.txt
 .scannerwork/
-
-
-# Docker
 
 # Deploy
 build/

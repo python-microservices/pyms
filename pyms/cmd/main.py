@@ -3,10 +3,12 @@
 from __future__ import unicode_literals, print_function
 
 import argparse
+import os
 import sys
 
-from pyms.utils import check_package_exists, import_from
 from pyms.crypt.fernet import Crypt
+from pyms.flask.services.swagger import merge_swagger_file
+from pyms.utils import check_package_exists, import_from
 
 
 class Command:
@@ -33,13 +35,23 @@ class Command:
         parser_create_key.add_argument("create_key", action='store_true',
                                        help='Generate a Key to encrypt strings in config')
 
-        parser_startproject = commands.add_parser('startproject',
-                                                  help='Generate a project from https://github.com/python-microservices/microservices-template')
-        parser_startproject.add_argument("startproject", action='store_true',
-                                         help='Generate a project from https://github.com/python-microservices/microservices-template')
+        parser_startproject = commands.add_parser(
+            'startproject',
+            help='Generate a project from https://github.com/python-microservices/microservices-template')
+        parser_startproject.add_argument(
+            "startproject", action='store_true',
+            help='Generate a project from https://github.com/python-microservices/microservices-template')
 
-        parser_startproject.add_argument("-b", "--branch",
-                                         help='Select a branch from https://github.com/python-microservices/microservices-template')
+        parser_startproject.add_argument(
+            "-b", "--branch",
+            help='Select a branch from https://github.com/python-microservices/microservices-template')
+
+        parser_merge_swagger = commands.add_parser('merge-swagger', help='Merge swagger into a single file')
+        parser_merge_swagger.add_argument("merge_swagger", action='store_true',
+                                          help='Merge swagger into a single file')
+        parser_merge_swagger.add_argument(
+            "-f", "--file", default=os.path.join('project', 'swagger', 'swagger.yaml'),
+            help='Swagger file path')
 
         parser.add_argument("-v", "--verbose", default="", type=str, help="Verbose ")
 
@@ -57,6 +69,11 @@ class Command:
             self.branch = args.branch
         except AttributeError:
             self.startproject = False
+        try:
+            self.merge_swagger = args.merge_swagger
+            self.file = args.file
+        except AttributeError:
+            self.merge_swagger = False
         self.verbose = len(args.verbose)
         if autorun:  # pragma: no cover
             result = self.run()
@@ -89,6 +106,13 @@ class Command:
             cookiecutter = import_from("cookiecutter.main", "cookiecutter")
             cookiecutter('gh:python-microservices/cookiecutter-pyms', checkout=self.branch)
             self.print_ok("Created project OK")
+        if self.merge_swagger:
+            try:
+                merge_swagger_file(main_file=self.file)
+                self.print_ok("Swagger file generated [swagger-complete.yaml]")
+            except FileNotFoundError as ex:
+                self.print_error(ex.__str__())
+                return False
         return True
 
     @staticmethod
