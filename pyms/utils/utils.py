@@ -2,17 +2,12 @@ import importlib
 import importlib.util
 from typing import Union, Text
 
-from pyms.constants import SERVICE_BASE
 from pyms.exceptions import PackageNotExists
 
 
 def import_from(module: Text, name: Text):
     module = __import__(module, fromlist=[name])
     return getattr(module, name)
-
-
-def get_service_name(service_base=SERVICE_BASE, service=""):
-    return ".".join([service_base, service])
 
 
 def import_package(package: Text):

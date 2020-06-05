@@ -17,9 +17,8 @@ from flask import current_app, request, has_request_context
 
 from pyms.config.conf import get_conf
 from pyms.constants import LOGGER_NAME
-from pyms.flask.services.driver import DriverService
+from pyms.flask.services.driver import DriverService, get_service_name
 from pyms.utils import check_package_exists, import_package, import_from
-from pyms.utils.utils import get_service_name
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -42,8 +41,8 @@ def inject_span_in_headers(headers):
                 span = get_current_span()
                 if not span:
                     span = tracer.tracer.start_span()
-        context = span.context if span else None
-        tracer.tracer.inject(context, opentracing.Format.HTTP_HEADERS, headers)
+            context = span.context if span else None
+            tracer.tracer.inject(context, opentracing.Format.HTTP_HEADERS, headers)
     return headers
 
 
@@ -52,7 +51,7 @@ class Service(DriverService):
     Add trace to all executions with [opentracing](https://github.com/opentracing-contrib/python-flask).
     All default values keys are created as class attributes in `DriverService`
     """
-    service = "tracer"
+    config_resource = "tracer"
     default_values = {
         "client": DEFAULT_CLIENT,
     }

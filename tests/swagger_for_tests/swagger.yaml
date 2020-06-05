@@ -2,11 +2,17 @@
 swagger: "2.0"
 info:
   description: "This is a sample server Test server"
-  version: "1.0.0"
+  version:
+    $ref: 'info.yaml#/version'
   title: "Swagger Test list"
   termsOfService: "http://swagger.io/terms/"
   contact:
-    email: "apiteam@swagger.io"
+    name:
+      $ref: 'info.yaml#/author'
+    url:
+      $ref: 'info.yaml#/url'
+    email:
+      $ref: 'info.yaml#/email'
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
@@ -38,11 +44,12 @@ paths:
       produces:
       - "application/json"
       responses:
-        200:
+        "200":
           description: "Example"
-        405:
+        "405":
           description: "Invalid input"
       x-swagger-router-controller: "tests.test_flask"
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"
+...

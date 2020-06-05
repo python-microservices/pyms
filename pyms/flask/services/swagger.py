@@ -1,7 +1,15 @@
 import os
+from pathlib import Path
+from typing import Dict, Any
 
 import connexion
 from connexion.resolver import RestyResolver
+
+try:
+    import prance
+    from prance.util import formats, fs
+except ModuleNotFoundError:  # pragma: no cover
+    prance = None
 
 from pyms.exceptions import AttrDoesNotExistException
 from pyms.flask.services.driver import DriverService
@@ -11,6 +19,36 @@ SWAGGER_PATH = "swagger"
 SWAGGER_FILE = "swagger.yaml"
 SWAGGER_URL = "ui/"
 PROJECT_DIR = "project"
+
+
+def get_bundled_specs(main_file: Path) -> Dict[str, Any]:
+    """
+    Get bundled specs
+    :param main_file: Swagger file path
+    :return:
+    """
+    parser = prance.ResolvingParser(str(main_file.absolute()),
+                                    lazy=True, backend='openapi-spec-validator')
+    parser.parse()
+    return parser.specification
+
+
+def merge_swagger_file(main_file: str):
+    """
+    Generate swagger into a single file
+    :param main_file: Swagger file path
+    :return:
+    """
+    input_file = Path(main_file)
+    output_file = Path(input_file.parent, 'swagger-complete.yaml')
+
+    contents = formats.serialize_spec(
+        specs=get_bundled_specs(input_file),
+        filename=output_file,
+    )
+    fs.write_file(filename=output_file,
+                  contents=contents,
+                  encoding='utf-8')
 
 
 class Service(DriverService):
@@ -24,7 +62,7 @@ class Service(DriverService):
 
     All default values keys are created as class attributes in `DriverService`
     """
-    service = "swagger"
+    config_resource = "swagger"
     default_values = {
         "path": SWAGGER_PATH,
         "file": SWAGGER_FILE,
@@ -75,7 +113,8 @@ class Service(DriverService):
                             resolver=RestyResolver(self.project_dir))
 
         params = {
-            "specification": self.file,
+            "specification": get_bundled_specs(
+                Path(os.path.join(specification_dir, self.file))) if prance else self.file,
             "arguments": {'title': config.APP_NAME},
             "base_path": application_root,
             "options": {"swagger_url": self.url},

@@ -20,6 +20,7 @@ class RequestServiceNoDataTests(unittest.TestCase):
     def setUp(self):
         os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(self.BASE_DIR, "config-tests-requests-no-data.yml")
         ms = Microservice(path=__file__)
+        ms.reload_conf()
         self.app = ms.create_app()
         self.request = ms.requests
 
@@ -47,6 +48,7 @@ class RequestServiceTests(unittest.TestCase):
     def setUp(self):
         os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(self.BASE_DIR, "config-tests-requests.yml")
         ms = Microservice(path=__file__)
+        ms.reload_conf()
         self.app = ms.create_app()
         self.request = ms.requests
 
@@ -219,6 +221,65 @@ class RequestServiceTests(unittest.TestCase):
         with self.app.app_context():
             mock_request.put(full_url, text=text, status_code=200)
             response = self.request.put_for_object(url, path_params, json=user)
+
+        self.assertEqual(expected, response)
+
+    @requests_mock.Mocker()
+    def test_patch(self, mock_request):
+        url = "http://www.my-site.com/users/{user-id}"
+        path_params = {'user-id': 123}
+        full_url = "http://www.my-site.com/users/123"
+        user = {'name': 'Peter', 'email': 'peter@my-site.com'}
+        text = json.dumps({'data': {'id': 123, 'name': 'Peter', 'email': 'peter@my-site.com'}})
+
+        with self.app.app_context():
+            mock_request.patch(full_url, text=text, status_code=200)
+            response = self.request.patch(url, path_params, json=user)
+
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(text, response.text)
+
+    @requests_mock.Mocker()
+    def test_patch_for_object_without_json(self, mock_request):
+        url = "http://www.my-site.com/users/{user-id}"
+        path_params = {'user-id': 123}
+        full_url = "http://www.my-site.com/users/123"
+        user = {'name': 'Peter', 'email': 'peter@my-site.com'}
+        expected = {}
+
+        with self.app.app_context():
+            mock_request.patch(full_url, status_code=200)
+            response = self.request.patch_for_object(url, path_params, json=user)
+
+        self.assertEqual(expected, response)
+
+    @requests_mock.Mocker()
+    def test_patch_for_object_without_valid_json_data(self, mock_request):
+        url = "http://www.my-site.com/users/{user-id}"
+        path_params = {'user-id': 123}
+        full_url = "http://www.my-site.com/users/123"
+        user = {'name': 'Peter', 'email': 'peter@my-site.com'}
+        text = json.dumps({'another_data': {'id': 123, 'name': 'Peter', 'email': 'peter@my-site.com.com'}})
+        expected = {}
+
+        with self.app.app_context():
+            mock_request.patch(full_url, text=text, status_code=200)
+            response = self.request.patch_for_object(url, path_params, json=user)
+
+        self.assertEqual(expected, response)
+
+    @requests_mock.Mocker()
+    def test_patch_for_object_with_valid_data(self, mock_request):
+        url = "http://www.my-site.com/users/{user-id}"
+        path_params = {'user-id': 123}
+        full_url = "http://www.my-site.com/users/123"
+        user = {'name': 'Peter', 'email': 'peter@my-site.com'}
+        text = json.dumps({'data': {'id': 123, 'name': 'Peter', 'email': 'peter@my-site.com.com'}})
+        expected = {'id': 123, 'name': 'Peter', 'email': 'peter@my-site.com.com'}
+
+        with self.app.app_context():
+            mock_request.patch(full_url, text=text, status_code=200)
+            response = self.request.patch_for_object(url, path_params, json=user)
 
         self.assertEqual(expected, response)
 

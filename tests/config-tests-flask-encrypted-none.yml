@@ -1,6 +1,4 @@
 pyms:
-  crypt:
-    method: "fernet"
   services:
     metrics: true
     requests:
@@ -11,15 +9,16 @@ pyms:
     tracer:
       client: "jaeger"
       host: "localhost"
-      component_name: "Python Microservice"
+      component_name: "Python Microservice With Flask encrypted None"
   config:
     debug: true
     testing: true
-    app_name: "Python Microservice"
+    app_name: "Python Microservice With Flask encrypted None"
     application_root: /
     test_var: general
     subservice1:
        test: input
     subservice2:
        test: output
-    enc_database_url: gAAAAABeSZ714r99iRIxhoH77vTdRJ0iqSymShfqgGN9PJveqhQWmshRDuV2a8sATey8_lHkln0TwezczucH-aJHGP_LyEiPxwM-88clNa7FB1u4g7Iaw3A=
+    enc_database_url: "http://database-url"
+    ENC_SQLALCHEMY_DATABASE_URI: "http://database-url"

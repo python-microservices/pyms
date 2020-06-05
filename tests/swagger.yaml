@@ -38,9 +38,9 @@ paths:
       produces:
       - "application/json"
       responses:
-        200:
+        "200":
           description: "Example"
-        405:
+        "405":
           description: "Invalid input"
       x-swagger-router-controller: "tests.test_flask"
 externalDocs:

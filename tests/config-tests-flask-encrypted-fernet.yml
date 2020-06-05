@@ -11,11 +11,11 @@ pyms:
     tracer:
       client: "jaeger"
       host: "localhost"
-      component_name: "Python Microservice"
+      component_name: "Python Microservice With Flask encrypted"
   config:
     debug: true
     testing: true
-    app_name: "Python Microservice"
+    app_name: "Python Microservice With Flask encrypted"
     application_root: /
     test_var: general
     subservice1:
@@ -23,3 +23,4 @@ pyms:
     subservice2:
        test: output
     enc_database_url: gAAAAABeSZ714r99iRIxhoH77vTdRJ0iqSymShfqgGN9PJveqhQWmshRDuV2a8sATey8_lHkln0TwezczucH-aJHGP_LyEiPxwM-88clNa7FB1u4g7Iaw3A=
+    ENC_SQLALCHEMY_DATABASE_URI: gAAAAABeSZ714r99iRIxhoH77vTdRJ0iqSymShfqgGN9PJveqhQWmshRDuV2a8sATey8_lHkln0TwezczucH-aJHGP_LyEiPxwM-88clNa7FB1u4g7Iaw3A=

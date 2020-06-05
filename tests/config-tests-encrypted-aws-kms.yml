@@ -1,6 +1,7 @@
 pyms:
   crypt:
-    method: "fernet"
+    method: "aws_kms"
+    key_id: "alias/prueba-avara"
   services:
     metrics: true
     requests:
@@ -22,4 +23,6 @@ pyms:
        test: input
     subservice2:
        test: output
-    enc_database_url: gAAAAABeSZ714r99iRIxhoH77vTdRJ0iqSymShfqgGN9PJveqhQWmshRDuV2a8sATey8_lHkln0TwezczucH-aJHGP_LyEiPxwM-88clNa7FB1u4g7Iaw3A=
+    enc_encrypted_key: "AQICAHiALhLQv4eW8jqUccFSnkyDkBAWLAm97Lr2qmdItkUCIAHDcZMEagUYqrB5Zd7fK4zPAAAA
+                        bDBqBgkqhkiG9w0BBwagXTBbAgEAMFYGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMkFXtzD5L
+                        4p9EY2OMAgEQgCnW5boCtlwF2ZLwUEX7xo6feuXte7MBijtmSPKfc5xOYBgihOKa/s5+jA=="

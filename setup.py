@@ -15,12 +15,21 @@ else:
     long_description = ''
 
 install_min_requires = [
-    'flask>=1.1.1',
+    'flask>=1.1.2',
     'python-json-logger>=0.1.10',
-    'pyyaml>=5.1.2',
+    'pyyaml>=5.3.1',
     'anyconfig>=0.9.8',
+    'cryptography>=2.9',
+]
+
+install_crypt_requires = [
     'cryptography>=2.8',
 ]
+
+install_aws_requires = [
+    'boto3==1.12.39',
+]
+
 
 install_request_requires = [
     'requests>=2.23.0',
@@ -30,6 +39,8 @@ install_swagger_requires = [
     'connexion[swagger-ui]>=2.6.0',
     'swagger-ui-bundle>=0.0.6',
     'anyconfig>=0.9.8',
+    'semver>=2.9.1',
+    'prance>=0.18.2',
 ]
 
 install_traces_requires = [
@@ -46,20 +57,22 @@ install_metrics_requires = [
 
 install_tests_requires = [
     'requests-mock>=1.7.0',
-    'coverage>=5.0.3',
+    'coverage>=5.0.4',
     'pytest>=5.3.5',
     'pytest-cov>=2.8.1',
     'pylint>=2.4.4',
     'flake8>=3.7.9',
-    'tox>=3.14.5',
+    'tox>=3.14.6',
     'bandit>=1.6.2',
     'mkdocs>=1.1',
     'mkdocs-material>=4.6.3',
     'lightstep>=4.4.3',
+    'safety==1.8.7'
 ]
 
 install_all_requires = (install_request_requires + install_swagger_requires +
-                        install_traces_requires + install_metrics_requires)
+                        install_traces_requires + install_metrics_requires + install_crypt_requires +
+                        install_aws_requires)
 
 setup(
     name="py-ms",
@@ -94,6 +107,8 @@ setup(
         'swagger': install_swagger_requires,
         'traces': install_traces_requires,
         'metrics': install_metrics_requires,
+        'crypt': install_crypt_requires,
+        'aws': install_aws_requires,
         'tests': install_tests_requires,
     },
     tests_require=install_all_requires + install_tests_requires,

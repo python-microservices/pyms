@@ -44,7 +44,7 @@ class Service(DriverService):
     Encapsulate common rest operations between business services propagating trace headers if set up.
     All default values keys are created as class attributes in `DriverService`
     """
-    service = "requests"
+    config_resource = "requests"
     default_values = {
         "data": "",
         "retries": DEFAULT_RETRIES,
@@ -269,6 +269,50 @@ class Service(DriverService):
         """
 
         response = self.put(url, path_params=path_params, data=data, headers=headers, **kwargs)
+        return self.parse_response(response)
+
+    @retry
+    def patch(self, url, path_params=None, data=None, headers=None, **kwargs):
+        """Sends a PATCH request.
+
+        :param url: URL for the new :class:`Request` object. Could contain path parameters
+        :param path_params: (optional) Dictionary, list of tuples with path parameters values to compose url
+        :param data: (optional) Dictionary, list of tuples, bytes, or file-like
+            object to send in the body of the :class:`Request`.
+        :param json: (optional) json data to send in the body of the :class:`Request`.
+        :param headers: (optional) Dictionary of HTTP Headers to send with the :class:`Request`.
+        :param kwargs: Optional arguments that ``request`` takes.
+        :return: :class:`Response <Response>` object
+        :rtype: requests.Response
+        """
+
+        full_url = self._build_url(url, path_params)
+        headers = self._get_headers(headers)
+        headers = self.insert_trace_headers(headers)
+        logger.debug("Patch with url {}, data {}, headers {}, kwargs {}".format(full_url, data, headers,
+                                                                                kwargs))
+
+        session = requests.Session()
+        response = self.requests(session=session).patch(full_url, data, headers=headers, **kwargs)
+        logger.debug("Response {}".format(response))
+
+        return response
+
+    def patch_for_object(self, url, path_params=None, data=None, headers=None, **kwargs):
+        """Sends a PATCH request and returns the json representation found in response's content data node.
+
+        :param url: URL for the new :class:`Request` object. Could contain path parameters
+        :param path_params: (optional) Dictionary, list of tuples with path parameters values to compose url
+        :param data: (optional) Dictionary, list of tuples, bytes, or file-like
+            object to send in the body of the :class:`Request`.
+        :param json: (optional) json data to send in the body of the :class:`Request`.
+        :param headers: (optional) Dictionary of HTTP Headers to send with the :class:`Request`.
+        :param kwargs: Optional arguments that ``request`` takes.
+        :return: :class:`Response <Response>` object
+        :rtype: requests.Response
+        """
+
+        response = self.patch(url, path_params=path_params, data=data, headers=headers, **kwargs)
         return self.parse_response(response)
 
     @retry
