@@ -1,6 +1,6 @@
 # Commnand line
 
-PyMS hcomes with some commands to make your developments easier:
+PyMS comes with some commands to make your developments easier:
 
 ```bash
 pyms -h
