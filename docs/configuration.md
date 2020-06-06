@@ -83,7 +83,7 @@ our `ms` object will have an attribute `requests` that is a instance of our serv
 
 ## pyms - config block
 This section contains all keywords used for general [Flask Configuration Handling](http://flask.pocoo.org/docs/1.0/config/), along 
-with our constants for the different the enviroments (local configuration, staging configuration...). Keep in mind that 
+with our constants for the different enviroments (local configuration, staging configuration...). Keep in mind that 
 a Flask app configuration needs the keywords to be declared as uppercase. If you defined a variable like `app_name`, 
 you will be able to retrieve it this with `current_app.config["APP_NAME"]`
 
