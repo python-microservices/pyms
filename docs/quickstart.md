@@ -51,7 +51,7 @@ PyMS has a command line option to create a project template like [Microservices 
 This command uses [cookiecutter](https://github.com/cookiecutter/cookiecutter) to download and install this [template](https://github.com/python-microservices/microservices-template)
 
 !!! warning
-    Fist, you must run `pip install cookiecutter==1.7.0`
+    First, you must run `pip install cookiecutter==1.7.0`
 
 ## Installation
 
