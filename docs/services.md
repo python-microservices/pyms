@@ -1,11 +1,11 @@
 # Services
 
 Services are libraries, resources and extensions added to the Microservice in the configuration file.
-This services are created as an attribute of the [Microservice class](ms_class.md) to use in the code.
+These services are created as an attribute of the [Microservice class](ms_class.md) to use in the code.
 
 To add a service check the [configuration section](configuration.md).
 
-You can declare a service but activate/deactivate with the keyword `enabled`, like:
+You can declare a service but activate/deactivate with the keyword `enabled`, like so:
 
 ```yaml
 pyms:
@@ -14,7 +14,7 @@ pyms:
       enabled: false
 ```
 
-Current services are:
+Currently availabe services are:
 
 ## Swagger / connexion
 
@@ -26,7 +26,7 @@ You must install `pyms` with `pip install py-ms[all]` or `pip install py-ms[swag
 
 ### Configuration
 
-The parameters you can add to your config are:
+The parameters you can add to your config are the folowing:
 
 * **path:** The relative or absolute route to your swagger yaml file. The default value is the current directory
 * **file:** The name of you swagger yaml file. The default value is `swagger.yaml`
@@ -50,7 +50,7 @@ pyms:
 ## Requests
 
 Extend the [requests library](http://docs.python-requests.org/en/master/) with trace headers and parsing JSON objects.
-Encapsulate common rest operations between business services propagating trace headers if set up.
+Encapsulates common rest operations between business services propagating trace headers if set up.
 
 ### Installation
 
@@ -61,9 +61,9 @@ You must install `pyms` with `pip install py-ms[all]` or `pip install py-ms[requ
 The parameters you can add to your config are:
 
 * **data:** wrap the response in a data field of an envelope object, and add other meta data to that wrapper. The default value is None
-* **retries:** If the response is not correct, send again the request. The default number of retries is 3.
-* **status_retries:** List of response status code that consider "not correct". The default values are [500, 502, 504]
-* **propagate_headers:** Propagate the headers of the actual execution to the request. The default values is False
+* **retries:** If the response is not correct, this specifies the amount of times it performs the request again. The default number of retries is 3.
+* **status_retries:** List of response status codes that are considered "not correct". The default values are [500, 502, 504]
+* **propagate_headers:** Propagate the headers of the current execution to the request. The default values is False
 
 ### Example
 
@@ -79,7 +79,7 @@ pyms:
 
 ## Tracer
 
-Add trace to all executions with [opentracing](https://github.com/opentracing-contrib/python-flask). This service
+Add traces to all executions with [opentracing](https://github.com/opentracing-contrib/python-flask). This service
 solves the problem of [distributed tracing](https://microservices.io/patterns/observability/distributed-tracing.html)
 
 ### Installation
@@ -90,7 +90,7 @@ You must install `pyms` with `pip install pyms[all]` or `pip install pyms[trace]
 
 The parameters you can add to your config are:
 
-* **client:** set the client to use traces, The actual options are [Jaeger](https://github.com/jaegertracing/jaeger-client-python) and [Lightstep](https://github.com/lightstep/lightstep-tracer-python). The default value is jaeger.
+* **client:** set the client that will receive the traces, The current options are [Jaeger](https://github.com/jaegertracing/jaeger-client-python) and [Lightstep](https://github.com/lightstep/lightstep-tracer-python). The default value is jaeger.
 * **host:** The url to send the data of traces. Check [this tutorial](https://opentracing.io/guides/python/quickstart/) to create your own server
 * **component_name:** The name of your application to show in Prometheus metrics
 
@@ -109,7 +109,7 @@ pyms:
 Adds [Prometheus](https://prometheus.io/) metrics using the [Prometheus Client
 Library](https://github.com/prometheus/client_python).
 
-At the moment, the next metrics are available:
+The folowing metrics are currently available:
 
 - Incoming requests latency as a histogram
 - Incoming requests number as a counter, divided by HTTP method, endpoint and
@@ -158,8 +158,8 @@ pyms:
 			myvalue: 5
 ```
 
-* Your service will be setted inside `ms` object in `flask.current_app` objetct. for example, with the last config,
-you can print the next code:
+* Your service will be instanced inside the `ms` object in `flask.current_app` object. For example, with the last config,
+you could print the folowing code:
 
 ```python
 from flask import jsonify, current_app
@@ -182,7 +182,7 @@ if __name__ == '__main__':
     app.run()
 ```
 
-This output in `http://localhost:5000/`:
+This would be the output in `http://localhost:5000/`:
 
 ```json
 {"myvalue": 5, "myvalue2": 1}

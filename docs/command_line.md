@@ -1,11 +1,11 @@
 # Commnand line
 
-PyMS has some command to make easy your developments:
+PyMS comes with some commands to make your developments easier:
 
 ```bash
 pyms -h
 ```
-Show you a list of options and help instructions to use this command like:
+Lists the options and help instructions to use this command:
 
 ```bash
 usage: main.py [-h] [-v VERBOSE]
@@ -37,11 +37,11 @@ Command:
 pyms startproject
 ```
 
-This command create a project template like [Microservices Scaffold](https://github.com/python-microservices/microservices-scaffold).
-This command use [cookiecutter](https://github.com/cookiecutter/cookiecutter) to download and install this [template](https://github.com/python-microservices/microservices-template)
+This command creates a project template like the one defined in [Microservices Scaffold](https://github.com/python-microservices/microservices-scaffold).
+This command uses [cookiecutter](https://github.com/cookiecutter/cookiecutter) to download and install this [template](https://github.com/python-microservices/microservices-template)
 
 !!! warning
-    You must run first `pip install cookiecutter==1.7.0`
+    First, you must run `pip install cookiecutter==1.7.0`
 
 ## Create a key encrypt/decrypt file
 
