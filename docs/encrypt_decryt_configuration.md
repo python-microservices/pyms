@@ -54,7 +54,7 @@ Store this key in a secure site, and DO NOT COMMIT it to your repository.
 
 Move your key, for example, to `mv key.key /home/my_user/keys/myproject.key`
 
-then, store the in a environment variable with:
+then, store the key in a environment variable with:
 
 ```bash
 export KEY_FILE=/home/my_user/keys/myproject.key
