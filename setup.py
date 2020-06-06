@@ -18,16 +18,16 @@ install_min_requires = [
     'flask>=1.1.2',
     'python-json-logger>=0.1.10',
     'pyyaml>=5.3.1',
-    'anyconfig>=0.9.8',
-    'cryptography>=2.9',
+    'anyconfig>=0.9.11',
+    'cryptography>=2.9.2',
 ]
 
 install_crypt_requires = [
-    'cryptography>=2.8',
+    'cryptography>=2.9.2',
 ]
 
 install_aws_requires = [
-    'boto3==1.12.39',
+    'boto3==1.13.24',
 ]
 
 
@@ -36,10 +36,9 @@ install_request_requires = [
 ]
 install_swagger_requires = [
     'swagger-ui-bundle>=0.0.2',
-    'connexion[swagger-ui]>=2.6.0',
+    'connexion[swagger-ui]>=2.7.0',
     'swagger-ui-bundle>=0.0.6',
-    'anyconfig>=0.9.8',
-    'semver>=2.9.1',
+    'semver>=2.10.1',
     'prance>=0.18.2',
 ]
 
@@ -52,22 +51,22 @@ install_traces_requires = [
 ]
 
 install_metrics_requires = [
-    'prometheus_client>=0.7.1',
+    'prometheus_client>=0.8.0',
 ]
 
 install_tests_requires = [
-    'requests-mock>=1.7.0',
-    'coverage>=5.0.4',
-    'pytest>=5.3.5',
-    'pytest-cov>=2.8.1',
-    'pylint>=2.4.4',
-    'flake8>=3.7.9',
+    'requests-mock>=1.8.0',
+    'coverage>=5.1',
+    'pytest>=5.4.3',
+    'pytest-cov>=2.9.0',
+    'pylint>=2.5.2',
+    'flake8>=3.8.2',
     'tox>=3.14.6',
     'bandit>=1.6.2',
-    'mkdocs>=1.1',
-    'mkdocs-material>=4.6.3',
+    'mkdocs>=1.1.2',
+    'mkdocs-material>=5.2.2',
     'lightstep>=4.4.3',
-    'safety==1.8.7'
+    'safety==1.9.0'
 ]
 
 install_all_requires = (install_request_requires + install_swagger_requires +
