@@ -136,7 +136,7 @@ API = Api(
 
 ## Looking for Configuration file with Kubernetes Configmaps
 By default, the Microservice class searches for a config.yml in the same path. You can set a different route or set a json file.
-To change this path, you must define a environment variable `CONFIGMAP_FILE`.
+To change this path, you must define an environment variable called `CONFIGMAP_FILE`.
 
 This way of looking for the configuration is useful when you work with Docker and Kubernetes. For example, you could integrate
 a configmap of Kubernetes, with this microservice and a deployment with:
