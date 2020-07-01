@@ -23,7 +23,7 @@ microservices with Python which handles cross-cutting concerns:
 PyMS is powered by [Flask](https://flask.palletsprojects.com/en/1.1.x/), [Connexion](https://github.com/zalando/connexion) 
 and [Opentracing](https://opentracing.io/).
 
-Get started with [Installation](installation.md) and then get an overview with the [Quickstart](quickstart.md).
+Get started with [Installation](./docs/installation.md) and then get an overview with the [Quickstart](./docs/quickstart.md).
 
 ## Documentation
 
@@ -98,7 +98,7 @@ pyms:
 1. Create a instance of PyMS Microservice class (#1.1). This initialization inject the configuration defined in the
 1.3 block and could be accessed through current_app.config like typical
 [Flask config](https://flask.palletsprojects.com/en/1.1.x/config/).
-Then, initialize the service defined in the 1.2 block. See [Services](services.md) for more details.
+Then, initialize the service defined in the 1.2 block. See [Services](./docs/services.md) for more details.
 
 2. Initialize [Flask](https://flask.palletsprojects.com/en/1.1.x/) instance, [Connexion](https://github.com/zalando/connexion)
 if it was defined in the pyms configuration block, create a tracer, add health-check blueprint, initialize libs and set
