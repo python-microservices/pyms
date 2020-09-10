@@ -34,7 +34,6 @@ class FlaskMetricsWrapper():
             path = request.url_rule.rule
         else:
             path = request.path
-
         request_latency = time.time() - request.start_time
         FLASK_REQUEST_LATENCY.labels(self.app_name, request.method, path, response.status_code).observe(request_latency)
         FLASK_REQUEST_COUNT.labels(self.app_name, request.method, path, response.status_code).inc()
