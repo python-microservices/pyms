@@ -6,7 +6,7 @@ import unittest
 from unittest.mock import patch
 
 import pytest
-
+from prance.util.url import ResolutionError
 from pyms.cmd import Command
 from pyms.exceptions import FileDoesNotExistException, PackageNotExists
 from pyms.crypt.fernet import Crypt
@@ -73,4 +73,5 @@ class TestCmd(unittest.TestCase):
     def test_merge_swagger_error(self):
         arguments = ["merge-swagger", ]
         cmd = Command(arguments=arguments, autorun=False)
-        assert not cmd.run()
+        with pytest.raises(ResolutionError) as excinfo:
+            cmd.run()
