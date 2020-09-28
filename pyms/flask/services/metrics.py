@@ -77,7 +77,7 @@ class MetricsLogHandler(logging.Handler):
     """A LogHandler that exports logging metrics for Prometheus.io."""
 
     def __init__(self, app_name):
-        super(MetricsLogHandler, self).__init__()
+        super().__init__()
         self.app_name = app_name
 
     def emit(self, record):
