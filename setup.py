@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright (c) 2018 by Alberto Vara <albertovara@paradigmadigital.com>
 import codecs
 import os
