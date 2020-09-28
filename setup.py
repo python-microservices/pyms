@@ -16,23 +16,23 @@ else:
 
 install_min_requires = [
     'flask>=1.1.2',
-    'python-json-logger>=0.1.10',
+    'python-json-logger>=2.0.0',
     'pyyaml>=5.3.1',
     'anyconfig>=0.9.11',
-    'cryptography>=2.9.2',
+    'cryptography>=3.1.1',
 ]
 
 install_crypt_requires = [
-    'cryptography>=2.9.2',
+    'cryptography>=3.1.1',
 ]
 
 install_aws_requires = [
-    'boto3==1.13.24',
+    'boto3>=1.15.6',
 ]
 
 
 install_request_requires = [
-    'requests>=2.23.0',
+    'requests>=2.24.0',
 ]
 install_swagger_requires = [
     'swagger-ui-bundle>=0.0.2',
@@ -56,16 +56,16 @@ install_metrics_requires = [
 
 install_tests_requires = [
     'requests-mock>=1.8.0',
-    'coverage>=5.1',
-    'pytest>=5.4.3',
-    'pytest-cov>=2.9.0',
-    'pylint>=2.5.2',
+    'coverage>=5.3',
+    'pytest>=6.1.0',
+    'pytest-cov>=2.10.1',
+    'pylint>=2.6.0',
     'flake8>=3.8.2',
-    'tox>=3.14.6',
+    'tox>=3.20.0',
     'bandit>=1.6.2',
     'mkdocs>=1.1.2',
-    'mkdocs-material>=5.2.2',
-    'lightstep>=4.4.3',
+    'mkdocs-material>=6.0.0',
+    'lightstep>=4.4.8',
     'safety==1.9.0'
 ]
 
@@ -97,7 +97,7 @@ setup(
     packages=find_packages(
         exclude=['*.tests', '*.tests.*', 'tests.*', 'tests', '*.examples', '*.examples.*', 'examples.*', 'examples']),
     setup_requires=[
-        'pytest-runner>=2.0,<3dev',
+        'pytest-runner>=5.2',
     ],
     install_requires=install_min_requires,
     extras_require={
