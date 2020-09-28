@@ -1,13 +1,14 @@
 language: python
 python:
-  - "3.6"
-  - "3.7"
   - "3.8"
 install:
-  - pip install --upgrade setuptools tox tox-travis coveralls
+  - python -m pip install --upgrade pip
+  - pip install --upgrade setuptools coveralls pipenv
+  - pipenv lock --dev --requirements > requirements.txt
+  - pip install -r requirements.txt
 script:
   - coverage erase
-  - tox
+  - python setup.py test
 after_success:
   - coverage combine
   - coveralls

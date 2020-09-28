@@ -51,7 +51,7 @@ class ConfFile(dict):
 
         config = self.set_config(config)
 
-        super(ConfFile, self).__init__(config)
+        super().__init__(config)
 
     def to_flask(self) -> Dict:
         return ConfFile(config={k.upper(): v for k, v in self.items()}, crypt=self._crypt_cls)
@@ -110,10 +110,10 @@ class ConfFile(dict):
             for k in keys:
                 aux_dict = aux_dict[k]
             return aux_dict
-        except KeyError:
+        except KeyError as e:
             if self._empty_init:
                 return ConfFile(config={}, empty_init=self._empty_init, crypt=self._crypt_cls)
-            raise AttrDoesNotExistException("Variable {} not exist in the config file".format(name))
+            raise AttrDoesNotExistException("Variable {} not exist in the config file".format(name)) from e
 
     def reload(self):
         """
@@ -124,4 +124,4 @@ class ConfFile(dict):
         self.set_config(config_src)
 
     def __setattr__(self, name, value, *args, **kwargs):
-        super(ConfFile, self).__setattr__(name, value)
+        super().__setattr__(name, value)
