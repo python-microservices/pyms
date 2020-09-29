@@ -34,7 +34,6 @@ install_request_requires = [
     'requests>=2.24.0',
 ]
 install_swagger_requires = [
-    'swagger-ui-bundle>=0.0.2',
     'connexion[swagger-ui]>=2.7.0',
     'swagger-ui-bundle>=0.0.6',
     'semver>=2.10.1',

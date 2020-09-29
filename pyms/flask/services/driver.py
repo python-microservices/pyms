@@ -1,5 +1,5 @@
 import logging
-from typing import Text, Tuple
+from typing import Text, Tuple, Iterator
 
 from pyms.config import ConfFile
 from pyms.config.resource import ConfigResource
@@ -61,7 +61,7 @@ class ServicesResource(ConfigResource):
     """
     config_resource = SERVICE_BASE
 
-    def get_services(self) -> Tuple[Text, DriverService]:
+    def get_services(self) -> Iterator[Tuple[Text, DriverService]]:
         for k in self.config.__dict__.keys():
             if k.islower() and not k.startswith("_"):
                 service = self.get_service(k)
