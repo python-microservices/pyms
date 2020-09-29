@@ -1,6 +1,6 @@
 import logging
 import os
-from typing import Type, List
+from typing import List
 
 from flask import Flask
 
