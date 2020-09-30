@@ -1,6 +1,6 @@
 import logging
 import os
-from typing import Text
+from typing import List
 
 from flask import Flask
 
@@ -10,7 +10,7 @@ from pyms.constants import LOGGER_NAME, CONFIG_BASE
 from pyms.crypt.driver import CryptResource
 from pyms.flask.app.utils import SingletonMeta, ReverseProxied
 from pyms.flask.healthcheck import healthcheck_blueprint
-from pyms.flask.services.driver import ServicesResource
+from pyms.flask.services.driver import ServicesResource, DriverService
 from pyms.logger import CustomJsonFormatter
 from pyms.utils import check_package_exists, import_from
 
@@ -72,11 +72,12 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
     Current services are swagger, request, tracer, metrics
     """
     config_resource = CONFIG_BASE
-    services = []
-    application = None
-    swagger = False
-    request = False
-    tracer = False
+    services: List[DriverService] = []
+    application = Flask
+    swagger: DriverService = None
+    request: DriverService = None
+    tracer: DriverService = None
+    metrics: DriverService = None
     _singleton = True
 
     def __init__(self, *args, **kwargs):
@@ -137,7 +138,7 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         """Set attribute in flask `tracer`. See in `pyms.flask.services.tracer` how it works
         :return: None
         """
-        if self._exists_service("tracer"):
+        if self.tracer:
             FlaskTracing = import_from("flask_opentracing", "FlaskTracing")
             client = self.tracer.get_client()
             self.application.tracer = FlaskTracing(client, True, self.application)
@@ -169,7 +170,7 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         run a "normal" Flask app.
         :return: None
         """
-        if self._exists_service("swagger"):
+        if self.swagger:
             application = self.swagger.init_app(config=self.config.to_flask(), path=self.path)
         else:
             check_package_exists("flask")
@@ -183,11 +184,11 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
 
         return application
 
-    def init_metrics(self):
+    def init_metrics(self) -> None:
         """Set attribute in flask `metrics`. See in `pyms.flask.services.metrics` how it works
         :return: None
         """
-        if getattr(self, "metrics", False) and self.metrics:
+        if self.metrics:
             self.application.register_blueprint(self.metrics.metrics_blueprint)
             self.metrics.add_logger_handler(
                 self.application.logger,
@@ -230,14 +231,6 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         logger.debug("Started app with PyMS and this services: {}".format(self.services))
 
         return self.application
-
-    def _exists_service(self, service_name: Text) -> bool:
-        """Check if service exists in the config.yml file
-        :param service_name:
-        :return: bool
-        """
-        service = getattr(self, service_name, False)
-        return service and service is not None
 
     def add_error_handlers(self):
         """Subclasses will override this method in order to add specific error handlers. This should be done with

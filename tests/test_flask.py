@@ -68,11 +68,6 @@ class FlaskWithSwaggerTests(unittest.TestCase):
     def test_exists_service(self):
         self.assertTrue(isinstance(self.app.ms.swagger, DriverService))
 
-    def test_disabled_service(self):
-        with pytest.raises(AttributeError) as excinfo:
-            self.assertTrue(isinstance(self.app.ms.metrics, DriverService))
-        assert "'MyMicroservice' object has no attribute 'metrics'" in str(excinfo.value)
-
     def test_reverse_proxy(self):
         response = self.client.get('/my-proxy-path/ui/', headers={"X-Script-Name": "/my-proxy-path"})
         self.assertEqual(200, response.status_code)

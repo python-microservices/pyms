@@ -1,5 +1,6 @@
 import time
 import logging
+from typing import Text
 
 from flask import Blueprint, Response, request
 from prometheus_client import Counter, Histogram, generate_latest
@@ -45,7 +46,7 @@ class Service(DriverService):
     """
     Adds [Prometheus](https://prometheus.io/) metrics using the [Prometheus Client Library](https://github.com/prometheus/client_python).
     """
-    config_resource = "metrics"
+    config_resource: Text = "metrics"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
