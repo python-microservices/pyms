@@ -247,3 +247,11 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         :param handler: callback for error handler
         """
         self.application.connexion_app.add_error_handler(code_or_exception, handler)
+
+
+def microservice():
+    """The behavior of this function is to access to the microservice outer the scope of flask context, to prevent to
+     raise a `'working outside of application context`
+    :return:
+    """
+    return Microservice()
