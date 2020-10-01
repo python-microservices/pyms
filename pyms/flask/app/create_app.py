@@ -10,6 +10,7 @@ from pyms.constants import LOGGER_NAME, CONFIG_BASE
 from pyms.crypt.driver import CryptResource
 from pyms.flask.app.utils import SingletonMeta, ReverseProxied
 from pyms.flask.healthcheck import healthcheck_blueprint
+from pyms.flask.configreload import configreload_blueprint
 from pyms.flask.services.driver import ServicesResource, DriverService
 from pyms.logger import CustomJsonFormatter
 from pyms.utils import check_package_exists, import_from
@@ -218,6 +219,7 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
 
         # Initialize Blueprints
         self.application.register_blueprint(healthcheck_blueprint)
+        self.application.register_blueprint(configreload_blueprint)
 
         self.init_libs()
         self.add_error_handlers()
