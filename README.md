@@ -9,7 +9,6 @@
 [![Documentation Status](https://readthedocs.org/projects/py-ms/badge/?version=latest)](https://py-ms.readthedocs.io/en/latest/?badge=latest)
 [![Gitter](https://img.shields.io/gitter/room/DAVFoundation/DAV-Contributors.svg)](https://gitter.im/python-microservices/pyms)
 
-
 PyMS, Python MicroService, is a [Microservice chassis pattern](https://microservices.io/patterns/microservice-chassis.html)
 like Spring Boot (Java) or Gizmo (Golang). PyMS is a collection of libraries, best practices and recommended ways to build
 microservices with Python which handles cross-cutting concerns:
@@ -55,7 +54,7 @@ Nowadays, is not perfect and we have a looong roadmap, but we hope this library 
 pip install py-ms[all]
 ```
 
-# Quickstart
+## Quickstart
 
 You need to create 2 files: main.py and config.yml:
 
@@ -93,7 +92,7 @@ pyms:
     SECRET_KEY: "gjr39dkjn344_!67#"
 ```
 
-### So what did that code do?
+## So what did that code do?
 
 1. Create a instance of PyMS Microservice class (#1.1). This initialization injects the configuration defined in the
 1.3 block and could be accessed through current_app.config like typical
@@ -146,5 +145,6 @@ Choose from 1, 2, 3, 4, 5, 6 [1]:
 When you finish introducing the options, a project will be created in `[project_folder]` folder
 
 ## How To contribute
+
 We appreciate opening issues and pull requests to make PyMS even more stable & useful! See [This doc](CONTRIBUTING.md)
 for more details.
