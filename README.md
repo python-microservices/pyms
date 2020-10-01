@@ -27,11 +27,11 @@ Get started with [Installation](./docs/installation.md) and then get an overview
 
 ## Documentation
 
-To know how use, install or build a project see the [docs](https://py-ms.readthedocs.io/en/latest/).
+To know how to use, install or build a project see the [docs](https://py-ms.readthedocs.io/en/latest/).
 
 ## Motivation
 
-When we started to create microservice with no idea, we were looking for tutorials, guides, best practices, but we found
+When we started creating a microservice with no idea, we were looking for tutorials, guides, best practices, but we found
 nothing to create professional projects. Most articles say:
 
 - "Install flask"
@@ -42,7 +42,7 @@ nothing to create professional projects. Most articles say:
 But... what happens with our configuration out of code like Kubernetes configmap? what happens with transactionality?
 If we have many microservices, what happens with traces?.
 
-There are many problems around Python and microservices and we can`t find anyone to give a solution.
+There are many problems around Python and microservices and we can't find anyone to give a solution.
 
 We start creating these projects to try to solve all the problems we have found in our professional lives about
 microservices architecture.
@@ -95,25 +95,25 @@ pyms:
 
 ### So what did that code do?
 
-1. Create a instance of PyMS Microservice class (#1.1). This initialization inject the configuration defined in the
+1. Create a instance of PyMS Microservice class (#1.1). This initialization injects the configuration defined in the
 1.3 block and could be accessed through current_app.config like typical
 [Flask config](https://flask.palletsprojects.com/en/1.1.x/config/).
 Then, initialize the service defined in the 1.2 block. See [Services](./docs/services.md) for more details.
 
-2. Initialize [Flask](https://flask.palletsprojects.com/en/1.1.x/) instance, [Connexion](https://github.com/zalando/connexion)
+2. Initialize a [Flask](https://flask.palletsprojects.com/en/1.1.x/) instance, [Connexion](https://github.com/zalando/connexion)
 if it was defined in the pyms configuration block, create a tracer, add health-check blueprint, initialize libs and set
 the PyMS Microservice in `ms` attribute and you can access to it with `current_app.ms`.
 This steps has their each functions and you can easy
 override it.
 
-3. `create_app` return the flask instance and you can interact with it as a typical flask app
+3. `create_app` returns the flask instance which you can interact with as a typical flask app
 
 See [Documentation](https://py-ms.readthedocs.io/en/latest/) to learn more.
 
 ## Create a project from scaffold
 
 PyMS has a command line option to create a project template like [Microservices Scaffold](https://github.com/python-microservices/microservices-scaffold).
-This command use [cookiecutter](https://github.com/cookiecutter/cookiecutter) to download and install this [template](https://github.com/python-microservices/microservices-template)
+This command uses [cookiecutter](https://github.com/cookiecutter/cookiecutter) to download and install this [template](https://github.com/python-microservices/microservices-template)
 
 **[Warning]** You must run first `pip install cookiecutter==1.7.0`
 
@@ -143,7 +143,7 @@ Select open_source_license:
 Choose from 1, 2, 3, 4, 5, 6 [1]:
 ```
 
-When you finish to introduce the options, a project will be created in `[project_folder]` folder
+When you finish introducing the options, a project will be created in `[project_folder]` folder
 
 ## How To contribute
 We appreciate opening issues and pull requests to make PyMS even more stable & useful! See [This doc](CONTRIBUTING.md)
