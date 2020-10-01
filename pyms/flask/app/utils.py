@@ -63,3 +63,14 @@ class ReverseProxied:
         if scheme:
             environ['wsgi.url_scheme'] = scheme
         return self.app(environ, start_response)
+
+
+def microservice():
+    from pyms.flask.app.create_app import Microservice
+    """
+    The behavior of this function is to access to the microservice outer the scope of flask context, to prevent to
+    raise a `'working outside of application context`
+    :return:
+    """
+    ms = Microservice()
+    return ms
