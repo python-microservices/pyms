@@ -7,7 +7,7 @@ healthcheck_blueprint = Blueprint('healthcheck', __name__, static_url_path='/sta
 
 @healthcheck_blueprint.route('/healthcheck', methods=['GET'])
 def healthcheck():
-    """Set a healtcheck to help other service to discover this microservice, like Kubernetes, AWS ELB, etc.
+    """Set a healthcheck to help other service to discover this microservice, like Kubernetes, AWS ELB, etc.
     :return:
     """
     return "OK"
