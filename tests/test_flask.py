@@ -100,7 +100,7 @@ class ReloadTests(unittest.TestCase):
     def test_configreload(self):
         os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                                               self.file2)
-        response = self.client.get('/reload_config')
+        response = self.client.post('/reload_config')
         self.assertEqual(b"OK", response.data)
         self.assertEqual(200, response.status_code)
         self.assertEqual("reload2", config()["APP_NAME"])
