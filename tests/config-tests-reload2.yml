@@ -1,0 +1,5 @@
+pyms:
+  config:
+    DEBUG: true
+    TESTING: true
+    APP_NAME: "reload2"

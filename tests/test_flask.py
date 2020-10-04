@@ -81,6 +81,31 @@ class FlaskWithSwaggerTests(unittest.TestCase):
         self.assertEqual(200, response.status_code)
 
 
+class ReloadTests(unittest.TestCase):
+    """
+    Tests for configreload endpoints
+    """
+
+    file1 = "config-tests-reload1.yml"
+    file2 = "config-tests-reload2.yml"
+
+    def setUp(self):
+        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                                              self.file1)
+        ms = MyMicroservice(path=__file__)
+        self.app = ms.create_app()
+        self.client = self.app.test_client()
+        self.assertEqual("reload1", self.app.config["APP_NAME"])
+
+    def test_configreload(self):
+        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                                              self.file2)
+        response = self.client.post('/reload-config')
+        self.assertEqual(b"OK", response.data)
+        self.assertEqual(200, response.status_code)
+        self.assertEqual("reload2", config()["APP_NAME"])
+
+
 class MicroserviceTest(unittest.TestCase):
     """
     Tests for Singleton
