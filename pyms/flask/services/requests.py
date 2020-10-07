@@ -97,7 +97,7 @@ class Service(DriverService):
                 headers.update({k: v})
         return headers
 
-    def _get_headers(self, headers, propagate_headers=False):
+    def _get_headers(self, headers: dict, propagate_headers: bool = False) -> dict:
         """If enabled appends trace headers to received ones.
 
         :param headers: dictionary of HTTP Headers to send.

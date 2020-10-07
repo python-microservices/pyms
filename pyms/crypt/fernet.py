@@ -18,8 +18,8 @@ class Crypt(CryptAbstract):
         self._loader = LoadFile(kwargs.get("path"), CRYPT_FILE_KEY_ENVIRONMENT, DEFAULT_KEY_FILENAME)
         super().__init__(*args, **kwargs)
 
-    def generate_key(self, password: Text, write_to_file: bool = False):
-        password = password.encode()  # Convert to type bytes
+    def generate_key(self, password: Text, write_to_file: bool = False) -> bytes:
+        byte_password = password.encode()  # Convert to type bytes
         salt = os.urandom(16)
         kdf = PBKDF2HMAC(
             algorithm=hashes.SHA512_256(),
@@ -28,7 +28,7 @@ class Crypt(CryptAbstract):
             iterations=100000,
             backend=default_backend()
         )
-        key = base64.urlsafe_b64encode(kdf.derive(password))  # Can only use kdf once
+        key = base64.urlsafe_b64encode(kdf.derive(byte_password))  # Can only use kdf once
         if write_to_file:
             self._loader.put_file(key, 'wb')
         return key

@@ -9,7 +9,7 @@ from pyms.utils import import_from
 logger = logging.getLogger(LOGGER_NAME)
 
 
-def get_service_name(service_base=SERVICE_BASE, service=""):
+def get_service_name(service_base: str = SERVICE_BASE, service: str = "") -> str:
     return ".".join([service_base, service])
 
 
@@ -48,10 +48,10 @@ class DriverService(ConfigResource):
         return config_attribute if config_attribute == "" or config_attribute != {} else self.default_values.get(attr,
                                                                                                                  None)
 
-    def is_enabled(self):
+    def is_enabled(self) -> bool:
         return self.enabled
 
-    def exists_config(self):
+    def exists_config(self) -> bool:
         return self.config is not None and isinstance(self.config, ConfFile)
 
 
