@@ -1,6 +1,6 @@
 import logging
 import os
-from typing import List
+from typing import List, Optional
 
 from flask import Flask
 
@@ -73,12 +73,12 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
     Current services are swagger, request, tracer, metrics
     """
     config_resource = CONFIG_BASE
-    services: List[DriverService] = []
+    services: List[str] = []
     application = Flask
-    swagger: DriverService = None
-    request: DriverService = None
-    tracer: DriverService = None
-    metrics: DriverService = None
+    swagger: Optional[DriverService] = None
+    request: Optional[DriverService] = None
+    tracer: Optional[DriverService] = None
+    metrics: Optional[DriverService] = None
     _singleton = True
 
     def __init__(self, *args, **kwargs):

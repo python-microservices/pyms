@@ -64,7 +64,8 @@ install_tests_requires = [
     'mkdocs>=1.1.2',
     'mkdocs-material>=6.0.0',
     'lightstep>=4.4.8',
-    'safety==1.9.0'
+    'safety==1.9.0',
+    'mypy>=0.782'
 ]
 
 install_all_requires = (install_request_requires + install_swagger_requires +
