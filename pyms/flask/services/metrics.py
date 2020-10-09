@@ -3,7 +3,7 @@ import logging
 from typing import Text
 
 from flask import Blueprint, Response, request
-from prometheus_client import Counter, Histogram, generate_latest
+from prometheus_client import multiprocess, Counter, Histogram, generate_latest, CollectorRegistry, REGISTRY
 from pyms.flask.services.driver import DriverService
 
 # Based on https://github.com/sbarratt/flask-prometheus
@@ -51,7 +51,16 @@ class Service(DriverService):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.metrics_blueprint = Blueprint("metrics", __name__)
+        self.init_registry()
         self.serve_metrics()
+
+    def init_registry(self):
+        try:
+            multiprocess_registry = CollectorRegistry()
+            multiprocess.MultiProcessCollector(multiprocess_registry)
+            self.registry = multiprocess_registry
+        except ValueError:
+            self.registry = REGISTRY
 
     @staticmethod
     def monitor(app_name, app):
@@ -63,7 +72,7 @@ class Service(DriverService):
         @self.metrics_blueprint.route("/metrics", methods=["GET"])
         def metrics():  # pylint: disable=unused-variable
             return Response(
-                generate_latest(),
+                generate_latest(self.registry),
                 mimetype="text/print()lain",
                 content_type="text/plain; charset=utf-8",
             )
