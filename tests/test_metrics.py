@@ -20,7 +20,7 @@ class TestMetricsFlask(unittest.TestCase):
     def test_metrics_latency(self):
         self.client.get("/")
         self.client.get("/metrics")
-        generated_latency_root = b'http_server_requests_seconds_bucket{le="0.005",method="GET",service="Python Microservice",status="200",uri="/"}'
+        generated_latency_root = b'http_server_requests_seconds_bucket{le="0.005",method="GET",service="Python Microservice with Jaeger",status="404",uri="/"}'
         generated_latency_metrics = b'http_server_requests_seconds_bucket{le="0.005",method="GET",service="Python Microservice with Jaeger",status="200",uri="/metrics"}'
         assert generated_latency_root in generate_latest()
         assert generated_latency_metrics in generate_latest()
@@ -28,7 +28,7 @@ class TestMetricsFlask(unittest.TestCase):
     def test_metrics_count(self):
         self.client.get("/")
         self.client.get("/metrics")
-        generated_count_root = b'http_server_requests_count_total{method="GET",service="Python Microservice",status="200",uri="/"}'
+        generated_count_root = b'http_server_requests_count_total{method="GET",service="Python Microservice with Jaeger",status="404",uri="/"}'
         generated_count_metrics = b'http_server_requests_count_total{method="GET",service="Python Microservice with Jaeger",status="200",uri="/metrics"}'
         assert generated_count_root in generate_latest()
         assert generated_count_metrics in generate_latest()
