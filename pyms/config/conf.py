@@ -1,6 +1,12 @@
+import logging
+import os
+
 from pyms.config.confile import ConfFile
-from pyms.constants import PYMS_CONFIG_WHITELIST_KEYWORDS
+from pyms.constants import PYMS_CONFIG_WHITELIST_KEYWORDS, CONFIGMAP_FILE_ENVIRONMENT_LEGACY, \
+    CONFIGMAP_FILE_ENVIRONMENT, CRYPT_FILE_KEY_ENVIRONMENT, CRYPT_FILE_KEY_ENVIRONMENT_LEGACY, LOGGER_NAME
 from pyms.exceptions import ServiceDoesNotExistException, ConfigErrorException, AttrDoesNotExistException
+
+logger = logging.getLogger(LOGGER_NAME)
 
 
 def get_conf(*args, **kwargs):
@@ -42,6 +48,9 @@ def get_conf(*args, **kwargs):
 
 
 def validate_conf(*args, **kwargs):
+    # TODO Remove temporally deprecated warnings on future versions
+    __verify_deprecated_env_variables()
+
     config = ConfFile(*args, **kwargs)
     is_config_ok = True
     try:
@@ -104,3 +113,21 @@ def validate_conf(*args, **kwargs):
           config:
             DEBUG: true
             TESTING: true""".format(wrong_keywords))
+
+
+def __verify_deprecated_env_variables():
+    if os.getenv(CONFIGMAP_FILE_ENVIRONMENT_LEGACY) is not None:
+        if os.getenv(CONFIGMAP_FILE_ENVIRONMENT) is not None:
+            logger.warning("If you are using {} environment variable, {} value will be ignored"
+                           .format(CONFIGMAP_FILE_ENVIRONMENT, CONFIGMAP_FILE_ENVIRONMENT_LEGACY))
+        else:
+            logger.warning("{} environment variable is deprecated on this version, you must use {} instead"
+                           .format(CONFIGMAP_FILE_ENVIRONMENT, CONFIGMAP_FILE_ENVIRONMENT_LEGACY))
+
+    if os.getenv(CRYPT_FILE_KEY_ENVIRONMENT_LEGACY) is not None:
+        if os.getenv(CRYPT_FILE_KEY_ENVIRONMENT) is not None:
+            logger.warning("If you are using {} environment variable, {} value will be ignored"
+                           .format(CRYPT_FILE_KEY_ENVIRONMENT, CRYPT_FILE_KEY_ENVIRONMENT_LEGACY))
+        else:
+            logger.warning("{} environment variable is deprecated on this version, you must use {} instead"
+                           .format(CONFIGMAP_FILE_ENVIRONMENT, CONFIGMAP_FILE_ENVIRONMENT_LEGACY))
