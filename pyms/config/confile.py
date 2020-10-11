@@ -16,7 +16,7 @@ logger = logging.getLogger(LOGGER_NAME)
 
 class ConfFile(dict):
     """Recursive get configuration from dictionary, a config file in JSON or YAML format from a path or
-    `CONFIGMAP_FILE` environment variable.
+    `PYMS_CONFIGMAP_FILE` environment variable.
     **Atributes:**
     * path: Path to find the `DEFAULT_CONFIGMAP_FILENAME` and `DEFAULT_KEY_FILENAME` if use encrypted vars
     * empty_init: Allow blank variables
@@ -28,7 +28,7 @@ class ConfFile(dict):
     def __init__(self, *args, **kwargs):
         """
         Get configuration from a dictionary(variable `config`), from path (variable `path`) or from
-        environment with the constant `CONFIGMAP_FILE`
+        environment with the constant `PYMS_CONFIGMAP_FILE`
         Set the configuration as upper case to inject the keys in flask config. Flask search for uppercase keys in
         `app.config.from_object`
         ```python

@@ -57,7 +57,7 @@ Move your key, for example, to `mv key.key /home/my_user/keys/myproject.key`
 then, store the key in a environment variable with:
 
 ```bash
-export KEY_FILE=/home/my_user/keys/myproject.key
+export PYMS_KEY_FILE=/home/my_user/keys/myproject.key
 ```
 
 ## 3. Encrypt your information and store it in config
@@ -89,7 +89,7 @@ can find the answer
 ## 4. Decrypt from your config file
 
 Pyms knows if a variable is encrypted if this var start with the prefix `enc_` or `ENC_`. PyMS searches for your key file
-in the `KEY_FILE` env variable and decrypts this value to store it in the same variable without the `enc_` prefix, 
+in the `PYMS_KEY_FILE` env variable and decrypts this value to store it in the same variable without the `enc_` prefix, 
 for example, 
 
 ```yaml
