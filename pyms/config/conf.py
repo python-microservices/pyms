@@ -118,16 +118,16 @@ def validate_conf(*args, **kwargs):
 def __verify_deprecated_env_variables():
     if os.getenv(CONFIGMAP_FILE_ENVIRONMENT_LEGACY) is not None:
         if os.getenv(CONFIGMAP_FILE_ENVIRONMENT) is not None:
-            logger.warning("If you are using {} environment variable, {} value will be ignored"
+            logger.warning("IMPORTANT: If you are using \"{}\" environment variable, \"{}\" value will be ignored."
                            .format(CONFIGMAP_FILE_ENVIRONMENT, CONFIGMAP_FILE_ENVIRONMENT_LEGACY))
         else:
-            logger.warning("{} environment variable is deprecated on this version, you must use {} instead"
-                           .format(CONFIGMAP_FILE_ENVIRONMENT, CONFIGMAP_FILE_ENVIRONMENT_LEGACY))
+            logger.warning("IMPORTANT: \"{}\" environment variable is deprecated on this version, use \"{}\" instead."
+                           .format(CONFIGMAP_FILE_ENVIRONMENT_LEGACY, CONFIGMAP_FILE_ENVIRONMENT))
 
     if os.getenv(CRYPT_FILE_KEY_ENVIRONMENT_LEGACY) is not None:
         if os.getenv(CRYPT_FILE_KEY_ENVIRONMENT) is not None:
-            logger.warning("If you are using {} environment variable, {} value will be ignored"
+            logger.warning("IMPORTANT: If you are using \"{}\" environment variable, \"{}\" value will be ignored."
                            .format(CRYPT_FILE_KEY_ENVIRONMENT, CRYPT_FILE_KEY_ENVIRONMENT_LEGACY))
         else:
-            logger.warning("{} environment variable is deprecated on this version, you must use {} instead"
-                           .format(CONFIGMAP_FILE_ENVIRONMENT, CONFIGMAP_FILE_ENVIRONMENT_LEGACY))
+            logger.warning("IMPORTANT: \"{}\" environment variable is deprecated on this version, use \"{}\" instead."
+                           .format(CONFIGMAP_FILE_ENVIRONMENT_LEGACY, CONFIGMAP_FILE_ENVIRONMENT))
