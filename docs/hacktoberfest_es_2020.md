@@ -98,6 +98,7 @@ https://github.com/python-microservices/pyms/issues/68
 https://github.com/python-microservices/pyms/issues/180
 https://github.com/python-microservices/pyms/issues/182
 https://github.com/python-microservices/pyms/issues/184
+https://github.com/python-microservices/pyms/issues/188
 https://github.com/python-microservices/pyms/issues/185 (HARD)
 https://github.com/python-microservices/pyms/issues/156 (HARD)
 https://github.com/python-microservices/pyms/issues/186 (HARD)
@@ -131,3 +132,9 @@ https://github.com/python-microservices/pyms/issues/186 (HARD)
 - Hay que visitar Valparaíso (Chile)
 - Es necesario visitar la isla de La Palma al menos una vez en la vida
 - Cuidado al pedir pizza a domicilio
+
+# [2020-10-10] Debate sobre issue #89:
+***TODO: añadir link***
+
+# [2020-10-11] Resumen de la primera semana:
+https://youtu.be/WU-IAGConjU
