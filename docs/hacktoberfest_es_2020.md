@@ -31,6 +31,40 @@ Como no todos tenemos el mismo nivel, hemos acordado empezar con unos tutoriales
 
 Para poder colaborar, proponemos que cuando alguien esté mirando cosas del proyecto o dedicado a investigar, que avise por chat y si quiere, conectarse al chat de voz para resolver dudas y hacer pair-programming, presentar o charlar. Del mismo modo, si alguien quiere ver dudas que avise por chat "a tal hora me conecto"
 
+## Recursos útiles para aprender Python:
+- 7 Repositorios para aprender Python https://towardsdatascience.com/top-7-repositories-on-github-to-learn-python-44a3a7accb44
+
+## Cursos, Posts y Podcasts
+- https://realpython.com/ - Python en general, cursos pago, posts gratis, muy claro. 
+- https://www.fullstackpython.com/ - Posts de desarrollo fullstack, muchos enlaces a otros recursos.
+- https://training.talkpython.fm/ - Podcast gratis y cursos de pago, mucho de web en Flask.
+- https://www.pluralsight.com/ - De pago, muchos lenguajes, mucho testing, muchos perfiles (dev, sec, devops), buenos recursos video, examenes, portfolio de habilidades y roles.
+- https://ed.team/ - Canal de youtube, cursos de pago, muchas tecnologías, en español.
+- https://codely.tv/ - Canal de youtube, cursos de pago (devops y arquitectura), algo de Golang pero nada de Python
+
+## Katas
+- https://www.hackerrank.com/ muchos niveles, portfolio de habilidades, bolsa de trabajo.
+- https://exercism.io/ -  muchos lenguajes, basado en tests, editas offline y envias con terminal.
+- https://www.codewars.com/ - muchos lenguajes, plataforma de katas, con katas de usuario.
+## Noticias
+- https://dev.to/t/python - Noticias y dudas.
+- https://www.reddit.com/r/Python - Noticias, dudas y nido de trolls.
+
+## Aprender Jugando
+- https://www.codingame.com/ - Muchos lenguajes.
+- https://py.checkio.org/
+- https://www.twilio.com/quest - Gracioso pero poco codigo.
+
+## Relacionadas con PyMS:
+- Forma más actual de hacer tests en python: https://docs.pytest.org/en/stable/
+- Para complementar tus test, Tox: https://tox.readthedocs.io/en/latest/
+- Pipenv como sustituto del típico virtualenv: https://pipenv-es.readthedocs.io/es/latest/
+- Linter para verificar la sintaxis del código, Pylint: https://pylint.readthedocs.io/en/latest/?badge=latest
+- También Flake8: https://flake8.pycqa.org/en/latest/
+- "Tipado" en Python: https://docs.python.org/3/library/typing.html
+- "La biblia" de la arquitectura de microservicios: https://microservices.io/
+- Trazabilidad distribuida con Python: https://github.com/opentracing/opentracing-python
+
 
 # [2020-10-05] Formación, Python Básico:
 
