@@ -60,9 +60,13 @@ https://github.com/python-microservices/cookiecutter-pyms/issues/9 @AmandaKhol
 https://github.com/python-microservices/cookiecutter-pyms/issues/4 @PandyTheBroh
 
 ## Tareas/issues listas para asignar:
+https://github.com/python-microservices/pyms/issues/68
 https://github.com/python-microservices/pyms/issues/180
 https://github.com/python-microservices/pyms/issues/182
+https://github.com/python-microservices/pyms/issues/184
+https://github.com/python-microservices/pyms/issues/185 (HARD)
 https://github.com/python-microservices/pyms/issues/156 (HARD)
+https://github.com/python-microservices/pyms/issues/186 (HARD)
 
 ## Investigación:
 - Access token:
@@ -71,10 +75,15 @@ https://github.com/python-microservices/pyms/issues/156 (HARD)
     - Mejorar y hacer de manera genérica la implementación de JWT
 - Saga:
     - Investigar https://microservices.io/patterns/data/saga.html
-    - Crear un arquetipo parecido a https://github.com/python-microservices/microservices-scaffold que haga este patrón
+    - Crear un arquetipo parecido al [que ya existe](https://github.com/python-microservices/microservices-scaffold) que haga este patrón
 - Circuit Breaker:
     - Investigar https://microservices.io/patterns/reliability/circuit-breaker.html
     - Llevar a PyMS, si es posible, ese patrón para que se pueda usar en todos los microservicios (por ejemplo, como hace https://micronaut.io/)
+
+- gRCP ([protocol buffers](https://grpc.io/docs/what-is-grpc/introduction/)):
+    - Una forma alternativa a API Rest para comunicar microservicios es [mediante gRCP](https://grpc.io/docs/languages/python/quickstart/)
+    - Crear un arquetipo parecido al [que ya existe](https://github.com/python-microservices/microservices-scaffold) que se comunique con otro mediante gRCP
+    - Llevar a PyMS, si es posible, este framework
 
 ## Retos:
 - Publisher-subscriber: https://github.com/python-microservices/pyms/issues/155
