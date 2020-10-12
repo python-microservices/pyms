@@ -11,7 +11,6 @@ This article is a review of the event [Python HacktoberfestES](https://hacktober
 
 
 # [2020-10-04] Presentación PyMS
-
 Buenas! Con PyMS vamos a estudiar y aprender a construir microservicios para el mundo real: No solo una API que devuelve datos. ¿qué tiene que cumplir un microservicio para ser productivo? Configuración externalizada, healthchecks, trazabilidad... ¡y mucho más!
 
 - Puedes ver la documentación en: https://py-ms.readthedocs.io/en/latest/
@@ -20,7 +19,6 @@ Buenas! Con PyMS vamos a estudiar y aprender a construir microservicios para el 
 - O crearte el tuyo propio con Cookiecutter: https://github.com/python-microservices/cookiecutter-pyms
 
 # [2020-10-04] Hacktoberfest: primera reunión
-
 De los que hemos participado juntamos un stack tecnológico muy interesante habiendo tocado no solo Python si no lenguajes como Java, .NET, Groovy, BASH, Ruby, además de tecnologías blockchain, sistemas e infrastructura, CI...
 
 También hemos visto que PyMS, tanto la librería como el arquetipo "destacado" son sobre Flask pero puede incluir en un futuro otros frameworks como aiohttp o FastAPI. Pero además existe este proyecto https://github.com/python-microservices/microservices-django-scaffold para adaptar todas estas buenas prácticas sobre un proyecto de Django.
@@ -67,16 +65,16 @@ Para poder colaborar, proponemos que cuando alguien esté mirando cosas del proy
 
 
 # [2020-10-05] Formación, Python Básico:
-
 https://github.com/avara1986/hacktoberfestES-pyms/blob/master/python_101/Python%20%22b%C3%A1sico%22.ipynb
 
 # [2020-10-06] Formación, buenas prácticas:
-
 https://github.com/avara1986/hacktoberfestES-pyms/blob/master/python_best_practices/Python%20Best%20Practices.ipynb
 
 # [2020-10-08] Formación, Cómo funciona PyMS:
+https://youtu.be/i9msDUKA0Zk
 
-***TODO: añadir link***
+# [2020-10-08] Formación, Portainer, web-ui para manejar Docker:
+https://youtu.be/z-_DhL6wRFQ
 
 # [2020-10-09] Fin de sprint, reparto de tareas:
 Se puede contribuir mediante Fork o avisadme y os añado como colaboradores para poder trabajar sobre el mismo repo. Lo que prefiráis!
@@ -134,7 +132,11 @@ https://github.com/python-microservices/pyms/issues/186 (HARD)
 - Cuidado al pedir pizza a domicilio
 
 # [2020-10-10] Debate sobre issue #89:
-***TODO: añadir link***
+https://youtu.be/cDR10YSnb0M
 
 # [2020-10-11] Resumen de la primera semana:
 https://youtu.be/WU-IAGConjU
+
+# [2020-10-11] Git workflow y testing:
+
+*TODO: falta link*
