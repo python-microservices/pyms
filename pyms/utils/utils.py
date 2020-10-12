@@ -36,9 +36,7 @@ def check_package_exists(package_name: Text) -> Union[Exception, bool]:
 
 
 def colored_text(msg, color: Colors, bold=False):
-    BOLD = "\033[1m"
-    RESET_ALL = "\033[0m"
+    result = "{}{}{}".format(color, msg, "\033[0m")
     if bold:
-        return "{}{}{}{}".format(BOLD, color, msg, RESET_ALL)
-    else:
-        return "{}{}{}".format(color, msg, RESET_ALL)
+        result = "{}{}".format("\033[1m", result)
+    return result

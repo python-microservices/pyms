@@ -64,7 +64,7 @@ class Crypt(CryptAbstract):
 
     @staticmethod
     def __get_updated_crypt_file_key_env() -> str:
-        if (os.getenv(CRYPT_FILE_KEY_ENVIRONMENT_LEGACY) is not None) & (os.getenv(CRYPT_FILE_KEY_ENVIRONMENT) is None):
-            return CRYPT_FILE_KEY_ENVIRONMENT_LEGACY
-        else:
-            return CRYPT_FILE_KEY_ENVIRONMENT
+        result = CRYPT_FILE_KEY_ENVIRONMENT
+        if (os.getenv(CRYPT_FILE_KEY_ENVIRONMENT_LEGACY) is not None) and (os.getenv(CRYPT_FILE_KEY_ENVIRONMENT) is None):
+            result = CRYPT_FILE_KEY_ENVIRONMENT_LEGACY
+        return result
