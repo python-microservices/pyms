@@ -134,6 +134,6 @@ class ConfFile(dict):
     @staticmethod
     def __get_updated_configmap_file_env() -> str:
         result = CONFIGMAP_FILE_ENVIRONMENT
-        if (os.getenv(CONFIGMAP_FILE_ENVIRONMENT_LEGACY) is not None) & (os.getenv(CONFIGMAP_FILE_ENVIRONMENT) is None):
+        if (os.getenv(CONFIGMAP_FILE_ENVIRONMENT_LEGACY) is not None) and (os.getenv(CONFIGMAP_FILE_ENVIRONMENT) is None):
             result = CONFIGMAP_FILE_ENVIRONMENT_LEGACY
         return result
