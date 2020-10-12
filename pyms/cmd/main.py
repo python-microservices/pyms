@@ -8,7 +8,7 @@ import sys
 
 from pyms.crypt.fernet import Crypt
 from pyms.flask.services.swagger import merge_swagger_file
-from pyms.utils import check_package_exists, import_from
+from pyms.utils import check_package_exists, import_from, utils
 
 
 class Command:
@@ -117,7 +117,7 @@ class Command:
 
     @staticmethod
     def print_ok(msg=""):
-        print('\033[92m\033[1m ' + msg + ' \033[0m\033[0m')
+        print(utils.colored_text(msg, utils.Colors.BRIGHT_GREEN, True))
 
     def print_verbose(self, msg=""):  # pragma: no cover
         if self.verbose:
@@ -125,7 +125,7 @@ class Command:
 
     @staticmethod
     def print_error(msg=""):  # pragma: no cover
-        print('\033[91m\033[1m ' + msg + ' \033[0m\033[0m')
+        print(utils.colored_text(msg, utils.Colors.BRIGHT_RED, True))
 
     def exit_with_error(self, msg=""):  # pragma: no cover
         self.print_error(msg)

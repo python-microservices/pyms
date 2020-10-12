@@ -7,7 +7,8 @@ import pytest
 
 from pyms.cloud.aws.kms import Crypt as CryptAws
 from pyms.config import get_conf
-from pyms.constants import LOGGER_NAME, CONFIGMAP_FILE_ENVIRONMENT, CRYPT_FILE_KEY_ENVIRONMENT, CONFIG_BASE
+from pyms.constants import LOGGER_NAME, CONFIGMAP_FILE_ENVIRONMENT, CRYPT_FILE_KEY_ENVIRONMENT, CONFIG_BASE, \
+    CRYPT_FILE_KEY_ENVIRONMENT_LEGACY
 from pyms.crypt.driver import CryptAbstract, CryptResource
 from pyms.crypt.fernet import Crypt as CryptFernet
 from pyms.exceptions import FileDoesNotExistException
@@ -56,7 +57,7 @@ class CryptFernetTests(unittest.TestCase):
         crypt = CryptFernet()
         with pytest.raises(FileDoesNotExistException) as excinfo:
             crypt.read_key()
-        assert ("Decrypt key None not exists. You must set a correct env var KEY_FILE or run "
+        assert ("Decrypt key None not exists. You must set a correct env var PYMS_KEY_FILE or run "
                 "`pyms crypt create-key` command") \
                in str(excinfo.value)
 
@@ -78,9 +79,21 @@ class GetConfigEncrypted(unittest.TestCase):
 
     def tearDown(self):
         del os.environ[CONFIGMAP_FILE_ENVIRONMENT]
-        del os.environ[CRYPT_FILE_KEY_ENVIRONMENT]
+        if os.getenv(CRYPT_FILE_KEY_ENVIRONMENT):
+            del os.environ[CRYPT_FILE_KEY_ENVIRONMENT]
+        if os.getenv(CRYPT_FILE_KEY_ENVIRONMENT_LEGACY):
+            del os.environ[CRYPT_FILE_KEY_ENVIRONMENT_LEGACY]
 
     def test_encrypt_conf(self):
+        crypt = CryptFernet(path=self.BASE_DIR)
+        crypt._loader.put_file(b"9IXx2F5d5Ob-h5xdCnFSUXhuFKLGRibvLfSbixpcfCw=", "wb")
+        config = get_conf(service=CONFIG_BASE, uppercase=True, crypt=CryptFernet)
+        crypt.delete_key()
+        assert config.database_url == "http://database-url"
+
+    def test_encrypt_conf_deprecated_env(self):
+        os.environ[CRYPT_FILE_KEY_ENVIRONMENT_LEGACY] = os.getenv(CRYPT_FILE_KEY_ENVIRONMENT)
+        del os.environ[CRYPT_FILE_KEY_ENVIRONMENT]
         crypt = CryptFernet(path=self.BASE_DIR)
         crypt._loader.put_file(b"9IXx2F5d5Ob-h5xdCnFSUXhuFKLGRibvLfSbixpcfCw=", "wb")
         config = get_conf(service=CONFIG_BASE, uppercase=True, crypt=CryptFernet)

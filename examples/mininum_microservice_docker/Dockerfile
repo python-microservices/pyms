@@ -4,7 +4,7 @@ RUN apk add --update curl gcc g++ git libffi-dev openssl-dev python3-dev build-b
     && rm -rf /var/cache/apk/*
 
 ENV PYTHONUNBUFFERED=1 APP_HOME=/microservice/
-ENV CONFIGMAP_FILE="$APP_HOME"config-docker.yml
+ENV PYMS_CONFIGMAP_FILE="$APP_HOME"config-docker.yml
 
 RUN mkdir $APP_HOME && adduser -S -D -H python
 RUN chown -R python $APP_HOME
