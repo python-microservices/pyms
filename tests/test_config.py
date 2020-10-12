@@ -5,7 +5,8 @@ from unittest import mock
 
 from pyms.config import get_conf, ConfFile
 from pyms.config.conf import validate_conf
-from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT, LOGGER_NAME, CONFIG_BASE
+from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT, CONFIGMAP_FILE_ENVIRONMENT_LEGACY, LOGGER_NAME, CONFIG_BASE, \
+    CRYPT_FILE_KEY_ENVIRONMENT, CRYPT_FILE_KEY_ENVIRONMENT_LEGACY
 from pyms.exceptions import AttrDoesNotExistException, ConfigDoesNotFoundException, ServiceDoesNotExistException, \
     ConfigErrorException
 
@@ -141,6 +142,16 @@ class GetConfig(unittest.TestCase):
 class ConfValidateTests(unittest.TestCase):
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+    def tearDown(self):
+        if os.getenv(CONFIGMAP_FILE_ENVIRONMENT) is not None:
+            del os.environ[CONFIGMAP_FILE_ENVIRONMENT]
+        if os.getenv(CONFIGMAP_FILE_ENVIRONMENT_LEGACY) is not None:
+            del os.environ[CONFIGMAP_FILE_ENVIRONMENT_LEGACY]
+        if os.getenv(CRYPT_FILE_KEY_ENVIRONMENT) is not None:
+            del os.environ[CRYPT_FILE_KEY_ENVIRONMENT]
+        if os.getenv(CRYPT_FILE_KEY_ENVIRONMENT_LEGACY) is not None:
+            del os.environ[CRYPT_FILE_KEY_ENVIRONMENT_LEGACY]
+
     def test_wrong_block_no_pyms(self):
         with self.assertRaises(ConfigErrorException):
             validate_conf(path=os.path.join(self.BASE_DIR, "config-tests-bad-structure.yml"))
@@ -152,3 +163,30 @@ class ConfValidateTests(unittest.TestCase):
     def test_wrong_block_not_valid_structure(self):
         with self.assertRaises(ConfigErrorException):
             validate_conf(path=os.path.join(self.BASE_DIR, "config-tests-bad-structure3.yml"))
+
+    def test_validate_conf_file_with_env_deprecated(self):
+        self.all_validate_conf_combinations(True)
+
+    def test_validate_conf_file_with_env_deprecated_and_updated(self):
+        os.environ[CONFIGMAP_FILE_ENVIRONMENT_LEGACY] = os.path.join(self.BASE_DIR, "config-tests-deprecated.yml")
+        self.all_validate_conf_combinations()
+
+    def test_validate_crypt_file_with_env_deprecated(self):
+        os.environ[CRYPT_FILE_KEY_ENVIRONMENT_LEGACY] = os.path.join(self.BASE_DIR, "key.key")
+        self.all_validate_conf_combinations()
+
+    def test_validate_crypt_file_with_env_deprecated_and_updated(self):
+        os.environ[CRYPT_FILE_KEY_ENVIRONMENT] = os.path.join(self.BASE_DIR, "key.key")
+        os.environ[CRYPT_FILE_KEY_ENVIRONMENT_LEGACY] = os.path.join(self.BASE_DIR, "key_deprecated.key")
+        self.all_validate_conf_combinations()
+
+    def all_validate_conf_combinations(self, legacy=False):
+        config_env = CONFIGMAP_FILE_ENVIRONMENT
+        if legacy:
+            config_env = CONFIGMAP_FILE_ENVIRONMENT_LEGACY
+        os.environ[config_env] = os.path.join(self.BASE_DIR, "config-tests.yml")
+        validate_conf()
+        os.environ[config_env] = os.path.join(self.BASE_DIR, "config-tests-debug.yml")
+        validate_conf()
+        os.environ[config_env] = os.path.join(self.BASE_DIR, "config-tests-debug-off.yml")
+        validate_conf()
