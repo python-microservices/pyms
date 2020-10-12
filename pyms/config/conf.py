@@ -5,6 +5,7 @@ from pyms.config.confile import ConfFile
 from pyms.constants import PYMS_CONFIG_WHITELIST_KEYWORDS, CONFIGMAP_FILE_ENVIRONMENT_LEGACY, \
     CONFIGMAP_FILE_ENVIRONMENT, CRYPT_FILE_KEY_ENVIRONMENT, CRYPT_FILE_KEY_ENVIRONMENT_LEGACY, LOGGER_NAME
 from pyms.exceptions import ServiceDoesNotExistException, ConfigErrorException, AttrDoesNotExistException
+from pyms.utils import utils
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -48,8 +49,6 @@ def get_conf(*args, **kwargs):
 
 
 def validate_conf(*args, **kwargs):
-    # TODO Remove temporally deprecated warnings on future versions
-    __verify_deprecated_env_variables()
 
     config = ConfFile(*args, **kwargs)
     is_config_ok = True
@@ -114,20 +113,34 @@ def validate_conf(*args, **kwargs):
             DEBUG: true
             TESTING: true""".format(wrong_keywords))
 
+    # TODO Remove temporally deprecated warnings on future versions
+    __verify_deprecated_env_variables(config)
 
-def __verify_deprecated_env_variables():
+
+def __verify_deprecated_env_variables(config):
+    env_var_duplicated = "IMPORTANT: If you are using \"{}\" environment variable, \"{}\" value will be ignored."
+    env_var_deprecated = "IMPORTANT: \"{}\" environment variable is deprecated on this version, use \"{}\" instead."
+
     if os.getenv(CONFIGMAP_FILE_ENVIRONMENT_LEGACY) is not None:
         if os.getenv(CONFIGMAP_FILE_ENVIRONMENT) is not None:
-            logger.warning("IMPORTANT: If you are using \"{}\" environment variable, \"{}\" value will be ignored."
-                           .format(CONFIGMAP_FILE_ENVIRONMENT, CONFIGMAP_FILE_ENVIRONMENT_LEGACY))
+            msg = env_var_duplicated.format(CONFIGMAP_FILE_ENVIRONMENT, CONFIGMAP_FILE_ENVIRONMENT_LEGACY)
         else:
-            logger.warning("IMPORTANT: \"{}\" environment variable is deprecated on this version, use \"{}\" instead."
-                           .format(CONFIGMAP_FILE_ENVIRONMENT_LEGACY, CONFIGMAP_FILE_ENVIRONMENT))
+            msg = env_var_deprecated.format(CONFIGMAP_FILE_ENVIRONMENT_LEGACY, CONFIGMAP_FILE_ENVIRONMENT)
+        try:
+            if config.pyms.config.DEBUG:
+                msg = utils.colored_text(msg, utils.Colors.BRIGHT_YELLOW, True)
+        except AttrDoesNotExistException:
+            pass
+        logger.warning(msg)
 
     if os.getenv(CRYPT_FILE_KEY_ENVIRONMENT_LEGACY) is not None:
         if os.getenv(CRYPT_FILE_KEY_ENVIRONMENT) is not None:
-            logger.warning("IMPORTANT: If you are using \"{}\" environment variable, \"{}\" value will be ignored."
-                           .format(CRYPT_FILE_KEY_ENVIRONMENT, CRYPT_FILE_KEY_ENVIRONMENT_LEGACY))
+            msg = env_var_duplicated.format(CRYPT_FILE_KEY_ENVIRONMENT, CRYPT_FILE_KEY_ENVIRONMENT_LEGACY)
         else:
-            logger.warning("IMPORTANT: \"{}\" environment variable is deprecated on this version, use \"{}\" instead."
-                           .format(CONFIGMAP_FILE_ENVIRONMENT_LEGACY, CONFIGMAP_FILE_ENVIRONMENT))
+            msg = env_var_deprecated.format(CRYPT_FILE_KEY_ENVIRONMENT_LEGACY, CRYPT_FILE_KEY_ENVIRONMENT)
+        try:
+            if config.pyms.config.DEBUG:
+                msg = utils.colored_text(msg, utils.Colors.BRIGHT_YELLOW, True)
+        except AttrDoesNotExistException:
+            pass
+        logger.warning(msg)
