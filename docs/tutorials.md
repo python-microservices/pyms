@@ -1,6 +1,6 @@
 # Tutorials
 
-This section shows tutorials to avanced use of PyMS. See [Examples](examples.md) for simple tutorials
+This section shows tutorials for advanced use of PyMS. See [Examples](examples.md) for simple tutorials
 
 ## Tutorial 1: Propagate Traces
 With this tutorial you can solve the problem of [distributed tracing](https://microservices.io/patterns/observability/distributed-tracing.html)
