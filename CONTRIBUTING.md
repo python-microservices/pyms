@@ -1,5 +1,17 @@
 # Contributing
 
+## Branch workflow
+
+**READ BEFORE CREATE A BRANCH OR OPEN A PR/MR**
+- We use [Github Glow](https://guides.github.com/introduction/flow/)
+  
+
+## Commit Message Guidelines
+
+- The messages of the commits use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
+- See [Angular guideline](https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines)
+
+
 ## Installation
 
 After cloning this repo, create a [virtualenv](https://virtualenv.pypa.io/en/stable/) and ensure dependencies are installed by running:
