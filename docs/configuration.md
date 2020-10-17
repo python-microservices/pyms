@@ -191,5 +191,5 @@ cript configuration and initialize `create_app`.
         self.create_app()
 ```
 
-It means that your libraries will be restarted, for this reason, it's important to initialize your BD, 
+This means that your libraries will be restarted, which is why it's important to initialize your BD, 
 your configuration inside `init_libs` method. See more info [how to use Microservice class in this link](ms_class.md)
