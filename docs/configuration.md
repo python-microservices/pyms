@@ -170,7 +170,7 @@ See [Routing](routing.md) and [Examples](examples.md) to continue with this tuto
 
 ## Reload configuration without stopping your services
 
-In production environment, you could need to change configuration files without restart the microservice/pod/container.
+In a production environment you may need to change the microservice's configuration without restarting it.
 
 PyMS has a feature to reload the configuration:
 
