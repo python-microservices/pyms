@@ -83,25 +83,25 @@ workflow para contribuir:
 https://guides.github.com/introduction/flow/
 
 ## Tareas/issues repartidas:
-https://github.com/python-microservices/pyms/issues/166 @BelenC y @AmandaKhol -> En esta pueden participar más de una persona
-https://github.com/python-microservices/pyms/issues/89 @Rapejim (Raúl) :heavy_check_mark:
-https://github.com/python-microservices/microservices-scaffold/issues/213 @vmyelicich (Víctor)
-https://github.com/python-microservices/pyms/issues/178 @kirk
-https://github.com/python-microservices/microservices-scaffold/issues @felipem775 
-https://github.com/python-microservices/cookiecutter-pyms/issues/9 @AmandaKhol :heavy_check_mark:
-https://github.com/python-microservices/cookiecutter-pyms/issues/4 @PandyTheBroh
+* [ ] https://github.com/python-microservices/pyms/issues/166 @BelenC y @AmandaKhol -> En esta pueden participar más de una persona
+* [x] https://github.com/python-microservices/pyms/issues/89 @Rapejim 
+* [ ] https://github.com/python-microservices/microservices-scaffold/issues/213 @vmyelicich
+* [ ] https://github.com/python-microservices/pyms/issues/178 @kirk
+* [ ] https://github.com/python-microservices/microservices-scaffold/issues @felipem775 
+* [x] https://github.com/python-microservices/cookiecutter-pyms/issues/9 @AmandaKhol 
+* [ ] https://github.com/python-microservices/cookiecutter-pyms/issues/4 @PandyTheBroh
 
 ## Tareas/issues listas para asignar:
-https://github.com/python-microservices/pyms/issues/68
-https://github.com/python-microservices/pyms/issues/180
-https://github.com/python-microservices/pyms/issues/182
-https://github.com/python-microservices/pyms/issues/184
-https://github.com/python-microservices/pyms/issues/188
-https://github.com/python-microservices/pyms/issues/189
-https://github.com/python-microservices/pyms/issues/185 (HARD)
-https://github.com/python-microservices/pyms/issues/156 (HARD)
-https://github.com/python-microservices/pyms/issues/186 (HARD)
-https://github.com/python-microservices/pyms/issues/190 (HARD)
+* [ ] https://github.com/python-microservices/pyms/issues/68
+* [ ] https://github.com/python-microservices/pyms/issues/180
+* [ ] https://github.com/python-microservices/pyms/issues/182
+* [ ] https://github.com/python-microservices/pyms/issues/184
+* [ ] https://github.com/python-microservices/pyms/issues/188
+* [ ] https://github.com/python-microservices/pyms/issues/189
+* [ ] https://github.com/python-microservices/pyms/issues/185 (HARD)
+* [ ] https://github.com/python-microservices/pyms/issues/156 (HARD)
+* [ ] https://github.com/python-microservices/pyms/issues/186 (HARD)
+* [ ] https://github.com/python-microservices/pyms/issues/190 (HARD)
 
 ## Investigación:
 - Access token:
@@ -142,3 +142,25 @@ https://youtu.be/WU-IAGConjU
 # [2020-10-11] Git workflow y testing:
 
 *TODO: falta link*
+
+# [2020-10-16] Fin de sprint, reparto de tareas:
+Dejamos asignadas tareas para todo el mundo para hacer el reto de hacktoberfest y que de aquí a 2
+semanas nadie nos quite alguna tarea que teníamos pensada
+## Tareas/issues repartidas:
+* [ ] https://github.com/python-microservices/pyms/issues/189 @AmandaKhol
+* [ ] https://github.com/python-microservices/pyms/issues/196 @PandyTheBroh
+* [ ] https://github.com/python-microservices/pyms/issues/164 @Rapejim
+* [ ] https://github.com/python-microservices/pyms/issues/180 @mbcaldeiro
+* [ ] https://github.com/python-microservices/microservices-scaffold/issues/194 @mbcaldeiro
+* [ ] https://github.com/python-microservices/pyms/issues/184 @vmyelicich
+* [ ] https://github.com/python-microservices/microservices-scaffold/issues/220 @PandyTheBroh
+* [ ] https://github.com/python-microservices/pyms/issues/197 @PandyTheBroh
+
+## Tareas/issues listas para asignar:
+https://github.com/python-microservices/microservices-scaffold/issues/219  ¿@felipem775?
+https://github.com/python-microservices/microservices-scaffold/issues/218  ¿@felipem775?
+https://github.com/python-microservices/pyms/issues/195
+https://github.com/python-microservices/pyms/issues/188
+https://github.com/python-microservices/pyms/issues/68
+https://github.com/python-microservices/pyms/issues/182
+https://github.com/python-microservices/pyms/issues/199
