@@ -167,3 +167,29 @@ spec:
 ```
 
 See [Routing](routing.md) and [Examples](examples.md) to continue with this tutorial
+
+## Reload configuration without stop your services
+
+In production environment, you could need to change configuration files without restart the microservice/pod/container.
+
+PyMS has a feature to reload the configuration:
+
+```
+curl -X POST http://localhost:5000/reload-config
+```
+
+This endpoint call to the method `Microservice.reload_conf()`. This method restart the services, 
+cript configuration and initialize `create_app`.
+
+```python
+    def reload_conf(self):
+        self.delete_services()
+        self.config.reload()
+        self.services = []
+        self.init_services()
+        self.crypt.config.reload()
+        self.create_app()
+```
+
+It means that your libraries will be restarted, for this reason, it's important to initialize your BD, 
+your configuration inside `init_libs` method. See more info [how to use Microservice class in this link](ms_class.md)
