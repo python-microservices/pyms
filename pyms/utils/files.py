@@ -56,5 +56,6 @@ class LoadFile:
         return files_cached[path]
 
     def reload(self, fn=None):
-        files_cached.pop(self.path, None)
+        path = self.path or self.get_path_from_env()
+        files_cached.pop(path, None)
         return self.get_file(fn)
