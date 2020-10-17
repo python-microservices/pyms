@@ -179,7 +179,7 @@ curl -X POST http://localhost:5000/reload-config
 ```
 
 This endpoint calls the method `Microservice.reload_conf()`, which restarts the services, 
-cript configuration and initialize `create_app`.
+crypt configuration and initialize `create_app`.
 
 ```python
     def reload_conf(self):
