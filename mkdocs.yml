@@ -22,5 +22,8 @@ nav:
 markdown_extensions:
   - admonition:
   - pymdownx.tasklist:
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
 theme:
   name: 'material'
