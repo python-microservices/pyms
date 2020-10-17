@@ -168,7 +168,7 @@ spec:
 
 See [Routing](routing.md) and [Examples](examples.md) to continue with this tutorial
 
-## Reload configuration without stop your services
+## Reload configuration without stopping your services
 
 In production environment, you could need to change configuration files without restart the microservice/pod/container.
 
