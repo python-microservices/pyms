@@ -20,8 +20,8 @@ nav:
     - External Links and Articles: links_articles.md
     - HacktoberfestES: hacktoberfest_es_2020.md
 markdown_extensions:
-  - admonition
-  - pymdownx.tasklist
+  - admonition:
+  - pymdownx.tasklist:
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
