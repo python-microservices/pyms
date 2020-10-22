@@ -1,6 +1,6 @@
 # Introduction to Microservices
 
-Typically, the application implementation is based on a monolithic architecture scheme. In this architecture, all the elements implemented are included in a single application. This carries  some disadvantages, such as it becomes more difficult to solve problems and add new functionalities as the application grows. The microservicies architecture pattern is proposed in order to solve these problems.
+Typically, the application structure is based on a monolithic architecture scheme. In this architecture, all the elements implemented are included in a single application. The monolithic architecture has some disadvantages, such as it becomes more difficult to solve problems and add new functionalities as the application grows. The microservicies architecture pattern is proposed in order to solve these problems.
 
 ![Productivity](imgs/productivity_martin_fowler.png)
 
