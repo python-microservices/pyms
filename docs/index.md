@@ -13,7 +13,7 @@ microservices with Python which handles cross-cutting concerns:
 PyMS is powered by [Flask](https://flask.palletsprojects.com/en/1.1.x/), [Connexion](https://github.com/zalando/connexion) 
 and [Opentracing](https://opentracing.io/).
 
-Get started with an [Introduction to Microservices](microservices.md) and then the [Installation](installation.md). Get an overview with the [Quickstart](quickstart.md). 
+Get started with an Introduction to Microservices in [English](microservices.md) or [Spanish](microservicios.md) and then the [Installation](installation.md). Get an overview with the [Quickstart](quickstart.md). 
 
 ## Motivation
 

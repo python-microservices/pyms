@@ -5,7 +5,8 @@ repo_name: GitHub
 site_author: Alberto Vara
 nav:
     - Home: index.md
-    - Introduction to microservices: microservices.md
+    - Introduction to microservices (ENG): microservices.md
+    - Introduction to microservices (SPA): microservicios.md
     - Installation: installation.md
     - Quickstart: quickstart.md
     - Configuration: configuration.md
