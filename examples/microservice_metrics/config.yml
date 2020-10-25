@@ -1,0 +1,13 @@
+pyms:
+  services:
+    metrics: true
+    requests:
+      data: ""
+    swagger:
+      path: ""
+      file: "swagger.yaml"
+  config:
+    DEBUG: true
+    TESTING: false
+    APP_NAME: "Python Microservice"
+    APPLICATION_ROOT: ""
