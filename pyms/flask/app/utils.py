@@ -10,7 +10,7 @@ class SingletonMeta(type):
     _instances: Dict[type, type] = {}
     _singleton = True
 
-    def __call__(cls, *args, **kwargs):
+    def __call__(cls, *args, **kwargs) -> type:
         if cls not in cls._instances or not cls._singleton:
             cls._instances[cls] = super(SingletonMeta, cls).__call__(*args, **kwargs)
         else:
@@ -32,7 +32,7 @@ class ReverseProxied:
         self.app = app
 
     @staticmethod
-    def _extract_prefix(environ):
+    def _extract_prefix(environ: dict) -> str:
         """
         Get Path from environment from:
         - Traefik with HTTP_X_SCRIPT_NAME https://docs.traefik.io/v2.0/middlewares/headers/

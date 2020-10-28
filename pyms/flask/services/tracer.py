@@ -1,4 +1,6 @@
 import logging
+from typing import Union
+
 
 try:
     import opentracing
@@ -28,7 +30,7 @@ LIGHT_CLIENT = "lightstep"
 DEFAULT_CLIENT = JAEGER_CLIENT
 
 
-def inject_span_in_headers(headers):
+def inject_span_in_headers(headers: dict) -> dict:
     if has_request_context():
         # FLASK https://github.com/opentracing-contrib/python-flask
         tracer = current_app.tracer if getattr(current_app, "tracer") else None
@@ -56,7 +58,7 @@ class Service(DriverService):
         "client": DEFAULT_CLIENT,
     }
 
-    def get_client(self):
+    def get_client(self) -> Union[bool, type]:
         opentracing_tracer = False
         if self.config.client == JAEGER_CLIENT:
             opentracing_tracer = self.init_jaeger_tracer()

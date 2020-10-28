@@ -1,10 +1,11 @@
 """Encapsulate common rest operations between business services propagating trace headers if configured.
 """
 import logging
+from typing import Any
 
 import requests
 from flask import request
-from requests.adapters import HTTPAdapter
+from requests.adapters import HTTPAdapter, Response
 from urllib3.util.retry import Retry
 
 from pyms.constants import LOGGER_NAME
@@ -18,8 +19,8 @@ DEFAULT_RETRIES = 3
 DEFAULT_STATUS_RETRIES = (500, 502, 504)
 
 
-def retry(f):
-    def wrapper(*args, **kwargs):
+def retry(f) -> Any:
+    def wrapper(*args, **kwargs) -> Any:
         response = False
         i = 0
         response_ok = False
@@ -53,7 +54,7 @@ class Service(DriverService):
     }
     tracer = None
 
-    def requests(self, session: requests.Session):
+    def requests(self, session: requests.Session) -> requests.Session:
         """
         A backoff factor to apply between attempts after the second try (most errors are resolved immediately by a
         second try without a delay). urllib3 will sleep for: {backoff factor} * (2 ^ ({number of total retries} - 1))
@@ -113,7 +114,7 @@ class Service(DriverService):
         return headers
 
     @staticmethod
-    def _build_url(url, path_params=None):
+    def _build_url(url, path_params: dict = None) -> str:
         """Compose full url replacing placeholders with path_params values.
 
         :param url: base url
@@ -124,7 +125,7 @@ class Service(DriverService):
 
         return url.format_map(path_params)
 
-    def parse_response(self, response):
+    def parse_response(self, response: Response) -> dict:
         """Parses response's json object. Checks configuration in order to parse a concrete node or the whole response.
 
         :param response: request's response that contains a valid json
@@ -142,7 +143,8 @@ class Service(DriverService):
             return {}
 
     @retry
-    def get(self, url, path_params=None, params=None, headers=None, propagate_headers=False, **kwargs):
+    def get(self, url: str, path_params: dict = None, params: dict = None, headers: dict = None,
+            propagate_headers: bool = False, **kwargs) -> Response:
         """Sends a GET request.
 
         :param url: URL for the new :class:`Request` object. Could contain path parameters
@@ -167,7 +169,8 @@ class Service(DriverService):
 
         return response
 
-    def get_for_object(self, url, path_params=None, params=None, headers=None, **kwargs):
+    def get_for_object(self, url: str, path_params: dict = None, params: dict = None, headers: dict = None,
+                       **kwargs) -> dict:
         """Sends a GET request and returns the json representation found in response's content data node.
 
         :param url: URL for the new :class:`Request` object. Could contain path parameters
@@ -184,7 +187,8 @@ class Service(DriverService):
         return self.parse_response(response)
 
     @retry
-    def post(self, url, path_params=None, data=None, json=None, headers=None, **kwargs):
+    def post(self, url: str, path_params: dict = None, data: dict = None, json: dict = None, headers: dict = None,
+             **kwargs) -> Response:
         """Sends a POST request.
 
         :param url: URL for the new :class:`Request` object. Could contain path parameters
@@ -210,7 +214,8 @@ class Service(DriverService):
 
         return response
 
-    def post_for_object(self, url, path_params=None, data=None, json=None, headers=None, **kwargs):
+    def post_for_object(self, url: str, path_params: dict = None, data: dict = None, json: dict = None,
+                        headers: dict = None, **kwargs) -> dict:
         """Sends a POST request and returns the json representation found in response's content data node.
 
         :param url: URL for the new :class:`Request` object. Could contain path parameters
@@ -228,7 +233,7 @@ class Service(DriverService):
         return self.parse_response(response)
 
     @retry
-    def put(self, url, path_params=None, data=None, headers=None, **kwargs):
+    def put(self, url: str, path_params: dict = None, data: dict = None, headers: dict = None, **kwargs) -> Response:
         """Sends a PUT request.
 
         :param url: URL for the new :class:`Request` object. Could contain path parameters
@@ -254,7 +259,8 @@ class Service(DriverService):
 
         return response
 
-    def put_for_object(self, url, path_params=None, data=None, headers=None, **kwargs):
+    def put_for_object(self, url: str, path_params: dict = None, data: dict = None, headers: dict = None,
+                       **kwargs) -> dict:
         """Sends a PUT request and returns the json representation found in response's content data node.
 
         :param url: URL for the new :class:`Request` object. Could contain path parameters
@@ -272,7 +278,7 @@ class Service(DriverService):
         return self.parse_response(response)
 
     @retry
-    def patch(self, url, path_params=None, data=None, headers=None, **kwargs):
+    def patch(self, url: str, path_params: dict = None, data: dict = None, headers: dict = None, **kwargs) -> Response:
         """Sends a PATCH request.
 
         :param url: URL for the new :class:`Request` object. Could contain path parameters
@@ -298,7 +304,8 @@ class Service(DriverService):
 
         return response
 
-    def patch_for_object(self, url, path_params=None, data=None, headers=None, **kwargs):
+    def patch_for_object(self, url: str, path_params: dict = None, data: dict = None, headers: dict = None,
+                         **kwargs) -> dict:
         """Sends a PATCH request and returns the json representation found in response's content data node.
 
         :param url: URL for the new :class:`Request` object. Could contain path parameters
@@ -316,7 +323,7 @@ class Service(DriverService):
         return self.parse_response(response)
 
     @retry
-    def delete(self, url, path_params=None, headers=None, **kwargs):
+    def delete(self, url: str, path_params: dict = None, headers: dict = None, **kwargs) -> Response:
         """Sends a DELETE request.
 
         :param url: URL for the new :class:`Request` object. Could contain path parameters

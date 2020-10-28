@@ -205,7 +205,7 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         self.crypt.config.reload()
         self.create_app()
 
-    def create_app(self):
+    def create_app(self) -> Flask:
         """Initialize the Flask app, register blueprints and initialize
         all libraries like Swagger, database,
         the trace system...
@@ -234,13 +234,13 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
 
         return self.application
 
-    def add_error_handlers(self):
+    def add_error_handlers(self) -> None:
         """Subclasses will override this method in order to add specific error handlers. This should be done with
         calls to add_error_handler method.
         """
         pass
 
-    def add_error_handler(self, code_or_exception, handler):
+    def add_error_handler(self, code_or_exception, handler) -> None:
         """Add custom handler for an error code or exception in the connexion app.
 
         :param code_or_exception: HTTP error code or exception

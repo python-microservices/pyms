@@ -16,6 +16,7 @@ py_ms.egg-info/*
 .eggs/*
 pylintReport.txt
 .scannerwork/
+.mypy_cache
 
 # Deploy
 build/
