@@ -2,6 +2,8 @@ import os
 from pathlib import Path
 from typing import Dict, Any
 
+from flask import Flask
+
 import connexion
 from connexion.resolver import RestyResolver
 
@@ -33,7 +35,7 @@ def get_bundled_specs(main_file: Path) -> Dict[str, Any]:
     return parser.specification
 
 
-def merge_swagger_file(main_file: str):
+def merge_swagger_file(main_file: str) -> None:
     """
     Generate swagger into a single file
     :param main_file: Swagger file path
@@ -71,14 +73,14 @@ class Service(DriverService):
     }
 
     @staticmethod
-    def _get_application_root(config):
+    def _get_application_root(config) -> str:
         try:
             application_root = config.APPLICATION_ROOT
         except AttrDoesNotExistException:
             application_root = "/"
         return application_root
 
-    def init_app(self, config, path):
+    def init_app(self, config, path: Path) -> Flask:
         """
         Initialize Connexion App. See more info in [Connexion Github](https://github.com/zalando/connexion)
         :param config: The Flask configuration defined in the config.yaml:

@@ -1,8 +1,9 @@
 import time
 import logging
+
 from typing import Text
 
-from flask import Blueprint, Response, request
+from flask import Blueprint, Response, request, Flask
 from prometheus_client import multiprocess, Counter, Histogram, generate_latest, CollectorRegistry, REGISTRY
 from pyms.flask.services.driver import DriverService
 
@@ -27,10 +28,10 @@ class FlaskMetricsWrapper():
     def __init__(self, app_name):
         self.app_name = app_name
 
-    def before_request(self):  # pylint: disable=R0201
+    def before_request(self) -> None:  # pylint: disable=R0201
         request.start_time = time.time()
 
-    def after_request(self, response):
+    def after_request(self, response: Response) -> Response:
         if hasattr(request.url_rule, "rule"):
             path = request.url_rule.rule
         else:
@@ -54,7 +55,7 @@ class Service(DriverService):
         self.init_registry()
         self.serve_metrics()
 
-    def init_registry(self):
+    def init_registry(self) -> None:
         try:
             multiprocess_registry = CollectorRegistry()
             multiprocess.MultiProcessCollector(multiprocess_registry)
@@ -63,7 +64,7 @@ class Service(DriverService):
             self.registry = REGISTRY
 
     @staticmethod
-    def monitor(app_name, app):
+    def monitor(app_name: str, app: Flask) -> None:
         metric = FlaskMetricsWrapper(app_name)
         app.before_request(metric.before_request)
         app.after_request(metric.after_request)
@@ -78,7 +79,7 @@ class Service(DriverService):
             )
 
     @staticmethod
-    def add_logger_handler(logger, service_name):
+    def add_logger_handler(logger: logging.Logger, service_name: str) -> logging.Logger:
         logger.addHandler(MetricsLogHandler(service_name))
         return logger
 
@@ -90,5 +91,5 @@ class MetricsLogHandler(logging.Handler):
         super().__init__()
         self.app_name = app_name
 
-    def emit(self, record):
+    def emit(self, record) -> None:
         LOGGER_TOTAL_MESSAGES.labels(self.app_name, record.levelname).inc()
