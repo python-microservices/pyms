@@ -18,7 +18,7 @@ install_min_requires = [
     'python-json-logger>=2.0.0',
     'pyyaml>=5.3.1',
     'anyconfig>=0.9.11',
-    'cryptography>=3.1.1',
+    'cryptography>=3.2',
 ]
 
 install_crypt_requires = [
