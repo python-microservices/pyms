@@ -72,6 +72,7 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
 
     Current services are swagger, request, tracer, metrics
     """
+
     config_resource = CONFIG_BASE
     services: List[str] = []
     application = Flask
@@ -105,7 +106,9 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         """
         services_resources = ServicesResource()
         for service_name, service in services_resources.get_services():
-            if service_name not in self.services or not getattr(self, service_name, False):
+            if service_name not in self.services or not getattr(
+                self, service_name, False
+            ):
                 self.services.append(service_name)
                 setattr(self, service_name, service)
 
@@ -150,7 +153,7 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         :return:
         """
         self.application.logger = logger
-        os.environ['WERKZEUG_RUN_MAIN'] = "true"
+        os.environ["WERKZEUG_RUN_MAIN"] = "true"
 
         formatter = CustomJsonFormatter()
         formatter.add_service_name(self.application.config["APP_NAME"])
@@ -172,11 +175,16 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         :return: None
         """
         if self.swagger:
-            application = self.swagger.init_app(config=self.config.to_flask(), path=self.path)
+            application = self.swagger.init_app(
+                config=self.config.to_flask(), path=self.path
+            )
         else:
             check_package_exists("flask")
-            application = Flask(__name__, static_folder=os.path.join(self.path, 'static'),
-                                template_folder=os.path.join(self.path, 'templates'))
+            application = Flask(
+                __name__,
+                static_folder=os.path.join(self.path, "static"),
+                template_folder=os.path.join(self.path, "templates"),
+            )
 
         application.root_path = self.path
 
@@ -192,8 +200,7 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         if self.metrics:
             self.application.register_blueprint(self.metrics.metrics_blueprint)
             self.metrics.add_logger_handler(
-                self.application.logger,
-                self.application.config["APP_NAME"]
+                self.application.logger, self.application.config["APP_NAME"]
             )
             self.metrics.monitor(self.application.config["APP_NAME"], self.application)
 
@@ -230,7 +237,9 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
 
         self.init_metrics()
 
-        logger.debug("Started app with PyMS and this services: {}".format(self.services))
+        logger.debug(
+            "Started app with PyMS and this services: {}".format(self.services)
+        )
 
         return self.application
 
