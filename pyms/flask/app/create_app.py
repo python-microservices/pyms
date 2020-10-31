@@ -80,6 +80,7 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
     request: Optional[DriverService] = None
     tracer: Optional[DriverService] = None
     metrics: Optional[DriverService] = None
+    opentelemetry: Optional[DriverService] = None
     _singleton = True
 
     def __init__(self, *args, **kwargs):
@@ -204,6 +205,28 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
             )
             self.metrics.monitor(self.application.config["APP_NAME"], self.application)
 
+    def init_opentelemetry(self) -> None:
+        if self.opentelemetry:
+            if self.opentelemetry.config.metrics.enabled:
+                # Set metrics backend
+                self.opentelemetry.set_metrics_backend()
+                # Set the metrics blueprint
+                # DISCLAIMER this endpoint may be only necessary with prometheus client
+                self.application.register_blueprint(self.opentelemetry.blueprint)
+                # Set instrumentations
+                if self.opentelemetry.config.metrics.instrumentations.flask:
+                    self.opentelemetry.monitor(
+                        self.application.config["APP_NAME"], self.application
+                    )
+                if self.opentelemetry.config.metrics.instrumentations.logger:
+                    self.opentelemetry.add_logger_handler(
+                        self.application.logger, self.application.config["APP_NAME"]
+                    )
+            if self.opentelemetry.config.tracing.enabled:
+                self.opentelemetry.set_tracing_backend()
+            if self.opentelemetry.config.logging.enabled:
+                self.opentelemetry.set_logging_backend()
+
     def reload_conf(self):
         self.delete_services()
         self.config.reload()
@@ -236,6 +259,8 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         self.init_logger()
 
         self.init_metrics()
+
+        self.init_opentelemetry()
 
         logger.debug(
             "Started app with PyMS and this services: {}".format(self.services)

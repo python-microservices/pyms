@@ -52,6 +52,11 @@ install_metrics_requires = [
     'prometheus_client>=0.8.0',
 ]
 
+install_opentelemetry_requires = [
+    'opentelemetry-exporter-prometheus>=0.14b0',
+    'opentelemetry-sdk>=0.14b0',
+]
+
 install_tests_requires = [
     'requests-mock>=1.8.0',
     'coverage>=5.3',
