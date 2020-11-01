@@ -11,6 +11,7 @@ from pyms.cmd import Command
 from pyms.exceptions import FileDoesNotExistException, PackageNotExists
 from pyms.crypt.fernet import Crypt
 from pyms.flask.services.swagger import get_bundled_specs
+from tests.common import remove_conf_file
 
 
 class TestCmd(unittest.TestCase):
@@ -75,3 +76,13 @@ class TestCmd(unittest.TestCase):
         cmd = Command(arguments=arguments, autorun=False)
         with pytest.raises(ResolutionError) as excinfo:
             cmd.run()
+
+    @patch('pyms.cmd.main.Command.yes_no_input', return_value=True)
+    def test_create_config_all(self, input):
+        # Remove config file if already exists for test
+        remove_conf_file()
+        arguments = ["create-config"]
+        cmd = Command(arguments=arguments, autorun=False)
+        assert cmd.run()
+        assert not cmd.run()
+        remove_conf_file()

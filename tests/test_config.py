@@ -3,7 +3,7 @@ import os
 import unittest
 from unittest import mock
 
-from pyms.config import get_conf, ConfFile
+from pyms.config import get_conf, ConfFile, create_conf_file
 from pyms.config.conf import validate_conf
 from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT, CONFIGMAP_FILE_ENVIRONMENT_LEGACY, LOGGER_NAME, CONFIG_BASE, \
     CRYPT_FILE_KEY_ENVIRONMENT, CRYPT_FILE_KEY_ENVIRONMENT_LEGACY
@@ -190,3 +190,25 @@ class ConfValidateTests(unittest.TestCase):
         validate_conf()
         os.environ[config_env] = os.path.join(self.BASE_DIR, "config-tests-debug-off.yml")
         validate_conf()
+
+
+class ConfiFileTest(unittest.TestCase):
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+    def setUp(self):
+        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(self.BASE_DIR, "config-file.yml")
+
+    def tearDown(self):
+        del os.environ[CONFIGMAP_FILE_ENVIRONMENT]
+
+    def test_create_config(self):
+        create_conf_file(use_requests=True, use_swagger=True)
+        self.assertTrue(os.path.exists(os.environ[CONFIGMAP_FILE_ENVIRONMENT]))
+        validate_conf()
+
+    def test_create_config_failure(self):
+        with self.assertRaises(FileExistsError):
+            create_conf_file(use_requests=True, use_swagger=True)
+        # Delete the file
+        if os.path.exists(os.environ[CONFIGMAP_FILE_ENVIRONMENT]):
+            os.remove(os.environ[CONFIGMAP_FILE_ENVIRONMENT])
