@@ -62,7 +62,6 @@ install_tests_requires = [
     'tox>=3.20.0',
     'bandit>=1.6.2',
     'mkdocs>=1.1.2',
-    'mkdocs-material>=6.0.0',
     'lightstep>=4.4.8',
     'safety==1.9.0',
     'mypy>=0.782'

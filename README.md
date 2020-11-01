@@ -6,7 +6,7 @@
 [![Requirements Status](https://requires.io/github/python-microservices/pyms/requirements.svg?branch=master)](https://requires.io/github/python-microservices/pyms/requirements/?branch=master)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/python-microservices/pyms.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/python-microservices/pyms/alerts/)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/python-microservices/pyms.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/python-microservices/pyms/context:python)
-[![Documentation Status](https://readthedocs.org/projects/py-ms/badge/?version=latest)](https://py-ms.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/py-ms/badge/?version=latest)](https://python-microservices.github.io/home/)
 [![Gitter](https://img.shields.io/gitter/room/DAVFoundation/DAV-Contributors.svg)](https://gitter.im/python-microservices/pyms)
 
 PyMS, Python MicroService, is a [Microservice chassis pattern](https://microservices.io/patterns/microservice-chassis.html)
@@ -26,27 +26,7 @@ Get started with [Installation](./docs/installation.md) and then get an overview
 
 ## Documentation
 
-To know how to use, install or build a project see the [docs](https://py-ms.readthedocs.io/en/latest/).
-
-## Motivation
-
-When we started creating a microservice with no idea, we were looking for tutorials, guides, best practices, but we found
-nothing to create professional projects. Most articles say:
-
-- "Install flask"
-- "Create routes"
-- (Sometimes) "Create a swagger specs"
-- "TA-DA! you have a microservice"
-
-But... what happens with our configuration out of code like Kubernetes configmap? what happens with transactionality?
-If we have many microservices, what happens with traces?.
-
-There are many problems around Python and microservices and we can't find anyone to give a solution.
-
-We start creating these projects to try to solve all the problems we have found in our professional lives about
-microservices architecture.
-
-Nowadays, is not perfect and we have a looong roadmap, but we hope this library could help other fellas and friends ;)
+To know how to use, install or build a project see the [docs](https://python-microservices.github.io/).
 
 ## Installation
 
@@ -107,7 +87,7 @@ override it.
 
 3. `create_app` returns the flask instance which you can interact with as a typical flask app
 
-See [Documentation](https://py-ms.readthedocs.io/en/latest/) to learn more.
+See [Documentation](https://python-microservices.github.io/) to learn more.
 
 ## Create a project from scaffold
 
