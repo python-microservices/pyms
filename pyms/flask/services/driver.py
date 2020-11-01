@@ -15,27 +15,9 @@ def get_service_name(service_base: str = SERVICE_BASE, service: str = "") -> str
 
 class DriverService(ConfigResource):
     """All services must inherit from this class. This set the configuration. If we have got his config file:
-    ```
-    pyms:
-      services:
-        metrics: true
-        requests:
-          data: data
-        swagger:
-          path: ""
-          file: "swagger.yaml"
-        tracer:
-          client: "jaeger"
-          host: "localhost"
-          component_name: "Python Microservice"
-      config:
-        DEBUG: true
-        TESTING: true
-    ```
-    * `pyms.services` block is the default key to load in the pyms.flask.app.create_app.Microservice class.
-        * `metrics`: is set as the service `pyms.services.metrics`
-        * `swagger`: is set as the service `pyms.services.swagger`
-        * `tracer`: is set as the service `pyms.services.tracer`
+    See these docs:
+    * https://python-microservices.github.io/configuration/
+    * https://python-microservices.github.io/services/
     """
     enabled = True
 
@@ -58,6 +40,9 @@ class DriverService(ConfigResource):
 class ServicesResource(ConfigResource):
     """This class works between `pyms.flask.create_app.Microservice` and `pyms.flask.services.[THESERVICE]`. Search
     for a file with the name you want to load, set the configuration and return a instance of the class you want
+    See these docs:
+    * https://python-microservices.github.io/configuration/
+    * https://python-microservices.github.io/services/
     """
     config_resource = SERVICE_BASE
 
