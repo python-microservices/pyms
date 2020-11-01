@@ -5,10 +5,12 @@ from __future__ import unicode_literals, print_function
 import argparse
 import os
 import sys
+from distutils.util import strtobool
 
 from pyms.crypt.fernet import Crypt
 from pyms.flask.services.swagger import merge_swagger_file
 from pyms.utils import check_package_exists, import_from, utils
+from pyms.config import create_conf_file
 
 
 class Command:
@@ -18,6 +20,7 @@ class Command:
 
     args = []
 
+    # flake8: noqa: C901
     def __init__(self, *args, **kwargs):
         arguments = kwargs.get("arguments", False)
         autorun = kwargs.get("autorun", True)
@@ -53,6 +56,9 @@ class Command:
             "-f", "--file", default=os.path.join('project', 'swagger', 'swagger.yaml'),
             help='Swagger file path')
 
+        parser_create_config = commands.add_parser('create-config', help='Generate a config file')
+        parser_create_config.add_argument("create_config", action='store_true', help='Generate a config file')
+
         parser.add_argument("-v", "--verbose", default="", type=str, help="Verbose ")
 
         args = parser.parse_args(arguments)
@@ -74,6 +80,10 @@ class Command:
             self.file = args.file
         except AttributeError:
             self.merge_swagger = False
+        try:
+            self.create_config = args.create_config
+        except Exception:
+            self.create_config = False
         self.verbose = len(args.verbose)
         if autorun:  # pragma: no cover
             result = self.run()
@@ -91,6 +101,8 @@ class Command:
         if self.create_key:
             path = crypt._loader.get_path_from_env()  # pylint: disable=protected-access
             pwd = self.get_input('Type a password to generate the key file: ')
+            # Should use yes_no_input insted of get input below
+            # the result should be validated for Yes (Y|y) rather allowing anything other than 'n'
             generate_file = self.get_input('Do you want to generate a file in {}? [Y/n]'.format(path))
             generate_file = generate_file.lower() != "n"
             key = crypt.generate_key(pwd, generate_file)
@@ -99,6 +111,8 @@ class Command:
             else:
                 self.print_ok("Key generated: {}".format(key))
         if self.encrypt:
+            # Spoted Unhandle exceptions - The encrypt function throws FileDoesNotExistException, ValueError
+            # which are not currently handled
             encrypted = crypt.encrypt(self.encrypt)
             self.print_ok("Encrypted OK: {}".format(encrypted))
         if self.startproject:
@@ -113,7 +127,25 @@ class Command:
             except FileNotFoundError as ex:
                 self.print_error(ex.__str__())
                 return False
+        if self.create_config:
+            use_requests = self.yes_no_input('Do you want to use request')
+            use_swagger = self.yes_no_input('Do you want to use swagger')
+            try:
+                conf_file_path = create_conf_file(use_requests, use_swagger)
+                self.print_ok(f'Config file "{conf_file_path}" created')
+                return True
+            except Exception as ex:
+                self.print_error(ex.__str__())
+                return False
         return True
+
+    def yes_no_input(self, msg=""):  # pragma: no cover
+        answer = input(utils.colored_text(f'{msg}{"?" if not msg.endswith("?") else ""} [Y/n] :', utils.Colors.BLUE, True))  # nosec
+        try:
+            return strtobool(answer)
+        except ValueError:
+            self.print_error('Invalid input, Please answer with a "Y" or "n"')
+            self.yes_no_input(msg)
 
     @staticmethod
     def print_ok(msg=""):

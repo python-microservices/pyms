@@ -1,11 +1,13 @@
-import logging
 import os
-
+import logging
+from typing import Union
+import yaml
+from pyms.utils import utils
 from pyms.config.confile import ConfFile
 from pyms.constants import PYMS_CONFIG_WHITELIST_KEYWORDS, CONFIGMAP_FILE_ENVIRONMENT_LEGACY, \
-    CONFIGMAP_FILE_ENVIRONMENT, CRYPT_FILE_KEY_ENVIRONMENT, CRYPT_FILE_KEY_ENVIRONMENT_LEGACY, LOGGER_NAME
+    CONFIGMAP_FILE_ENVIRONMENT, CRYPT_FILE_KEY_ENVIRONMENT, CRYPT_FILE_KEY_ENVIRONMENT_LEGACY, LOGGER_NAME, \
+    DEFAULT_CONFIGMAP_FILENAME
 from pyms.exceptions import ServiceDoesNotExistException, ConfigErrorException, AttrDoesNotExistException
-from pyms.utils import utils
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -144,3 +146,49 @@ def __verify_deprecated_env_variables(config):
         except AttrDoesNotExistException:
             pass
         logger.warning(msg)
+
+
+def create_conf_file(use_requests: bool = False, use_swagger: bool = False) -> Union[Exception, str]:
+    """
+    Creates a configuration file defining
+
+    :param use_requests: Do you want to use requests, defaults to False
+    :type use_requests: bool, optional
+    :param use_swagger: Do you want to use swagger, defaults to False
+    :type use_swagger: bool, optional
+    :raises FileExistsError: Config file already exists
+    :raises IOError: Config file creation failed.
+    :return: Raises FileExistsError or IOError OR returns config_file_path
+    :rtype: Union[Exception, str]
+    """
+    # Try using env value for config file, if not found use default
+    CONFIG_FILE = os.getenv(CONFIGMAP_FILE_ENVIRONMENT, None)
+    if not CONFIG_FILE:
+        CONFIG_FILE = DEFAULT_CONFIGMAP_FILENAME
+    # Prevent overwriting existing file
+    if os.path.exists(CONFIG_FILE):
+        raise FileExistsError("Config file already exists at '{}'".format(os.path.abspath(CONFIG_FILE)))
+    # Create config dict
+    config = {"pyms": {}}
+    # add services
+    if use_requests:
+        if not config["pyms"].get("services", None):
+            config["pyms"]["services"] = {}
+        config["pyms"]["services"]["requests"] = {"data": ""}
+    if use_swagger:
+        if not config["pyms"].get("services", None):
+            config["pyms"]["services"] = {}
+        config["pyms"]["services"]["swagger"] = {"path": "", "file": "swagger.yaml"}
+    # add Basic Flask config
+    config["pyms"]["config"] = {
+        "DEBUG": True,
+        "TESTING": False,
+        "APP_NAME": "Python Microservice",
+        "APPLICATION_ROOT": ""
+    }
+    try:
+        with open(CONFIG_FILE, 'w', encoding='utf-8') as config_file:
+            config_file.write(yaml.dump(config, default_flow_style=False, default_style=None, sort_keys=False))
+    except Exception as ex:
+        raise ex
+    return CONFIG_FILE
