@@ -3,7 +3,7 @@ import logging
 import uuid
 
 import requests
-from requests.exceptions import ConnectionError
+from requests.exceptions import RequestException
 from pyms.constants import LOGGER_NAME
 from pyms.exceptions import ServiceDiscoveryConnectionException
 from pyms.flask.services.driver import DriverService
@@ -44,7 +44,7 @@ class ServiceDiscoveryConsul(ServiceDiscoveryBase):
             if response.status_code != 200:
                 msg_error = response.content
                 error = True
-        except ConnectionError:
+        except RequestException:
             error = True
 
         if error:
