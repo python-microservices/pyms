@@ -108,6 +108,15 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
             if service_name not in self.services or not getattr(self, service_name, False):
                 self.services.append(service_name)
                 setattr(self, service_name, service)
+                # if getattr(service, "init_action"):
+                #     service.init_action(self)
+
+    def init_services_actions(self):
+        for service_name in self.services:
+            srv_action = getattr(getattr(self, service_name), "init_action")
+            if srv_action:
+                srv_action(self)
+
 
     def init_crypt(self, *args, **kwargs) -> None:
         """
@@ -134,15 +143,6 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         :return:
         """
         return self.application
-
-    def init_tracer(self) -> None:
-        """Set attribute in flask `tracer`. See in `pyms.flask.services.tracer` how it works
-        :return: None
-        """
-        if self.tracer:
-            FlaskTracing = import_from("flask_opentracing", "FlaskTracing")
-            client = self.tracer.get_client()
-            self.application.tracer = FlaskTracing(client, True, self.application)
 
     def init_logger(self) -> None:
         """
@@ -185,18 +185,6 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
 
         return application
 
-    def init_metrics(self) -> None:
-        """Set attribute in flask `metrics`. See in `pyms.flask.services.metrics` how it works
-        :return: None
-        """
-        if self.metrics:
-            self.application.register_blueprint(self.metrics.metrics_blueprint)
-            self.metrics.add_logger_handler(
-                self.application.logger,
-                self.application.config["APP_NAME"]
-            )
-            self.metrics.monitor(self.application.config["APP_NAME"], self.application)
-
     def reload_conf(self):
         self.delete_services()
         self.config.reload()
@@ -214,7 +202,6 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         """
         self.application = self.init_app()
         self.application.config.from_object(self.config.to_flask())
-        self.application.tracer = None
         self.application.ms = self
 
         # Initialize Blueprints
@@ -223,12 +210,9 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
 
         self.init_libs()
         self.add_error_handlers()
-
-        self.init_tracer()
-
         self.init_logger()
 
-        self.init_metrics()
+        self.init_services_actions()
 
         logger.debug("Started app with PyMS and this services: {}".format(self.services))
 

@@ -1,0 +1,10 @@
+pyms:
+  services:
+    service_discovery:
+      client: "consul"
+      host: "http://localhost:8500"
+  config:
+    DEBUG: true
+    TESTING: false
+    APP_NAME: "Python Microservice"
+    APPLICATION_ROOT: ""
