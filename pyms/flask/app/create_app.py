@@ -9,11 +9,11 @@ from pyms.config.resource import ConfigResource
 from pyms.constants import LOGGER_NAME, CONFIG_BASE
 from pyms.crypt.driver import CryptResource
 from pyms.flask.app.utils import SingletonMeta, ReverseProxied
-from pyms.flask.healthcheck import healthcheck_blueprint
 from pyms.flask.configreload import configreload_blueprint
+from pyms.flask.healthcheck import healthcheck_blueprint
 from pyms.flask.services.driver import ServicesResource, DriverService
 from pyms.logger import CustomJsonFormatter
-from pyms.utils import check_package_exists, import_from
+from pyms.utils import check_package_exists
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -116,7 +116,6 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
             srv_action = getattr(getattr(self, service_name), "init_action")
             if srv_action:
                 srv_action(self)
-
 
     def init_crypt(self, *args, **kwargs) -> None:
         """
