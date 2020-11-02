@@ -3,8 +3,9 @@ import logging
 import uuid
 
 import requests
-
+from requests.exceptions import ConnectionError
 from pyms.constants import LOGGER_NAME
+from pyms.exceptions import ServiceDiscoveryConnectionException
 from pyms.flask.services.driver import DriverService
 
 logger = logging.getLogger(LOGGER_NAME)
@@ -35,9 +36,19 @@ class ServiceDiscoveryConsul(ServiceDiscoveryBase):
                 "status": "passing"
             }
         }
-        response = requests.put("{host}/v1/agent/service/register".format(host=host), data=json.dumps(data),
-                                headers=headers)
-        assert response.status_code == 200
+        error = False
+        msg_error = "Failed to establish a new connection"
+        try:
+            response = requests.put("{host}/v1/agent/service/register".format(host=host), data=json.dumps(data),
+                                    headers=headers)
+            if response.status_code != 200:
+                msg_error = response.content
+                error = True
+        except ConnectionError:
+            error = True
+
+        if error:
+            raise ServiceDiscoveryConnectionException("Host %s raise an error: %s" % (host, msg_error))
 
 
 class Service(DriverService):
