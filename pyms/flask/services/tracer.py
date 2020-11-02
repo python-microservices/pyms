@@ -58,6 +58,11 @@ class Service(DriverService):
         "client": DEFAULT_CLIENT,
     }
 
+    def init_action(self, microservice_instance):
+        FlaskTracing = import_from("flask_opentracing", "FlaskTracing")
+        client = self.get_client()
+        microservice_instance.application.tracer = FlaskTracing(client, True, microservice_instance.application)
+
     def get_client(self) -> Union[bool, type]:
         opentracing_tracer = False
         if self.config.client == JAEGER_CLIENT:

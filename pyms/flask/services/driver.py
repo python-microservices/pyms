@@ -39,6 +39,8 @@ class DriverService(ConfigResource):
     """
     enabled = True
 
+    init_action = False
+
     def __init__(self, *args, **kwargs):
         self.config_resource = get_service_name(service=self.config_resource)
         super().__init__(*args, **kwargs)
