@@ -22,6 +22,7 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
     """The class Microservice is the core of all microservices built with PyMS.
     See this docs: https://python-microservices.github.io/ms_class/
     """
+
     config_resource = CONFIG_BASE
     services: List[str] = []
     application = Flask
@@ -29,6 +30,7 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
     request: Optional[DriverService] = None
     tracer: Optional[DriverService] = None
     metrics: Optional[DriverService] = None
+    opentelemetry: Optional[DriverService] = None
     _singleton = True
 
     def __init__(self, *args, **kwargs):
@@ -55,7 +57,9 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         """
         services_resources = ServicesResource()
         for service_name, service in services_resources.get_services():
-            if service_name not in self.services or not getattr(self, service_name, False):
+            if service_name not in self.services or not getattr(
+                self, service_name, False
+            ):
                 self.services.append(service_name)
                 setattr(self, service_name, service)
 
@@ -100,7 +104,7 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         :return:
         """
         self.application.logger = logger
-        os.environ['WERKZEUG_RUN_MAIN'] = "true"
+        os.environ["WERKZEUG_RUN_MAIN"] = "true"
 
         formatter = CustomJsonFormatter()
         formatter.add_service_name(self.application.config["APP_NAME"])
@@ -122,11 +126,16 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         :return: None
         """
         if self.swagger:
-            application = self.swagger.init_app(config=self.config.to_flask(), path=self.path)
+            application = self.swagger.init_app(
+                config=self.config.to_flask(), path=self.path
+            )
         else:
             check_package_exists("flask")
-            application = Flask(__name__, static_folder=os.path.join(self.path, 'static'),
-                                template_folder=os.path.join(self.path, 'templates'))
+            application = Flask(
+                __name__,
+                static_folder=os.path.join(self.path, "static"),
+                template_folder=os.path.join(self.path, "templates"),
+            )
 
         application.root_path = self.path
 
@@ -142,10 +151,31 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         if self.metrics:
             self.application.register_blueprint(self.metrics.metrics_blueprint)
             self.metrics.add_logger_handler(
-                self.application.logger,
-                self.application.config["APP_NAME"]
+                self.application.logger, self.application.config["APP_NAME"]
             )
             self.metrics.monitor(self.application.config["APP_NAME"], self.application)
+
+    def init_opentelemetry(self) -> None:
+        if self.opentelemetry:
+            if self.opentelemetry.config.metrics.enabled:
+                # Set metrics backend
+                self.opentelemetry.set_metrics_backend()
+                # Set the metrics blueprint
+                # DISCLAIMER this endpoint may be only necessary with prometheus client
+                self.application.register_blueprint(self.opentelemetry.blueprint)
+                # Set instrumentations
+                if self.opentelemetry.config.metrics.instrumentations.flask:
+                    self.opentelemetry.monitor(
+                        self.application.config["APP_NAME"], self.application
+                    )
+                if self.opentelemetry.config.metrics.instrumentations.logger:
+                    self.opentelemetry.add_logger_handler(
+                        self.application.logger, self.application.config["APP_NAME"]
+                    )
+            if self.opentelemetry.config.tracing.enabled:
+                self.opentelemetry.set_tracing_backend()
+            if self.opentelemetry.config.logging.enabled:
+                self.opentelemetry.set_logging_backend()
 
     def reload_conf(self):
         self.delete_services()
@@ -180,7 +210,11 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
 
         self.init_metrics()
 
-        logger.debug("Started app with PyMS and this services: {}".format(self.services))
+        self.init_opentelemetry()
+
+        logger.debug(
+            "Started app with PyMS and this services: {}".format(self.services)
+        )
 
         return self.application
 
