@@ -63,7 +63,7 @@ class TestMetricsFlask(unittest.TestCase):
     def test_metrics_jaeger(self):
         self.client.get("/")
         self.client.get("/metrics")
-        generated_logger = b'jaeger:reporter_spans_total'
+        generated_logger = b"jaeger:reporter_spans_total"
         assert generated_logger in generate_latest()
 
 
@@ -79,8 +79,9 @@ class TestMultiprocessMetricsFlask(unittest.TestCase):
     def setUpClass(cls):
         cls.temp_dir = TemporaryDirectory()
         os.environ["prometheus_multiproc_dir"] = cls.temp_dir.name
-        cls.patch_value_class = unittest.mock.patch.object(values, "ValueClass",
-                                                           values.MultiProcessValue(cls.current_test))
+        cls.patch_value_class = unittest.mock.patch.object(
+            values, "ValueClass", values.MultiProcessValue(cls.current_test)
+        )
         cls.patch_value_class.start()
 
     def setUp(self):
@@ -135,5 +136,5 @@ class TestMultiprocessMetricsFlask(unittest.TestCase):
     def test_metrics_jaeger(self):
         self.client.get("/")
         self.client.get("/metrics")
-        generated_logger = b'jaeger:reporter_spans_total'
+        generated_logger = b"jaeger:reporter_spans_total"
         assert generated_logger in generate_latest(self.app.ms.metrics.registry)

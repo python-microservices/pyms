@@ -14,15 +14,4 @@ from pyms.services_discovery.consulate.api.session import Session
 from pyms.services_discovery.consulate.api.status import Status
 from pyms.services_discovery.consulate.api.base import Response
 
-__all__ = [
-    ACL,
-    Agent,
-    Catalog,
-    Event,
-    Health,
-    KV,
-    Lock,
-    Session,
-    Status,
-    Response
-]
+__all__ = ["ACL", "Agent", "Catalog", "Event", "Health", "KV", "Lock", "Session", "Status", "Response"]

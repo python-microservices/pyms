@@ -22,8 +22,8 @@ class Health(base.Endpoint):
         :rtype: list
 
         """
-        query_params = {'node-meta': node_meta} if node_meta else {}
-        return self._get_list(['checks', service_id], query_params)
+        query_params = {"node-meta": node_meta} if node_meta else {}
+        return self._get_list(["checks", service_id], query_params)
 
     def node(self, node_id):
         """Return the health info for a given node.
@@ -32,7 +32,7 @@ class Health(base.Endpoint):
         :rtype: list
 
         """
-        return self._get_list(['node', node_id])
+        return self._get_list(["node", node_id])
 
     def service(self, service_id, tag=None, passing=None, node_meta=None):
         """Returns the nodes and health info of a service
@@ -45,14 +45,13 @@ class Health(base.Endpoint):
 
         query_params = {}
         if tag:
-            query_params['tag'] = tag
+            query_params["tag"] = tag
         if passing:
-            query_params['passing'] = ''
+            query_params["passing"] = ""
         if node_meta:
-            query_params['node-meta'] = node_meta
+            query_params["node-meta"] = node_meta
 
-        return self._get_list(['service', service_id],
-                              query_params=query_params)
+        return self._get_list(["service", service_id], query_params=query_params)
 
     def state(self, state):
         """Returns the checks in a given state where state is one of
@@ -62,4 +61,4 @@ class Health(base.Endpoint):
         :rtype: list
 
         """
-        return self._get_list(['state', state])
+        return self._get_list(["state", state])

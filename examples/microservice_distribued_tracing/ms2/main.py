@@ -13,5 +13,5 @@ def index():
     return jsonify({"response": response.json()})
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(port=5001)

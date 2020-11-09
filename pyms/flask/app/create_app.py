@@ -72,6 +72,7 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
 
     Current services are swagger, request, tracer, metrics
     """
+
     config_resource = CONFIG_BASE
     services: List[str] = []
     application = Flask
@@ -149,7 +150,7 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         :return:
         """
         self.application.logger = logger
-        os.environ['WERKZEUG_RUN_MAIN'] = "true"
+        os.environ["WERKZEUG_RUN_MAIN"] = "true"
 
         formatter = CustomJsonFormatter()
         formatter.add_service_name(self.application.config["APP_NAME"])
@@ -174,8 +175,11 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
             application = self.swagger.init_app(config=self.config.to_flask(), path=self.path)
         else:
             check_package_exists("flask")
-            application = Flask(__name__, static_folder=os.path.join(self.path, 'static'),
-                                template_folder=os.path.join(self.path, 'templates'))
+            application = Flask(
+                __name__,
+                static_folder=os.path.join(self.path, "static"),
+                template_folder=os.path.join(self.path, "templates"),
+            )
 
         application.root_path = self.path
 

@@ -4,6 +4,7 @@ Base Endpoint class used by all endpoint classes
 """
 import base64
 import json
+
 try:
     from urllib.parse import urlencode  # Python 3
 except ImportError:
@@ -12,10 +13,10 @@ except ImportError:
 from pyms.services_discovery.consulate import utils
 
 
-class Endpoint(object):
+class Endpoint:
     """Base class for API endpoints"""
 
-    KEYWORD = ''
+    KEYWORD = ""
 
     def __init__(self, uri, adapter, datacenter=None, token=None):
         """Create a new instance of the Endpoint class
@@ -27,7 +28,7 @@ class Endpoint(object):
 
         """
         self._adapter = adapter
-        self._base_uri = '{0}/{1}'.format(uri, self.__class__.__name__.lower())
+        self._base_uri = "{0}/{1}".format(uri, self.__class__.__name__.lower())
         self._dc = datacenter
         self._token = token
 
@@ -41,17 +42,15 @@ class Endpoint(object):
         if not query_params:
             query_params = dict()
         if self._dc:
-            query_params['dc'] = self._dc
+            query_params["dc"] = self._dc
         if self._token:
-            query_params['token'] = self._token
-        path = '/'.join(params)
+            query_params["token"] = self._token
+        path = "/".join(params)
         if query_params:
-            return '{0}/{1}?{2}'.format(self._base_uri, path,
-                                        urlencode(query_params))
-        return '{0}/{1}'.format(self._base_uri, path)
+            return "{0}/{1}?{2}".format(self._base_uri, path, urlencode(query_params))
+        return "{0}/{1}".format(self._base_uri, path)
 
-    def _get(self, params, query_params=None, raise_on_404=False,
-             timeout=None):
+    def _get(self, params, query_params=None, raise_on_404=False, timeout=None):
         """Perform a GET request
 
         :param list params: List of path parts
@@ -61,16 +60,15 @@ class Endpoint(object):
         :rtype: dict or list or None
 
         """
-        response = self._adapter.get(self._build_uri(params, query_params),
-                                     timeout=timeout)
+        response = self._adapter.get(self._build_uri(params, query_params), timeout=timeout)
         if utils.response_ok(response, raise_on_404):
             return response.body
         return []
 
     def _delete(
-            self,
-            params,
-            raise_on_404=False,
+        self,
+        params,
+        raise_on_404=False,
     ):
         """Perform a DELETE request
 
@@ -103,31 +101,29 @@ class Endpoint(object):
         :rtype: iterator
 
         """
-        for line in self._adapter.get_stream(
-                self._build_uri(params, query_params)):
+        for line in self._adapter.get_stream(self._build_uri(params, query_params)):
             yield line
 
     def _get_no_response_body(self, url_parts, query=None):
-        return utils.response_ok(
-            self._adapter.get(self._build_uri(url_parts, query)))
+        return utils.response_ok(self._adapter.get(self._build_uri(url_parts, query)))
 
     def _get_response_body(self, url_parts, query=None):
         response = self._adapter.get(self._build_uri(url_parts, query))
         if utils.response_ok(response):
             return response.body
+        return None
 
     def _put_no_response_body(self, url_parts, query=None, payload=None):
-        return utils.response_ok(
-            self._adapter.put(self._build_uri(url_parts, query), payload))
+        return utils.response_ok(self._adapter.put(self._build_uri(url_parts, query), payload))
 
     def _put_response_body(self, url_parts, query=None, payload=None):
-        response = self._adapter.put(self._build_uri(url_parts, query),
-                                     data=payload)
+        response = self._adapter.put(self._build_uri(url_parts, query), data=payload)
         if utils.response_ok(response):
             return response.body
+        return None
 
 
-class Response(object):
+class Response:
     """Used to process and wrap the responses from Consul.
 
     :param int status_code: HTTP Status code
@@ -135,6 +131,7 @@ class Response(object):
     :param dict headers: Response headers
 
     """
+
     status_code = None
     body = None
     headers = None
@@ -149,7 +146,7 @@ class Response(object):
         self.body = self._demarshal(response.content)
         self.headers = response.headers
 
-    def _demarshal(self, body):
+    def _demarshal(self, body):  # pylint: disable=too-many-branches,too-many-return-statements
         """Demarshal the request payload.
 
         :param str body: The string response body
@@ -158,11 +155,11 @@ class Response(object):
         """
         if body is None:
             return None
-        if self.status_code == 200:
+        if self.status_code == 200:  # pylint: disable=too-many-nested-blocks
             try:
                 if utils.PYTHON3 and isinstance(body, bytes):
                     try:
-                        body = body.decode('utf-8')
+                        body = body.decode("utf-8")
                     except UnicodeDecodeError:
                         pass
                 value = json.loads(body)
@@ -172,14 +169,14 @@ class Response(object):
                 return None
             if isinstance(value, bool):
                 return value
-            if 'error' not in value:
+            if "error" not in value:
                 for row in value:
-                    if 'Value' in row:
+                    if "Value" in row:
                         try:
-                            row['Value'] = base64.b64decode(row['Value'])
-                            if isinstance(row['Value'], bytes):
+                            row["Value"] = base64.b64decode(row["Value"])
+                            if isinstance(row["Value"], bytes):
                                 try:
-                                    row['Value'] = row['Value'].decode('utf-8')
+                                    row["Value"] = row["Value"].decode("utf-8")
                                 except UnicodeDecodeError:
                                     pass
                         except TypeError:

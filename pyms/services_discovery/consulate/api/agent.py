@@ -5,12 +5,7 @@ Consul Agent Endpoint Access
 from pyms.services_discovery.consulate.api import base
 from pyms.services_discovery.consulate.models import agent as models
 
-_TOKENS = [
-    'acl_token',
-    'acl_agent_token',
-    'acl_agent_master_token',
-    'acl_replication_token'
-]
+_TOKENS = ["acl_token", "acl_agent_token", "acl_agent_master_token", "acl_replication_token"]
 
 
 class Agent(base.Endpoint):
@@ -30,10 +25,9 @@ class Agent(base.Endpoint):
         :param str token: Access Token
 
         """
-        super(Agent, self).__init__(uri, adapter, datacenter, token)
+        super().__init__(uri, adapter, datacenter, token)
         self.check = Agent.Check(self._base_uri, adapter, datacenter, token)
-        self.service = Agent.Service(
-            self._base_uri, adapter, datacenter, token)
+        self.service = Agent.Service(self._base_uri, adapter, datacenter, token)
 
     class Check(base.Endpoint):
         """One of the primary roles of the agent is the management of system
@@ -64,25 +58,27 @@ class Agent(base.Endpoint):
 
         """
 
-        def register(self,
-                     name,
-                     check_id=None,
-                     interval=None,
-                     notes=None,
-                     deregister_critical_service_after=None,
-                     args=None,
-                     docker_container_id=None,
-                     grpc=None,
-                     grpc_use_tls=None,
-                     http=None,
-                     http_method=None,
-                     header=None,
-                     timeout=None,
-                     tls_skip_verify=None,
-                     tcp=None,
-                     ttl=None,
-                     service_id=None,
-                     status=None):
+        def register(
+            self,
+            name,
+            check_id=None,
+            interval=None,
+            notes=None,
+            deregister_critical_service_after=None,
+            args=None,
+            docker_container_id=None,
+            grpc=None,
+            grpc_use_tls=None,
+            http=None,
+            http_method=None,
+            header=None,
+            timeout=None,
+            tls_skip_verify=None,
+            tcp=None,
+            ttl=None,
+            service_id=None,
+            status=None,
+        ):  # pylint: disable=too-many-arguments,too-many-locals
             """Add a new check to the local agent. Checks are either a script
             or TTL type. The agent is responsible for managing the status of
             the check and keeping the Catalog in sync.
@@ -111,14 +107,15 @@ class Agent(base.Endpoint):
 
             """
             return self._put_no_response_body(
-                ['register'], None, dict(
+                ["register"],
+                None,
+                dict(
                     models.Check(
                         name=name,
                         id=check_id,
                         interval=interval,
                         notes=notes,
-                        deregister_critical_service_after=
-                        deregister_critical_service_after,
+                        deregister_critical_service_after=deregister_critical_service_after,
                         args=args,
                         docker_container_id=docker_container_id,
                         grpc=grpc,
@@ -131,7 +128,10 @@ class Agent(base.Endpoint):
                         tcp=tcp,
                         ttl=ttl,
                         service_id=service_id,
-                        status=status)))
+                        status=status,
+                    )
+                ),
+            )
 
         def deregister(self, check_id):
             """Remove a check from the local agent. The agent will take care
@@ -141,7 +141,7 @@ class Agent(base.Endpoint):
             :rtype: bool
 
             """
-            return self._put_no_response_body(['deregister', check_id])
+            return self._put_no_response_body(["deregister", check_id])
 
         def ttl_pass(self, check_id, note=None):
             """This endpoint is used with a check that is of the TTL type.
@@ -153,8 +153,7 @@ class Agent(base.Endpoint):
             :rtype: bool
 
             """
-            return self._put_no_response_body(
-                ['pass', check_id], {'note': note} if note else None)
+            return self._put_no_response_body(["pass", check_id], {"note": note} if note else None)
 
         def ttl_warn(self, check_id, note=None):
             """This endpoint is used with a check that is of the TTL type.
@@ -166,8 +165,7 @@ class Agent(base.Endpoint):
             :rtype: bool
 
             """
-            return self._put_no_response_body(
-                ['warn', check_id], {'note': note} if note else None)
+            return self._put_no_response_body(["warn", check_id], {"note": note} if note else None)
 
         def ttl_fail(self, check_id, note=None):
             """This endpoint is used with a check that is of the TTL type.
@@ -179,8 +177,7 @@ class Agent(base.Endpoint):
             :rtype: bool
 
             """
-            return self._put_no_response_body(
-                ['fail', check_id], {'note': note} if note else None)
+            return self._put_no_response_body(["fail", check_id], {"note": note} if note else None)
 
     class Service(base.Endpoint):
         """One of the main goals of service discovery is to provide a catalog
@@ -192,16 +189,19 @@ class Agent(base.Endpoint):
         the HTTP interface.
 
         """
-        def register(self,
-                     name,
-                     service_id=None,
-                     address=None,
-                     port=None,
-                     tags=None,
-                     meta=None,
-                     check=None,
-                     checks=None,
-                     enable_tag_override=None):
+
+        def register(
+            self,
+            name,
+            service_id=None,
+            address=None,
+            port=None,
+            tags=None,
+            meta=None,
+            check=None,
+            checks=None,
+            enable_tag_override=None,
+        ):  # pylint: disable=too-many-arguments
             """Add a new service to the local agent.
 
             :param str name: The name of the service
@@ -220,11 +220,22 @@ class Agent(base.Endpoint):
 
             """
             return self._put_no_response_body(
-                ['register'], None,
-                dict(models.Service(
-                    name=name, id=service_id, address=address, port=port,
-                    tags=tags, meta=meta, check=check, checks=checks,
-                    enable_tag_override=enable_tag_override)))
+                ["register"],
+                None,
+                dict(
+                    models.Service(
+                        name=name,
+                        id=service_id,
+                        address=address,
+                        port=port,
+                        tags=tags,
+                        meta=meta,
+                        check=check,
+                        checks=checks,
+                        enable_tag_override=enable_tag_override,
+                    )
+                ),
+            )
 
         def deregister(self, service_id):
             """Deregister the service from the local agent. The agent will
@@ -235,7 +246,7 @@ class Agent(base.Endpoint):
             :rtype: bool
 
             """
-            return self._put_no_response_body(['deregister', service_id])
+            return self._put_no_response_body(["deregister", service_id])
 
         def maintenance(self, service_id, enable=True, reason=None):
             """Place given service into "maintenance mode".
@@ -246,11 +257,10 @@ class Agent(base.Endpoint):
             :rtype: bool
 
             """
-            query_params = {'enable': enable}
+            query_params = {"enable": enable}
             if reason:
-                query_params['reason'] = reason
-            return self._put_no_response_body(['maintenance', service_id],
-                                              query_params)
+                query_params["reason"] = reason
+            return self._put_no_response_body(["maintenance", service_id], query_params)
 
     def checks(self):
         """Return the all the checks that are registered with the local agent.
@@ -264,7 +274,7 @@ class Agent(base.Endpoint):
         :rtype: dict
 
         """
-        return self._get(['checks'])
+        return self._get(["checks"])
 
     def force_leave(self, node):
         """Instructs the agent to force a node into the left state. If a node
@@ -274,7 +284,7 @@ class Agent(base.Endpoint):
         node into the left state allows its old entries to be removed.
 
         """
-        return self._put_no_response_body(['force-leave', node])
+        return self._put_no_response_body(["force-leave", node])
 
     def join(self, address, wan=False):
         """This endpoint is hit with a GET and is used to instruct the agent
@@ -287,8 +297,8 @@ class Agent(base.Endpoint):
         :rtype: bool
 
         """
-        query_params = {'wan': 1} if wan else None
-        return self._put_no_response_body(['join', address], query_params)
+        query_params = {"wan": 1} if wan else None
+        return self._put_no_response_body(["join", address], query_params)
 
     def maintenance(self, enable=True, reason=None):
         """Places the agent into or removes the agent from "maintenance mode".
@@ -300,10 +310,10 @@ class Agent(base.Endpoint):
         :rtype: bool
 
         """
-        query_params = {'enable': enable}
+        query_params = {"enable": enable}
         if reason:
-            query_params['reason'] = reason
-        return self._put_no_response_body(['maintenance'], query_params)
+            query_params["reason"] = reason
+        return self._put_no_response_body(["maintenance"], query_params)
 
     def members(self):
         """Returns the members the agent sees in the cluster gossip pool.
@@ -314,7 +324,7 @@ class Agent(base.Endpoint):
         :rtype: list
 
         """
-        return self._get_list(['members'])
+        return self._get_list(["members"])
 
     def metrics(self):
         """Returns agent's metrics for the most recent finished interval
@@ -324,7 +334,7 @@ class Agent(base.Endpoint):
         :rtype: dict
 
         """
-        return self._get(['metrics'])
+        return self._get(["metrics"])
 
     def monitor(self):
         """Iterator over logs from the local agent.
@@ -334,7 +344,7 @@ class Agent(base.Endpoint):
         :rtype: iterator
 
         """
-        for line in self._get_stream(['monitor']):
+        for line in self._get_stream(["monitor"]):
             yield line
 
     def reload(self):
@@ -346,7 +356,7 @@ class Agent(base.Endpoint):
         :rtype: list
 
         """
-        return self._put_response_body(['reload']) or None
+        return self._put_response_body(["reload"]) or None
 
     def services(self):
         """return the all the services that are registered with the local
@@ -361,16 +371,16 @@ class Agent(base.Endpoint):
         :rtype: dict
 
         """
-        return self._get(['services'])
+        return self._get(["services"])
 
     def self(self):
-        """ This endpoint is used to return the configuration and member
+        """This endpoint is used to return the configuration and member
         information of the local agent under the Config key.
 
         :rtype: dict
 
         """
-        return self._get(['self'])
+        return self._get(["self"])
 
     def token(self, name, value):
         """Update the ACL tokens currently in use by the agent. It can be used
@@ -395,6 +405,5 @@ class Agent(base.Endpoint):
 
         """
         if name not in _TOKENS:
-            raise ValueError('Invalid token name: {}'.format(name))
-        return self._put_no_response_body(
-            ['token', name], {}, {'Token': value})
+            raise ValueError("Invalid token name: {}".format(name))
+        return self._put_no_response_body(["token", name], {}, {"Token": value})

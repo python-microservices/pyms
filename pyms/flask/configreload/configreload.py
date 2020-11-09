@@ -2,10 +2,10 @@ from __future__ import unicode_literals, print_function, absolute_import, divisi
 from flask import Blueprint
 from flask import current_app
 
-configreload_blueprint = Blueprint('configreload', __name__, static_url_path='/static')
+configreload_blueprint = Blueprint("configreload", __name__, static_url_path="/static")
 
 
-@configreload_blueprint.route('/reload-config', methods=['POST'])
+@configreload_blueprint.route("/reload-config", methods=["POST"])
 def reloadconfig():
     """
     Reread configuration from file.

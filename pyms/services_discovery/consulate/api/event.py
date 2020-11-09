@@ -6,16 +6,9 @@ from pyms.services_discovery.consulate.api import base
 
 
 class Event(base.Endpoint):
-    """The Event endpoints are used to fire a new event and list recent events.
+    """The Event endpoints are used to fire a new event and list recent events."""
 
-    """
-
-    def fire(self, name,
-             payload=None,
-             datacenter=None,
-             node=None,
-             service=None,
-             tag=None):
+    def fire(self, name, payload=None, datacenter=None, node=None, service=None, tag=None):
         """Trigger a new user Event
 
         :param str name: The name of the event
@@ -29,16 +22,15 @@ class Event(base.Endpoint):
         """
         query_args = {}
         if datacenter:
-            query_args['dc'] = datacenter
+            query_args["dc"] = datacenter
         if node:
-            query_args['node'] = node
+            query_args["node"] = node
         if service:
-            query_args['service'] = service
+            query_args["service"] = service
         if tag:
-            query_args['tag'] = tag
-        response = self._adapter.put(self._build_uri(['fire', name],
-                                                     query_args), payload)
-        return response.body.get('ID')
+            query_args["tag"] = tag
+        response = self._adapter.put(self._build_uri(["fire", name], query_args), payload)
+        return response.body.get("ID")
 
     def list(self, name=None):
         """Returns the most recent events known by the agent. As a consequence
@@ -51,5 +43,5 @@ class Event(base.Endpoint):
         """
         query_args = {}
         if name:
-            query_args['name'] = name
-        return self._get(['list'], query_args)
+            query_args["name"] = name
+        return self._get(["list"], query_args)

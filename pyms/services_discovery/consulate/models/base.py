@@ -37,10 +37,11 @@ class Model(collections.Iterable):
     """The attributes that define the data elements of the model"""
 
     def __init__(self, **kwargs):
-        super(Model, self).__init__()
-        [setattr(self, name, value) for name, value in kwargs.items()]
-        [self._set_default(name) for name in self.__attributes__.keys()
-         if name not in kwargs.keys()]
+        super().__init__()
+        [setattr(self, name, value) for name, value in kwargs.items()]  # pylint: disable=expression-not-assigned
+        [  # pylint: disable=expression-not-assigned
+            self._set_default(name) for name in self.__attributes__ if name not in kwargs
+        ]
 
     def __iter__(self):
         """Iterate through the model's key, value pairs.
@@ -48,7 +49,7 @@ class Model(collections.Iterable):
         :rtype: iterator
 
         """
-        for name in self.__attributes__.keys():
+        for name in self.__attributes__:
             value = self._maybe_cast_value(name)
             if value is not None:
                 yield self._maybe_return_key(name), value
@@ -67,7 +68,7 @@ class Model(collections.Iterable):
         if name not in self.__attributes__:
             raise AttributeError('Invalid attribute "{}"'.format(name))
         value = self._validate_value(name, value)
-        super(Model, self).__setattr__(name, value)
+        super().__setattr__(name, value)
 
     def __getattribute__(self, name):
         """Return the attribute from the model if it is set, otherwise
@@ -78,10 +79,10 @@ class Model(collections.Iterable):
 
         """
         try:
-            return super(Model, self).__getattribute__(name)
+            return super().__getattribute__(name)
         except AttributeError:
             if name in self.__attributes__:
-                return self.__attributes__[name].get('default', None)
+                return self.__attributes__[name].get("default", None)
             raise
 
     def _maybe_cast_value(self, name):
@@ -93,8 +94,8 @@ class Model(collections.Iterable):
 
         """
         value = getattr(self, name)
-        if value is not None and self.__attributes__[name].get('cast_to'):
-            return self.__attributes__[name]['cast_to'](value)
+        if value is not None and self.__attributes__[name].get("cast_to"):
+            return self.__attributes__[name]["cast_to"](value)
         return value
 
     def _maybe_return_key(self, name):
@@ -106,8 +107,8 @@ class Model(collections.Iterable):
         :rtype: mixed
 
         """
-        if self.__attributes__[name].get('key'):
-            return self.__attributes__[name]['key']
+        if self.__attributes__[name].get("key"):
+            return self.__attributes__[name]["key"]
         return name
 
     def _required_attr(self, name):
@@ -117,7 +118,7 @@ class Model(collections.Iterable):
         :rtype: bool
 
         """
-        return self.__attributes__[name].get('required', False)
+        return self.__attributes__[name].get("required", False)
 
     def _set_default(self, name):
         """Set the default value for the attribute name.
@@ -125,7 +126,7 @@ class Model(collections.Iterable):
         :param str name: The attribute name
 
         """
-        setattr(self, name, self.__attributes__[name].get('default', None))
+        setattr(self, name, self.__attributes__[name].get("default", None))
 
     def _validate_value(self, name, value):
         """Ensures the the value validates based upon the type or a validation
@@ -141,27 +142,24 @@ class Model(collections.Iterable):
         if value is None:
             if self._required_attr(name):
                 raise ValueError('Attribute "{}" is required'.format(name))
-            return
+            return None
 
-        if not isinstance(value, self.__attributes__[name].get('type')):
-            cast_from = self.__attributes__[name].get('cast_from')
+        if not isinstance(value, self.__attributes__[name].get("type")):
+            cast_from = self.__attributes__[name].get("cast_from")
             if cast_from and isinstance(value, cast_from):
-                value = self.__attributes__[name]['type'](value)
+                value = self.__attributes__[name]["type"](value)
             else:
                 raise TypeError(
                     'Attribute "{}" must be of type {} not {}'.format(
-                        name, self.__attributes__[name]['type'].__name__,
-                        value.__class__.__name__))
+                        name, self.__attributes__[name]["type"].__name__, value.__class__.__name__
+                    )
+                )
 
-        if self.__attributes__[name].get('enum') \
-                and value not in self.__attributes__[name]['enum']:
-            raise ValueError(
-                'Attribute "{}" value {!r} not valid'.format(name, value))
+        if self.__attributes__[name].get("enum") and value not in self.__attributes__[name]["enum"]:
+            raise ValueError('Attribute "{}" value {!r} not valid'.format(name, value))
 
-        validator = self.__attributes__[name].get('validator')
+        validator = self.__attributes__[name].get("validator")
         if callable(validator):
             if not validator(value, self):
-                raise ValueError(
-                    'Attribute "{}" value {!r} did not validate'.format(
-                        name, value))
+                raise ValueError('Attribute "{}" value {!r} did not validate'.format(name, value))
         return value

@@ -4,12 +4,14 @@ Consul ACL Endpoint Access
 """
 import logging
 
-from pyms.services_discovery.consulate.models import acl as model
-from pyms.services_discovery.consulate.api import base
 from pyms.services_discovery.consulate import exceptions
+from pyms.services_discovery.consulate.api import base
+from pyms.services_discovery.consulate.models import acl as model
+
 # from typing import List, Dict, Union
 
 LOGGER = logging.getLogger(__name__)
+
 
 # ServiceIdentity = Dict[str, Union[str, List[str]]]
 # ServiceIdentities = List[ServiceIdentity]
@@ -19,11 +21,12 @@ LOGGER = logging.getLogger(__name__)
 # RoleLinks = List[RoleLink]
 
 
-class ACL(base.Endpoint):
+class ACL(base.Endpoint):  # pylint: disable=too-many-public-methods
     """The ACL endpoints are used to create, update, destroy, and query ACL
     tokens.
 
     """
+
     def list_policies(self):
         """List all ACL policies available in cluster.
 
@@ -32,7 +35,7 @@ class ACL(base.Endpoint):
         """
         return self._get(["policies"])
 
-    def read_policy(self, id):
+    def read_policy(self, id):  # pylint: disable=redefined-builtin
         """Read an existing policy with the given ID.
 
         :param str id: The ID of the policy.
@@ -41,11 +44,7 @@ class ACL(base.Endpoint):
         """
         return self._get(["policy", id])
 
-    def create_policy(self,
-                      name,
-                      datacenters=None,
-                      description=None,
-                      rules=None):
+    def create_policy(self, name, datacenters=None, description=None, rules=None):
         """Create policy with name given and rules.
 
         :param str name: name of the policy
@@ -55,20 +54,15 @@ class ACL(base.Endpoint):
         :param rtype: dict
 
         """
-        return self._put_response_body(["policy"], {},
-                                       dict(
-                                           model.ACLPolicy(
-                                               name=name,
-                                               datacenters=datacenters,
-                                               description=description,
-                                               rules=rules)))
+        return self._put_response_body(
+            ["policy"],
+            {},
+            dict(model.ACLPolicy(name=name, datacenters=datacenters, description=description, rules=rules)),
+        )
 
-    def update_policy(self,
-                      id,
-                      name,
-                      datacenters=None,
-                      description=None,
-                      rules=None):
+    def update_policy(
+        self, id, name, datacenters=None, description=None, rules=None
+    ):  # pylint: disable=redefined-builtin
         """Update policy with id given.
 
         :param str id: A UUID for the policy to update.
@@ -79,15 +73,13 @@ class ACL(base.Endpoint):
         :param rtype: dict
 
         """
-        return self._put_response_body(["policy", id], {},
-                                       dict(
-                                           model.ACLPolicy(
-                                               name=name,
-                                               datacenters=datacenters,
-                                               description=description,
-                                               rules=rules)))
+        return self._put_response_body(
+            ["policy", id],
+            {},
+            dict(model.ACLPolicy(name=name, datacenters=datacenters, description=description, rules=rules)),
+        )
 
-    def delete_policy(self, id):
+    def delete_policy(self, id):  # pylint: disable=redefined-builtin
         """Delete an existing policy with the given ID.
 
         :param str id: The ID of the policy.
@@ -103,7 +95,7 @@ class ACL(base.Endpoint):
         """
         return self._get(["roles"])
 
-    def read_role(self, id=None, name=None):
+    def read_role(self, id=None, name=None):  # pylint: disable=redefined-builtin
         """Read an existing role with the given ID or Name.
 
         :param str id: The ID of the role.
@@ -111,18 +103,14 @@ class ACL(base.Endpoint):
         :param rtype: dict
 
         """
-        if id is not None:
+        if id is not None:  # pylint: disable=no-else-return
             return self._get(["role", id])
         elif name is not None:
             return self._get(["role", "name", name])
         else:
             raise exceptions.NotFound("Either id or name must be specified")
 
-    def create_role(self,
-                    name,
-                    description=None,
-                    policies=None,
-                    service_identities=None):
+    def create_role(self, name, description=None, policies=None, service_identities=None):
         """Create an ACL role from a list of policies or service identities.
 
         :param str name: The name of the ACL role. Must be unique.
@@ -133,19 +121,18 @@ class ACL(base.Endpoint):
 
         """
         return self._put_response_body(
-            ["role"], {},
+            ["role"],
+            {},
             dict(
-                model.ACLRole(name=name,
-                              description=description,
-                              policies=policies,
-                              service_identities=service_identities)))
+                model.ACLRole(
+                    name=name, description=description, policies=policies, service_identities=service_identities
+                )
+            ),
+        )
 
-    def update_role(self,
-                    id,
-                    name,
-                    description=None,
-                    policies=None,
-                    service_identities=None):
+    def update_role(
+        self, id, name, description=None, policies=None, service_identities=None
+    ):  # pylint: disable=redefined-builtin
         """Update role with id given.
 
         :param str id: A UUID for the policy to update.
@@ -157,14 +144,16 @@ class ACL(base.Endpoint):
 
         """
         return self._put_response_body(
-            ["role", id], {},
+            ["role", id],
+            {},
             dict(
-                model.ACLRole(name=name,
-                              description=description,
-                              policies=policies,
-                              service_identities=service_identities)))
+                model.ACLRole(
+                    name=name, description=description, policies=policies, service_identities=service_identities
+                )
+            ),
+        )
 
-    def delete_role(self, id):
+    def delete_role(self, id):  # pylint: disable=redefined-builtin
         """Delete an existing role with the given ID.
 
         :param str id: The ID of the role.
@@ -198,16 +187,18 @@ class ACL(base.Endpoint):
         """
         return self._get(["token", "self"])
 
-    def create_token(self,
-                     accessor_id=None,
-                     description=None,
-                     expiration_time=None,
-                     expiration_ttl=None,
-                     local=False,
-                     policies=None,
-                     roles=None,
-                     secret_id=None,
-                     service_identities=None):
+    def create_token(
+        self,
+        accessor_id=None,
+        description=None,
+        expiration_time=None,
+        expiration_ttl=None,
+        local=False,
+        policies=None,
+        roles=None,
+        secret_id=None,
+        service_identities=None,
+    ):  # pylint: disable=too-many-arguments
         """Create a token from the roles, policies, and service identities
         provided.
 
@@ -226,28 +217,35 @@ class ACL(base.Endpoint):
 
         """
         return self._put_response_body(
-            ["token"], {},
+            ["token"],
+            {},
             dict(
-                model.ACLToken(accessor_id=accessor_id,
-                               description=description,
-                               expiration_time=expiration_time,
-                               expiration_ttl=expiration_ttl,
-                               local=local,
-                               policies=policies,
-                               roles=roles,
-                               secret_id=secret_id,
-                               service_identities=service_identities)))
+                model.ACLToken(
+                    accessor_id=accessor_id,
+                    description=description,
+                    expiration_time=expiration_time,
+                    expiration_ttl=expiration_ttl,
+                    local=local,
+                    policies=policies,
+                    roles=roles,
+                    secret_id=secret_id,
+                    service_identities=service_identities,
+                )
+            ),
+        )
 
-    def update_token(self,
-                     accessor_id,
-                     description=None,
-                     expiration_time=None,
-                     expiration_ttl=None,
-                     local=False,
-                     policies=None,
-                     roles=None,
-                     secret_id=None,
-                     service_identities=None):
+    def update_token(
+        self,
+        accessor_id,
+        description=None,
+        expiration_time=None,
+        expiration_ttl=None,
+        local=False,
+        policies=None,
+        roles=None,
+        secret_id=None,
+        service_identities=None,
+    ):  # pylint: disable=too-many-arguments
         """Create a token from the roles, policies, and service identities
         provided.
 
@@ -266,17 +264,22 @@ class ACL(base.Endpoint):
 
         """
         return self._put_response_body(
-            ["token", accessor_id], {},
+            ["token", accessor_id],
+            {},
             dict(
-                model.ACLToken(accessor_id=accessor_id,
-                               description=description,
-                               expiration_time=expiration_time,
-                               expiration_ttl=expiration_ttl,
-                               local=local,
-                               policies=policies,
-                               roles=roles,
-                               secret_id=secret_id,
-                               service_identities=service_identities)))
+                model.ACLToken(
+                    accessor_id=accessor_id,
+                    description=description,
+                    expiration_time=expiration_time,
+                    expiration_ttl=expiration_ttl,
+                    local=local,
+                    policies=policies,
+                    roles=roles,
+                    secret_id=secret_id,
+                    service_identities=service_identities,
+                )
+            ),
+        )
 
     def clone_token(self, accessor_id, description=None):
         """Clone a token by the accessor_id.
@@ -287,8 +290,8 @@ class ACL(base.Endpoint):
 
         """
         return self._put_response_body(
-            ["token", accessor_id, "clone"], {},
-            dict(model.ACLToken(description=description)))
+            ["token", accessor_id, "clone"], {}, dict(model.ACLToken(description=description))
+        )
 
     def delete_token(self, accessor_id):
         """Delete an existing token with the given AcccessorID.
@@ -323,9 +326,9 @@ class ACL(base.Endpoint):
         :raises: :exc:`~consulate.exceptions.Forbidden`
 
         """
-        return self._put_response_body(['bootstrap'])['ID']
+        return self._put_response_body(["bootstrap"])["ID"]
 
-    def create(self, name, acl_type='client', rules=None):
+    def create(self, name, acl_type="client", rules=None):
         """The create endpoint is used to make a new token. A token has a name,
         a type, and a set of ACL rules.
 
@@ -354,11 +357,7 @@ class ACL(base.Endpoint):
         :raises: consulate.exceptions.Forbidden
 
         """
-        return self._put_response_body(['create'], {},
-                                       dict(
-                                           model.ACL(name=name,
-                                                     type=acl_type,
-                                                     rules=rules)))['ID']
+        return self._put_response_body(["create"], {}, dict(model.ACL(name=name, type=acl_type, rules=rules)))["ID"]
 
     def clone(self, acl_id):
         """Clone an existing ACL returning the new ACL ID
@@ -368,7 +367,7 @@ class ACL(base.Endpoint):
         :raises: consulate.exceptions.Forbidden
 
         """
-        return self._put_response_body(['clone', acl_id])['ID']
+        return self._put_response_body(["clone", acl_id])["ID"]
 
     def destroy(self, acl_id):
         """Delete the specified ACL
@@ -378,7 +377,7 @@ class ACL(base.Endpoint):
         :raises: consulate.exceptions.Forbidden
 
         """
-        response = self._adapter.put(self._build_uri(['destroy', acl_id]))
+        response = self._adapter.put(self._build_uri(["destroy", acl_id]))
         if response.status_code == 403:
             raise exceptions.Forbidden(response.body)
         return response.status_code == 200
@@ -392,9 +391,9 @@ class ACL(base.Endpoint):
         :raises: consulate.exceptions.NotFound
 
         """
-        response = self._get(['info', acl_id], raise_on_404=True)
+        response = self._get(["info", acl_id], raise_on_404=True)
         if not response:
-            raise exceptions.NotFound('ACL not found')
+            raise exceptions.NotFound("ACL not found")
         return response
 
     def list(self):
@@ -404,7 +403,7 @@ class ACL(base.Endpoint):
         :raises: consulate.exceptions.Forbidden
 
         """
-        return self._get(['list'])
+        return self._get(["list"])
 
     def replication(self):
         """Return the status of the ACL replication process in the datacenter.
@@ -418,9 +417,9 @@ class ACL(base.Endpoint):
         :raises: consulate.exceptions.Forbidden
 
         """
-        return self._get(['replication'])
+        return self._get(["replication"])
 
-    def update(self, acl_id, name, acl_type='client', rules=None):
+    def update(self, acl_id, name, acl_type="client", rules=None):
         """Update an existing ACL, updating its values or add a new ACL if
         the ACL ID specified is not found.
 
@@ -434,9 +433,6 @@ class ACL(base.Endpoint):
         :raises: consulate.exceptions.Forbidden
 
         """
-        return self._put_response_body(['update'], {},
-                                       dict(
-                                           model.ACL(id=acl_id,
-                                                     name=name,
-                                                     type=acl_type,
-                                                     rules=rules)))['ID']
+        return self._put_response_body(
+            ["update"], {}, dict(model.ACL(id=acl_id, name=name, type=acl_type, rules=rules))
+        )["ID"]

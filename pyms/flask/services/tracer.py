@@ -53,6 +53,7 @@ class Service(DriverService):
     Add trace to all executions with [opentracing](https://github.com/opentracing-contrib/python-flask).
     All default values keys are created as class attributes in `DriverService`
     """
+
     config_resource = "tracer"
     default_values = {
         "client": DEFAULT_CLIENT,
@@ -83,11 +84,7 @@ class Service(DriverService):
         Config = import_from("jaeger_client", "Config")
         host = {}
         if self.host:
-            host = {
-                'local_agent': {
-                    'reporting_host': self.host
-                }
-            }
+            host = {"local_agent": {"reporting_host": self.host}}
         metrics_config = get_conf(service=get_service_name(service="metrics"), empty_init=True)
         metrics = ""
         if metrics_config:
@@ -96,17 +93,18 @@ class Service(DriverService):
         config = Config(
             config={
                 **{
-                    'sampler': {
-                        'type': 'const',
-                        'param': 1,
+                    "sampler": {
+                        "type": "const",
+                        "param": 1,
                     },
-                    'propagation': 'b3',
-                    'logging': True
+                    "propagation": "b3",
+                    "logging": True,
                 },
-                **host
-            }, service_name=self.component_name,
+                **host,
+            },
+            service_name=self.component_name,
             metrics_factory=metrics,
-            validate=True
+            validate=True,
         )
         return config.initialize_tracer()
 

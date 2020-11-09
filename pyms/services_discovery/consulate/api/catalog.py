@@ -14,13 +14,9 @@ class Catalog(base.Endpoint):
     """
 
     def __init__(self, uri, adapter, dc=None, token=None):
-        super(Catalog, self).__init__(uri, adapter, dc, token)
+        super().__init__(uri, adapter, dc, token)
 
-    def register(self, node, address,
-                 datacenter=None,
-                 service=None,
-                 check=None,
-                 node_meta=None):
+    def register(self, node, address, datacenter=None, service=None, check=None, node_meta=None):
         """A a low level mechanism for directly registering or updating
         entries in the catalog. It is usually recommended to use the agent
         local endpoints, as they are simpler and perform anti-entropy.
@@ -94,20 +90,19 @@ class Catalog(base.Endpoint):
         :rtype: bool
 
         """
-        payload = {'Node': node, 'Address': address}
+        payload = {"Node": node, "Address": address}
         if datacenter:
-            payload['Datacenter'] = datacenter
+            payload["Datacenter"] = datacenter
         if service:
-            payload['Service'] = service
+            payload["Service"] = service
         if check:
-            payload['Check'] = check
+            payload["Check"] = check
         if node_meta:
-            payload['NodeMeta'] = node_meta
+            payload["NodeMeta"] = node_meta
 
-        return self._put_response_body(['register'], None, payload)
+        return self._put_response_body(["register"], None, payload)
 
-    def deregister(self, node, datacenter=None,
-                   check_id=None, service_id=None):
+    def deregister(self, node, datacenter=None, check_id=None, service_id=None):
         """Directly remove entries in the catalog. It is usually recommended
         to use the agent local endpoints, as they are simpler and perform
         anti-entropy.
@@ -127,14 +122,14 @@ class Catalog(base.Endpoint):
         :rtype: bool
 
         """
-        payload = {'Node': node}
+        payload = {"Node": node}
         if datacenter:
-            payload['Datacenter'] = datacenter
+            payload["Datacenter"] = datacenter
         if check_id:
-            payload['CheckID'] = check_id
+            payload["CheckID"] = check_id
         if service_id:
-            payload['ServiceID'] = service_id
-        return self._put_response_body(['deregister'], None, payload)
+            payload["ServiceID"] = service_id
+        return self._put_response_body(["deregister"], None, payload)
 
     def datacenters(self):
         """Return all the datacenters that are known by the Consul server.
@@ -142,7 +137,7 @@ class Catalog(base.Endpoint):
         :rtype: list
 
         """
-        return self._get_list(['datacenters'])
+        return self._get_list(["datacenters"])
 
     def node(self, node_id):
         """Return the node data for the specified node
@@ -151,7 +146,7 @@ class Catalog(base.Endpoint):
         :rtype: dict
 
         """
-        return self._get(['node', node_id])
+        return self._get(["node", node_id])
 
     def nodes(self, node_meta=None):
         """Return all of the nodes for the current datacenter.
@@ -160,8 +155,8 @@ class Catalog(base.Endpoint):
         :rtype: list
 
         """
-        query_params = {'node-meta': node_meta} if node_meta else {}
-        return self._get_list(['nodes'], query_params)
+        query_params = {"node-meta": node_meta} if node_meta else {}
+        return self._get_list(["nodes"], query_params)
 
     def service(self, service_id):
         """Return the service details for the given service
@@ -170,7 +165,7 @@ class Catalog(base.Endpoint):
         :rtype: list
 
         """
-        return self._get_list(['service', service_id])
+        return self._get_list(["service", service_id])
 
     def services(self):
         """Return a list of all of the services for the current datacenter.
@@ -178,4 +173,4 @@ class Catalog(base.Endpoint):
         :rtype: list
 
         """
-        return self._get_list(['services'])
+        return self._get_list(["services"])

@@ -9,6 +9,7 @@ import socket
 
 import requests
 import requests.exceptions
+
 try:
     import requests_unixsocket
 except ImportError:  # pragma: no cover
@@ -18,8 +19,8 @@ from pyms.services_discovery.consulate import api, exceptions, utils
 
 LOGGER = logging.getLogger(__name__)
 
-CONTENT_FORM = 'application/x-www-form-urlencoded; charset=utf-8'
-CONTENT_JSON = 'application/json; charset=utf-8'
+CONTENT_FORM = "application/x-www-form-urlencoded; charset=utf-8"
+CONTENT_JSON = "application/json; charset=utf-8"
 
 
 def prepare_data(fun):
@@ -36,18 +37,17 @@ def prepare_data(fun):
         :param dict kwargs: keyword arguments
 
         """
-        if kwargs.get('data'):
-            if not utils.is_string(kwargs.get('data')):
-                kwargs['data'] = json.dumps(kwargs['data'])
-        elif len(args) == 3 and \
-                not (utils.is_string(args[2]) or args[2] is None):
+        if kwargs.get("data"):
+            if not utils.is_string(kwargs.get("data")):
+                kwargs["data"] = json.dumps(kwargs["data"])
+        elif len(args) == 3 and not (utils.is_string(args[2]) or args[2] is None):
             args = args[0], args[1], json.dumps(args[2])
         return fun(*args, **kwargs)
 
     return inner
 
 
-class Request(object):
+class Request:
     """The Request adapter class"""
 
     def __init__(self, timeout=None, verify=True, cert=None):
@@ -83,10 +83,8 @@ class Request(object):
         """
         LOGGER.debug("GET %s", uri)
         try:
-            return api.Response(self.session.get(
-                uri, timeout=timeout or self.timeout))
-        except (requests.exceptions.RequestException,
-                OSError, socket.error) as err:
+            return api.Response(self.session.get(uri, timeout=timeout or self.timeout))
+        except (requests.exceptions.RequestException, OSError, socket.error) as err:
             raise exceptions.RequestError(str(err))
 
     def get_stream(self, uri):
@@ -99,12 +97,11 @@ class Request(object):
         LOGGER.debug("GET Stream from %s", uri)
         try:
             response = self.session.get(uri, stream=True)
-        except (requests.exceptions.RequestException,
-                OSError, socket.error) as err:
+        except (requests.exceptions.RequestException, OSError, socket.error) as err:
             raise exceptions.RequestError(str(err))
         if utils.response_ok(response):
             for line in response.iter_lines():  # pragma: no cover
-                yield line.decode('utf-8')
+                yield line.decode("utf-8")
 
     @prepare_data
     def put(self, uri, data=None, timeout=None):
@@ -118,17 +115,10 @@ class Request(object):
 
         """
         LOGGER.debug("PUT %s with %r", uri, data)
-        headers = {
-            'Content-Type': CONTENT_FORM
-            if utils.is_string(data) else CONTENT_JSON
-        }
+        headers = {"Content-Type": CONTENT_FORM if utils.is_string(data) else CONTENT_JSON}
         try:
-            return api.Response(
-                self.session.put(
-                    uri, data=data, headers=headers,
-                    timeout=timeout or self.timeout))
-        except (requests.exceptions.RequestException,
-                OSError, socket.error) as err:
+            return api.Response(self.session.put(uri, data=data, headers=headers, timeout=timeout or self.timeout))
+        except (requests.exceptions.RequestException, OSError, socket.error) as err:
             raise exceptions.RequestError(str(err))
 
 
@@ -136,5 +126,5 @@ class UnixSocketRequest(Request):  # pragma: no cover
     """Use to communicate with Consul over a Unix socket"""
 
     def __init__(self, timeout=None):
-        super(UnixSocketRequest, self).__init__(timeout)
+        super().__init__(timeout)
         self.session = requests_unixsocket.Session()

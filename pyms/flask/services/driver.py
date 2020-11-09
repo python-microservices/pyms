@@ -37,6 +37,7 @@ class DriverService(ConfigResource):
         * `swagger`: is set as the service `pyms.services.swagger`
         * `tracer`: is set as the service `pyms.services.tracer`
     """
+
     enabled = True
 
     init_action = False
@@ -47,8 +48,11 @@ class DriverService(ConfigResource):
 
     def __getattr__(self, attr, *args, **kwargs):
         config_attribute = getattr(self.config, attr)
-        return config_attribute if config_attribute == "" or config_attribute != {} else self.default_values.get(attr,
-                                                                                                                 None)
+        return (
+            config_attribute
+            if config_attribute == "" or config_attribute != {}
+            else self.default_values.get(attr, None)
+        )
 
     def is_enabled(self) -> bool:
         return self.enabled
@@ -61,6 +65,7 @@ class ServicesResource(ConfigResource):
     """This class works between `pyms.flask.create_app.Microservice` and `pyms.flask.services.[THESERVICE]`. Search
     for a file with the name you want to load, set the configuration and return a instance of the class you want
     """
+
     config_resource = SERVICE_BASE
 
     def get_services(self) -> Iterator[Tuple[Text, DriverService]]:

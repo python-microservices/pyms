@@ -12,5 +12,5 @@ def index():
     return jsonify({"main": "hello world {}".format(current_app.config["APP_NAME"])})
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run()

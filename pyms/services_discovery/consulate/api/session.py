@@ -8,13 +8,7 @@ from pyms.services_discovery.consulate.api import base
 class Session(base.Endpoint):
     """Create, destroy, and query Consul sessions."""
 
-    def create(self,
-               name=None,
-               behavior='release',
-               node=None,
-               delay=None,
-               ttl=None,
-               checks=None):
+    def create(self, name=None, behavior="release", node=None, delay=None, ttl=None, checks=None):
         """Initialize a new session.
 
         None of the fields are mandatory, and in fact no body needs to be PUT
@@ -53,18 +47,18 @@ class Session(base.Endpoint):
         :return str: session ID
 
         """
-        payload = {'name': name} if name else {}
+        payload = {"name": name} if name else {}
         if node:
-            payload['Node'] = node
+            payload["Node"] = node
         if behavior:
-            payload['Behavior'] = behavior
+            payload["Behavior"] = behavior
         if delay:
-            payload['LockDelay'] = delay
+            payload["LockDelay"] = delay
         if ttl:
-            payload['TTL'] = ttl
+            payload["TTL"] = ttl
         if checks:
-            payload['Checks'] = checks
-        return self._put_response_body(['create'], None, payload).get('ID')
+            payload["Checks"] = checks
+        return self._put_response_body(["create"], None, payload).get("ID")
 
     def destroy(self, session_id):
         """Destroy an existing session
@@ -73,7 +67,7 @@ class Session(base.Endpoint):
         :return: bool
 
         """
-        return self._put_no_response_body(['destroy', session_id])
+        return self._put_no_response_body(["destroy", session_id])
 
     def info(self, session_id):
         """Returns the requested session information within a given dc.
@@ -83,7 +77,7 @@ class Session(base.Endpoint):
         :return: dict
 
         """
-        return self._get_response_body(['info', session_id])
+        return self._get_response_body(["info", session_id])
 
     def list(self):
         """Returns the active sessions for a given dc.
@@ -91,7 +85,7 @@ class Session(base.Endpoint):
         :return: list
 
         """
-        return self._get_response_body(['list'])
+        return self._get_response_body(["list"])
 
     def node(self, node):
         """Returns the active sessions for a given node and dc.
@@ -101,7 +95,7 @@ class Session(base.Endpoint):
         :return: list
 
         """
-        return self._get_response_body(['node', node])
+        return self._get_response_body(["node", node])
 
     def renew(self, session_id):
         """Renew the given session. This is used with sessions that have a TTL,
@@ -112,4 +106,4 @@ class Session(base.Endpoint):
         :return: dict
 
         """
-        return self._put_response_body(['renew', session_id])
+        return self._put_response_body(["renew", session_id])

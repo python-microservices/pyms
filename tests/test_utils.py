@@ -16,11 +16,10 @@ class ConfUtils(unittest.TestCase):
     def test_check_package_exists_exception(self):
         with pytest.raises(PackageNotExists) as excinfo:
             check_package_exists("this-package-not-exists")
-        assert "this-package-not-exists is not installed. try with pip install -U this-package-not-exists" \
-               in str(excinfo.value)
+        assert "this-package-not-exists is not installed. try with pip install -U this-package-not-exists" in str(
+            excinfo.value
+        )
 
     def test_import_package(self):
         os_import = import_package("os")
         assert os_import == os
-
-

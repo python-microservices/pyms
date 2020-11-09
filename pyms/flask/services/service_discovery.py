@@ -24,13 +24,14 @@ class ServiceDiscoveryBase:
 
 class ServiceDiscoveryConsul(ServiceDiscoveryBase):
     def __init__(self, config):
-        self.client = consulate.Consul(host=config.host, port=config.port, token=config.token, scheme=config.scheme,
-                                       adapter=config.adapter)
+        self.client = consulate.Consul(
+            host=config.host, port=config.port, token=config.token, scheme=config.scheme, adapter=config.adapter
+        )
 
     def register_service(self, *args, **kwargs):
-        self.client.agent.check.register(kwargs["app_name"],
-                                         http=kwargs["healtcheck_url"],
-                                         interval=kwargs.get("interval", "10s"))
+        self.client.agent.check.register(
+            kwargs["app_name"], http=kwargs["healtcheck_url"], interval=kwargs.get("interval", "10s")
+        )
 
 
 class Service(DriverService):
@@ -42,17 +43,13 @@ class Service(DriverService):
         "scheme": "http",
         "port": 8500,
         "healtcheck_url": "http://127.0.0.1.nip.io:5000/healthcheck",
-        "autoregister": False
+        "autoregister": False,
     }
 
     def init_action(self, microservice_instance):
         if self.autoregister:
-            self._client.register_service(
-                id_app=self.id_app,
-                host=self.host,
-                healtcheck_url=self.healtcheck_url,
-                port=self.port,
-                app_name=microservice_instance.application.config["APP_NAME"])
+            app_name = microservice_instance.application.config["APP_NAME"]
+            self._client.register_service(healtcheck_url=self.healtcheck_url, app_name=app_name)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

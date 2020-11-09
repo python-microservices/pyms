@@ -36,7 +36,7 @@ class KV(base.Endpoint):
         :rtype: bool
 
         """
-        item = item.lstrip('/')
+        item = item.lstrip("/")
         return self._get_no_response_body([item])
 
     def __delitem__(self, item):
@@ -58,8 +58,8 @@ class KV(base.Endpoint):
         """
         value = self._get_item(item)
         if not value:
-            raise KeyError('Key not found ({0})'.format(item))
-        return value.get('Value')
+            raise KeyError("Key not found ({0})".format(item))
+        return value.get("Value")
 
     def __iter__(self):
         """Iterate over all the keys in the Key/Value service
@@ -103,11 +103,11 @@ class KV(base.Endpoint):
         :return: bool
 
         """
-        query_params = {'acquire': session}
+        query_params = {"acquire": session}
         if cas is not None:
-            query_params['cas'] = cas
+            query_params["cas"] = cas
         if flags is not None:
-            query_params['flags'] = flags
+            query_params["flags"] = flags
         return self._put_response_body([item], query_params, value)
 
     def delete(self, item, recurse=False):
@@ -133,7 +133,7 @@ class KV(base.Endpoint):
         """
         response = self._get_item(item, raw)
         if isinstance(response, dict):
-            return response.get('Value', default)
+            return response.get("Value", default)
         return response or default
 
     def get_record(self, item):
@@ -162,53 +162,53 @@ class KV(base.Endpoint):
         :rtype: dict
 
         """
-        query_params = {'recurse': None}
+        query_params = {"recurse": None}
         if separator:
-            query_params['keys'] = prefix
-            query_params['separator'] = separator
-        response = self._get_list([prefix.lstrip('/')], query_params)
+            query_params["keys"] = prefix
+            query_params["separator"] = separator
+        response = self._get_list([prefix.lstrip("/")], query_params)
         if separator:
             results = response
         else:
             results = {}
             for row in response:
-                results[row['Key']] = row['Value']
+                results[row["Key"]] = row["Value"]
         return results
 
     def items(self):
         """Return a dict of all of the key/value pairs in the Key/Value service
 
-        *Example:*
+         *Example:*
 
-        .. code:: python
+         .. code:: python
 
-            >>> consul.kv.items()
-            {'foo': 'bar', 'bar': 'baz', 'quz': True, 'corgie': 'dog'}
+             >>> consul.kv.items()
+             {'foo': 'bar', 'bar': 'baz', 'quz': True, 'corgie': 'dog'}
 
-       :rtype: dict
+        :rtype: dict
 
         """
-        return [{item['Key']: item['Value']} for item in self._get_all_items()]
+        return [{item["Key"]: item["Value"]} for item in self._get_all_items()]
 
     def iteritems(self):
         """Iterate over the dict of key/value pairs in the Key/Value service
 
-        *Example:*
+         *Example:*
 
-        .. code:: python
+         .. code:: python
 
-            >>> for key, value in consul.kv.iteritems():
-            ...     print(key, value)
-            ...
-            (u'bar', 'baz')
-            (u'foo', 'bar')
-            (u'quz', True)
+             >>> for key, value in consul.kv.iteritems():
+             ...     print(key, value)
+             ...
+             (u'bar', 'baz')
+             (u'foo', 'bar')
+             (u'quz', True)
 
-       :rtype: iterator
+        :rtype: iterator
 
         """
         for item in self._get_all_items():
-            yield item['Key'], item['Value']
+            yield item["Key"], item["Value"]
 
     def keys(self):
         """Return a list of all of the keys in the Key/Value service
@@ -223,7 +223,7 @@ class KV(base.Endpoint):
         :rtype: list
 
         """
-        return sorted([row['Key'] for row in self._get_all_items()])
+        return sorted([row["Key"] for row in self._get_all_items()])
 
     def records(self, key=None):
         """Return a list of tuples for all of the records in the Key/Value
@@ -243,11 +243,9 @@ class KV(base.Endpoint):
 
         """
         if key:
-            return [(item['Key'], item['Flags'], item['Value'])
-                    for item in self._get_list([key], {'recurse': None})]
-        else:
-            return [(item['Key'], item['Flags'], item['Value'])
-                    for item in self._get_all_items()]
+            return [(item["Key"], item["Flags"], item["Value"]) for item in self._get_list([key], {"recurse": None})]
+
+        return [(item["Key"], item["Flags"], item["Value"]) for item in self._get_all_items()]
 
     def release_lock(self, item, session):
         """Release an existing lock from the Consul KV database.
@@ -257,7 +255,7 @@ class KV(base.Endpoint):
         :return: bool
 
         """
-        return self._put_response_body([item], {'release': session})
+        return self._put_response_body([item], {"release": session})
 
     def set(self, item, value):
         """Set a value in the Key/Value service, using the CAS mechanism
@@ -295,7 +293,7 @@ class KV(base.Endpoint):
         :rtype: list
 
         """
-        return [row['Value'] for row in self._get_all_items()]
+        return [row["Value"] for row in self._get_all_items()]
 
     def _delete_item(self, item, recurse=False):
         """Remove an item from the Consul database
@@ -304,7 +302,7 @@ class KV(base.Endpoint):
         :param recurse:
         :return:
         """
-        query_params = {'recurse': True} if recurse else {}
+        query_params = {"recurse": True} if recurse else {}
         return self._adapter.delete(self._build_uri([item], query_params))
 
     def _get_all_items(self):
@@ -314,7 +312,7 @@ class KV(base.Endpoint):
         :rtype: list
 
         """
-        return self._get_list([''], {'recurse': None})
+        return self._get_list([""], {"recurse": None})
 
     def _get_item(self, item, raw=False):
         """Internal method to get the full item record from the Key/Value
@@ -325,8 +323,8 @@ class KV(base.Endpoint):
         :rtype: mixed
 
         """
-        item = item.lstrip('/')
-        query_params = {'raw': True} if raw else {}
+        item = item.lstrip("/")
+        query_params = {"raw": True} if raw else {}
         response = self._adapter.get(self._build_uri([item], query_params))
         if response.status_code == 200:
             return response.body
@@ -347,8 +345,8 @@ class KV(base.Endpoint):
         response = self._adapter.get(self._build_uri([item]))
         index = 0
         if response.status_code == 200:
-            index = response.body.get('ModifyIndex')
-            rvalue = response.body.get('Value')
+            index = response.body.get("ModifyIndex")
+            rvalue = response.body.get("Value")
             if rvalue == value:
                 return None
             if not replace:
@@ -366,16 +364,11 @@ class KV(base.Endpoint):
         if not utils.is_string(value) or isinstance(value, bytes):
             return value
         try:
-            if utils.PYTHON3:
-                return value.encode('utf-8')
-            elif isinstance(value, unicode):
-                return value.encode('utf-8')
+            return value.encode("utf-8")
         except UnicodeDecodeError:
             return value
-        return value
 
-    def _set_item(self, item, value, flags=None, replace=True,
-                  query_params=None):
+    def _set_item(self, item, value, flags=None, replace=True, query_params=None):
         """Internal method for setting a key/value pair with flags in the
         Key/Value service
 
@@ -387,21 +380,19 @@ class KV(base.Endpoint):
 
         """
         value = self._prepare_value(value)
-        if value and item.endswith('/'):
-            item = item.rstrip('/')
+        if value and item.endswith("/"):
+            item = item.rstrip("/")
 
         index = self._get_modify_index(item, value, replace)
         if index is None:
             return True
         query_params = query_params or {}
-        query_params.update({'cas': index})
+        query_params.update({"cas": index})
         if flags is not None:
-            query_params['flags'] = flags
-        response = self._adapter.put(self._build_uri([item], query_params),
-                                     value)
+            query_params["flags"] = flags
+        response = self._adapter.put(self._build_uri([item], query_params), value)
         if not response.status_code == 200 or not response.body:
             if response.status_code == 500:
-                raise exceptions.ServerError(
-                    response.body or 'Internal Consul server error')
-            raise KeyError(
-                'Error setting "{0}" ({1})'.format(item, response.status_code))
+                raise exceptions.ServerError(response.body or "Internal Consul server error")
+            raise KeyError('Error setting "{0}" ({1})'.format(item, response.status_code))
+        return None

@@ -31,7 +31,8 @@ class Lock(base.Endpoint):
     :raises: :exc:`~consulate.exception.LockError`
 
     """
-    DEFAULT_PREFIX = 'consulate/locks'
+
+    DEFAULT_PREFIX = "consulate/locks"
 
     def __init__(self, uri, adapter, session, datacenter=None, token=None):
         """Create a new instance of the Lock
@@ -43,8 +44,8 @@ class Lock(base.Endpoint):
         :param str token: Access Token
 
         """
-        super(Lock, self).__init__(uri, adapter, datacenter, token)
-        self._base_uri = '{0}/kv'.format(uri)
+        super().__init__(uri, adapter, datacenter, token)
+        self._base_uri = "{0}/kv".format(uri)
         self._session = session
         self._session_id = None
         self._item = str(uuid.uuid4())
@@ -79,23 +80,20 @@ class Lock(base.Endpoint):
         :param str value: The value to set the path prefix to
 
         """
-        self._prefix = value or ''
+        self._prefix = value or ""
 
     def _acquire(self, key=None, value=None):
         self._session_id = self._session.create()
-        self._item = '/'.join([self._prefix, (key or str(uuid.uuid4()))])
-        LOGGER.debug('Acquiring a lock of %s for session %s',
-                     self._item, self._session_id)
-        response = self._put_response_body([self._item],
-                                           {'acquire': self._session_id},
-                                           value)
+        self._item = "/".join([self._prefix, (key or str(uuid.uuid4()))])
+        LOGGER.debug("Acquiring a lock of %s for session %s", self._item, self._session_id)
+        response = self._put_response_body([self._item], {"acquire": self._session_id}, value)
         if not response:
             self._session.destroy(self._session_id)
             raise exceptions.LockFailure()
 
     def _release(self):
         """Release the lock"""
-        self._put_response_body([self._item], {'release': self._session_id})
+        self._put_response_body([self._item], {"release": self._session_id})
         self._adapter.delete(self._build_uri([self._item]))
         self._session.destroy(self._session_id)
         self._item, self._session_id = None, None

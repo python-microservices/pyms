@@ -7,8 +7,13 @@ import pytest
 
 from pyms.cloud.aws.kms import Crypt as CryptAws
 from pyms.config import get_conf
-from pyms.constants import LOGGER_NAME, CONFIGMAP_FILE_ENVIRONMENT, CRYPT_FILE_KEY_ENVIRONMENT, CONFIG_BASE, \
-    CRYPT_FILE_KEY_ENVIRONMENT_LEGACY
+from pyms.constants import (
+    LOGGER_NAME,
+    CONFIGMAP_FILE_ENVIRONMENT,
+    CRYPT_FILE_KEY_ENVIRONMENT,
+    CONFIG_BASE,
+    CRYPT_FILE_KEY_ENVIRONMENT_LEGACY,
+)
 from pyms.crypt.driver import CryptAbstract, CryptResource
 from pyms.crypt.fernet import Crypt as CryptFernet
 from pyms.exceptions import FileDoesNotExistException
@@ -30,12 +35,12 @@ class MockDecrypt2(CryptAbstract):
 
 
 class CryptTests(unittest.TestCase):
-
     def test_ko(self):
         with pytest.raises(TypeError) as excinfo:
             MockDecrypt()
         assert "Can't instantiate abstract class MockDecrypt with abstract methods decrypt, encrypt" in str(
-            excinfo.value)
+            excinfo.value
+        )
 
     def test_ko_enCryptFernet(self):
         crypt = MockDecrypt2()
@@ -57,9 +62,10 @@ class CryptFernetTests(unittest.TestCase):
         crypt = CryptFernet()
         with pytest.raises(FileDoesNotExistException) as excinfo:
             crypt.read_key()
-        assert ("Decrypt key None not exists. You must set a correct env var PYMS_KEY_FILE or run "
-                "`pyms crypt create-key` command") \
-               in str(excinfo.value)
+        assert (
+            "Decrypt key None not exists. You must set a correct env var PYMS_KEY_FILE or run "
+            "`pyms crypt create-key` command"
+        ) in str(excinfo.value)
 
     def test_crypt_file_ok(self):
         crypt = CryptFernet()
@@ -110,8 +116,8 @@ class GetConfigEncryptedAWS(unittest.TestCase):
     def tearDown(self):
         del os.environ[CONFIGMAP_FILE_ENVIRONMENT]
 
-    @patch.object(CryptAws, '_init_boto')
-    @patch.object(CryptAws, '_aws_decrypt')
+    @patch.object(CryptAws, "_init_boto")
+    @patch.object(CryptAws, "_aws_decrypt")
     def test_encrypt_conf(self, mock_aws_decrypt, mock_init_boto):
         mock_aws_decrypt.return_value = "http://database-url"
         crypt = CryptResource()
@@ -123,8 +129,9 @@ class FlaskWithEncryptedFernetTests(unittest.TestCase):
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
     def setUp(self):
-        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                                              "config-tests-flask-encrypted-fernet.yml")
+        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "config-tests-flask-encrypted-fernet.yml"
+        )
         os.environ[CRYPT_FILE_KEY_ENVIRONMENT] = os.path.join(self.BASE_DIR, "key.key")
         self.crypt = CryptFernet(path=self.BASE_DIR)
         self.crypt._loader.put_file(b"9IXx2F5d5Ob-h5xdCnFSUXhuFKLGRibvLfSbixpcfCw=", "wb")
@@ -152,8 +159,9 @@ class FlaskWithEncryptedNoneTests(unittest.TestCase):
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
     def setUp(self):
-        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                                              "config-tests-flask-encrypted-none.yml")
+        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "config-tests-flask-encrypted-none.yml"
+        )
         ms = MyMicroserviceNoSingleton(path=__file__)
         ms.reload_conf()
         self.app = ms.create_app()

@@ -21,8 +21,9 @@ class HomeWithFlaskTests(unittest.TestCase):
     """
 
     def setUp(self):
-        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                                              "config-tests-flask.yml")
+        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "config-tests-flask.yml"
+        )
         ms = MyMicroservice()
         ms.reload_conf()
         self.app = ms.create_app()
@@ -30,16 +31,16 @@ class HomeWithFlaskTests(unittest.TestCase):
         self.assertEqual("Python Microservice With Flask", self.app.config["APP_NAME"])
 
     def test_home(self):
-        response = self.client.get('/')
+        response = self.client.get("/")
         self.assertEqual(404, response.status_code)
 
     def test_healthcheck(self):
-        response = self.client.get('/healthcheck')
+        response = self.client.get("/healthcheck")
         self.assertEqual(b"OK", response.data)
         self.assertEqual(200, response.status_code)
 
     def test_swagger(self):
-        response = self.client.get('/ui/')
+        response = self.client.get("/ui/")
         self.assertEqual(404, response.status_code)
 
 
@@ -49,35 +50,36 @@ class FlaskWithSwaggerTests(unittest.TestCase):
     """
 
     def setUp(self):
-        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                                              "config-tests-flask-swagger.yml")
+        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "config-tests-flask-swagger.yml"
+        )
         ms = MyMicroservice(path=__file__)
         self.app = ms.create_app()
         self.client = self.app.test_client()
         self.assertEqual("Python Microservice With Flask in tests", self.app.config["APP_NAME"])
 
     def test_healthcheck(self):
-        response = self.client.get('/healthcheck')
+        response = self.client.get("/healthcheck")
         self.assertEqual(b"OK", response.data)
         self.assertEqual(200, response.status_code)
 
     def test_swagger(self):
-        response = self.client.get('/ui/')
+        response = self.client.get("/ui/")
         self.assertEqual(200, response.status_code)
 
     def test_exists_service(self):
         self.assertTrue(isinstance(self.app.ms.swagger, DriverService))
 
     def test_reverse_proxy(self):
-        response = self.client.get('/my-proxy-path/ui/', headers={"X-Script-Name": "/my-proxy-path"})
+        response = self.client.get("/my-proxy-path/ui/", headers={"X-Script-Name": "/my-proxy-path"})
         self.assertEqual(200, response.status_code)
 
     def test_reverse_proxy_no_slash(self):
-        response = self.client.get('/my-proxy-path/ui/', headers={"X-Script-Name": "my-proxy-path"})
+        response = self.client.get("/my-proxy-path/ui/", headers={"X-Script-Name": "my-proxy-path"})
         self.assertEqual(200, response.status_code)
 
     def test_reverse_proxy_zuul(self):
-        response = self.client.get('/my-proxy-path-zuul/ui/', headers={"X-Forwarded-Prefix": "my-proxy-path-zuul"})
+        response = self.client.get("/my-proxy-path-zuul/ui/", headers={"X-Forwarded-Prefix": "my-proxy-path-zuul"})
         self.assertEqual(200, response.status_code)
 
 
@@ -90,17 +92,15 @@ class ReloadTests(unittest.TestCase):
     file2 = "config-tests-reload2.yml"
 
     def setUp(self):
-        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                                              self.file1)
+        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)), self.file1)
         ms = MyMicroservice(path=__file__)
         self.app = ms.create_app()
         self.client = self.app.test_client()
         self.assertEqual("reload1", self.app.config["APP_NAME"])
 
     def test_configreload(self):
-        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                                              self.file2)
-        response = self.client.post('/reload-config')
+        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)), self.file2)
+        response = self.client.post("/reload-config")
         self.assertEqual(b"OK", response.data)
         self.assertEqual(200, response.status_code)
         self.assertEqual("reload2", config()["APP_NAME"])
@@ -112,8 +112,9 @@ class MicroserviceTest(unittest.TestCase):
     """
 
     def setUp(self):
-        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                                              "config-tests.yml")
+        os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "config-tests.yml"
+        )
 
     def test_singleton(self):
         ms1 = Microservice(path=__file__)
@@ -141,30 +142,20 @@ class MicroserviceTest(unittest.TestCase):
         assert conf_one == conf_two
 
 
-@pytest.mark.parametrize("payload, configfile, status_code", [
-    (
-            "Python Microservice",
-            "config-tests.yml",
-            200
-    ),
-    (
-            "Python Microservice With Flask",
-            "config-tests-flask.yml",
-            404
-    ),
-    (
-            "Python Microservice With Flask and Lightstep",
-            "config-tests-flask-trace-lightstep.yml",
-            200
-    )
-])
+@pytest.mark.parametrize(
+    "payload, configfile, status_code",
+    [
+        ("Python Microservice", "config-tests.yml", 200),
+        ("Python Microservice With Flask", "config-tests-flask.yml", 404),
+        ("Python Microservice With Flask and Lightstep", "config-tests-flask-trace-lightstep.yml", 200),
+    ],
+)
 def test_configfiles(payload, configfile, status_code):
-    os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                                          configfile)
+    os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(os.path.dirname(os.path.abspath(__file__)), configfile)
     ms = MyMicroservice(path=__file__)
     ms.reload_conf()
     app = ms.create_app()
     client = app.test_client()
-    response = client.get('/')
+    response = client.get("/")
     assert payload == app.config["APP_NAME"]
     assert status_code == response.status_code

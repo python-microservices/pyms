@@ -11,8 +11,7 @@ from pyms.flask.services.service_discovery import ServiceDiscoveryConsul
 
 
 class ServiceDiscoveryTests(unittest.TestCase):
-    """Test common rest operations wrapper.
-    """
+    """Test common rest operations wrapper."""
 
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 

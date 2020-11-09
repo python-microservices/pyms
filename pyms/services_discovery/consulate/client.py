@@ -5,15 +5,15 @@ Consul client object
 import os
 from pyms.services_discovery.consulate import adapters, api, utils
 
-DEFAULT_HOST = os.environ.get('CONSUL_HOST') or 'localhost'
-DEFAULT_PORT = os.environ.get('CONSUL_PORT') or 8500
-DEFAULT_ADDR = os.environ.get('CONSUL_HTTP_ADDR')
-DEFAULT_SCHEME = 'http'
-DEFAULT_TOKEN = os.environ.get('CONSUL_HTTP_TOKEN')
-API_VERSION = 'v1'
+DEFAULT_HOST = os.environ.get("CONSUL_HOST") or "localhost"
+DEFAULT_PORT = os.environ.get("CONSUL_PORT") or 8500
+DEFAULT_ADDR = os.environ.get("CONSUL_HTTP_ADDR")
+DEFAULT_SCHEME = "http"
+DEFAULT_TOKEN = os.environ.get("CONSUL_HTTP_TOKEN")
+API_VERSION = "v1"
 
 
-class Consul(object):
+class Consul:  # pylint: disable=too-many-instance-attributes
     """Access the Consul HTTP API via Python.
 
     The default values connect to Consul via ``localhost:8500`` via http. If
@@ -39,36 +39,33 @@ class Consul(object):
     :param float timeout: Timeout in seconds for API requests (Default: None)
 
     """
-    def __init__(self,
-                 addr=DEFAULT_ADDR,
-                 host=DEFAULT_HOST,
-                 port=DEFAULT_PORT,
-                 datacenter=None,
-                 token=DEFAULT_TOKEN,
-                 scheme=DEFAULT_SCHEME,
-                 adapter=None,
-                 verify=True,
-                 cert=None,
-                 timeout=None):
+
+    def __init__(
+        self,
+        addr=DEFAULT_ADDR,
+        host=DEFAULT_HOST,
+        port=DEFAULT_PORT,
+        datacenter=None,
+        token=DEFAULT_TOKEN,
+        scheme=DEFAULT_SCHEME,
+        adapter=None,
+        verify=True,
+        cert=None,
+        timeout=None,
+    ):  # pylint: disable=too-many-arguments
         """Create a new instance of the Consul class"""
-        base_uri = self._base_uri(addr=addr,
-                                  scheme=scheme,
-                                  host=host,
-                                  port=port)
-        self._adapter = adapter() if adapter else adapters.Request(
-            timeout=timeout, verify=verify, cert=cert)
+        base_uri = self._base_uri(addr=addr, scheme=scheme, host=host, port=port)
+        self._adapter = adapter() if adapter else adapters.Request(timeout=timeout, verify=verify, cert=cert)
         self._acl = api.ACL(base_uri, self._adapter, datacenter, token)
         self._agent = api.Agent(base_uri, self._adapter, datacenter, token)
         self._catalog = api.Catalog(base_uri, self._adapter, datacenter, token)
         self._event = api.Event(base_uri, self._adapter, datacenter, token)
         self._health = api.Health(base_uri, self._adapter, datacenter, token)
-        self._coordinate = api.Coordinate(base_uri, self._adapter, datacenter,
-                                          token)
+        self._coordinate = api.Coordinate(base_uri, self._adapter, datacenter, token)
         self._kv = api.KV(base_uri, self._adapter, datacenter, token)
         self._session = api.Session(base_uri, self._adapter, datacenter, token)
         self._status = api.Status(base_uri, self._adapter, datacenter, token)
-        self._lock = api.Lock(base_uri, self._adapter, self._session,
-                              datacenter, token)
+        self._lock = api.Lock(base_uri, self._adapter, self._session, datacenter, token)
 
     @property
     def acl(self):
@@ -193,8 +190,6 @@ class Consul(object):
         """
         if addr is None:
             if port:
-                return '{0}://{1}:{2}/{3}'.format(scheme, host, port,
-                                                  API_VERSION)
-            return '{0}://{1}/{2}'.format(scheme, utils.quote(host, ''),
-                                          API_VERSION)
-        return '{0}/{1}'.format(addr, API_VERSION)
+                return "{0}://{1}:{2}/{3}".format(scheme, host, port, API_VERSION)
+            return "{0}://{1}/{2}".format(scheme, utils.quote(host, ""), API_VERSION)
+        return "{0}/{1}".format(addr, API_VERSION)

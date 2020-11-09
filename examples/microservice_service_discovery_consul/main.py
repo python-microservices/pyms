@@ -12,5 +12,5 @@ def example():
     return jsonify({"main": checks})
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run()

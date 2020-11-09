@@ -4,9 +4,15 @@ from typing import Union
 import yaml
 from pyms.utils import utils
 from pyms.config.confile import ConfFile
-from pyms.constants import PYMS_CONFIG_WHITELIST_KEYWORDS, CONFIGMAP_FILE_ENVIRONMENT_LEGACY, \
-    CONFIGMAP_FILE_ENVIRONMENT, CRYPT_FILE_KEY_ENVIRONMENT, CRYPT_FILE_KEY_ENVIRONMENT_LEGACY, LOGGER_NAME, \
-    DEFAULT_CONFIGMAP_FILENAME
+from pyms.constants import (
+    PYMS_CONFIG_WHITELIST_KEYWORDS,
+    CONFIGMAP_FILE_ENVIRONMENT_LEGACY,
+    CONFIGMAP_FILE_ENVIRONMENT,
+    CRYPT_FILE_KEY_ENVIRONMENT,
+    CRYPT_FILE_KEY_ENVIRONMENT_LEGACY,
+    LOGGER_NAME,
+    DEFAULT_CONFIGMAP_FILENAME,
+)
 from pyms.exceptions import ServiceDoesNotExistException, ConfigErrorException, AttrDoesNotExistException
 
 logger = logging.getLogger(LOGGER_NAME)
@@ -43,7 +49,7 @@ def get_conf(*args, **kwargs):
 
     :return:
     """
-    service = kwargs.pop('service', None)
+    service = kwargs.pop("service", None)
     if not service:
         raise ServiceDoesNotExistException("Service not defined")
     config = ConfFile(*args, **kwargs)
@@ -59,7 +65,8 @@ def validate_conf(*args, **kwargs):
     except AttrDoesNotExistException:
         is_config_ok = False
     if not is_config_ok:
-        raise ConfigErrorException("""Config file must start with `pyms` keyword, for example:
+        raise ConfigErrorException(
+            """Config file must start with `pyms` keyword, for example:
     pyms:
       services:
         metrics: true
@@ -74,13 +81,15 @@ def validate_conf(*args, **kwargs):
           component_name: "Python Microservice"
       config:
         DEBUG: true
-        TESTING: true""")
+        TESTING: true"""
+        )
     try:
         config.pyms.config
     except AttrDoesNotExistException:
         is_config_ok = False
     if not is_config_ok:
-        raise ConfigErrorException("""`pyms` block must contain a `config` keyword in your Config file, for example:
+        raise ConfigErrorException(
+            """`pyms` block must contain a `config` keyword in your Config file, for example:
     pyms:
       services:
         metrics: true
@@ -95,10 +104,12 @@ def validate_conf(*args, **kwargs):
           component_name: "Python Microservice"
       config:
         DEBUG: true
-        TESTING: true""")
+        TESTING: true"""
+        )
     wrong_keywords = [i for i in config.pyms if i not in PYMS_CONFIG_WHITELIST_KEYWORDS]
     if len(wrong_keywords) > 0:
-        raise ConfigErrorException("""{} isn`t a valid keyword for pyms block, for example:
+        raise ConfigErrorException(
+            """{} isn`t a valid keyword for pyms block, for example:
         pyms:
           services:
             metrics: true
@@ -113,15 +124,18 @@ def validate_conf(*args, **kwargs):
               component_name: "Python Microservice"
           config:
             DEBUG: true
-            TESTING: true""".format(wrong_keywords))
+            TESTING: true""".format(
+                wrong_keywords
+            )
+        )
 
     # TODO Remove temporally deprecated warnings on future versions
     __verify_deprecated_env_variables(config)
 
 
 def __verify_deprecated_env_variables(config):
-    env_var_duplicated = "IMPORTANT: If you are using \"{}\" environment variable, \"{}\" value will be ignored."
-    env_var_deprecated = "IMPORTANT: \"{}\" environment variable is deprecated on this version, use \"{}\" instead."
+    env_var_duplicated = 'IMPORTANT: If you are using "{}" environment variable, "{}" value will be ignored.'
+    env_var_deprecated = 'IMPORTANT: "{}" environment variable is deprecated on this version, use "{}" instead.'
 
     if os.getenv(CONFIGMAP_FILE_ENVIRONMENT_LEGACY) is not None:
         if os.getenv(CONFIGMAP_FILE_ENVIRONMENT) is not None:
@@ -184,10 +198,10 @@ def create_conf_file(use_requests: bool = False, use_swagger: bool = False) -> U
         "DEBUG": True,
         "TESTING": False,
         "APP_NAME": "Python Microservice",
-        "APPLICATION_ROOT": ""
+        "APPLICATION_ROOT": "",
     }
     try:
-        with open(CONFIG_FILE, 'w', encoding='utf-8') as config_file:
+        with open(CONFIG_FILE, "w", encoding="utf-8") as config_file:
             config_file.write(yaml.dump(config, default_flow_style=False, default_style=None, sort_keys=False))
     except Exception as ex:
         raise ex

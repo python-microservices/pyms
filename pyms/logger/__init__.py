@@ -2,4 +2,6 @@
 """
 from .logger import CustomJsonFormatter
 
-__all__ = ['CustomJsonFormatter', ]
+__all__ = [
+    "CustomJsonFormatter",
+]

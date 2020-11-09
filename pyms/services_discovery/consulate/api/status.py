@@ -17,7 +17,7 @@ class Status(base.Endpoint):
         :rtype: str
 
         """
-        return self._get(['leader'])
+        return self._get(["leader"])
 
     def peers(self):
         """Get the Raft peers for the datacenter the agent is running in.
@@ -25,7 +25,7 @@ class Status(base.Endpoint):
         :rtype: list
 
         """
-        value = self._get(['peers'])
+        value = self._get(["peers"])
         if not isinstance(value, list):
             return [value]
         return value

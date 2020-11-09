@@ -23,7 +23,7 @@ LOGGER_TOTAL_MESSAGES = Counter(
 )
 
 
-class FlaskMetricsWrapper():
+class FlaskMetricsWrapper:
     def __init__(self, app_name):
         self.app_name = app_name
 
@@ -56,8 +56,7 @@ class Service(DriverService):
     def init_action(self, microservice_instance):
         microservice_instance.application.register_blueprint(microservice_instance.metrics.metrics_blueprint)
         self.add_logger_handler(
-            microservice_instance.application.logger,
-            microservice_instance.application.config["APP_NAME"]
+            microservice_instance.application.logger, microservice_instance.application.config["APP_NAME"]
         )
         self.monitor(microservice_instance.application.config["APP_NAME"], microservice_instance.application)
 

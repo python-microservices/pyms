@@ -4,22 +4,11 @@ Misc utility functions and constants
 
 """
 import re
-import sys
-try:  # pylint: disable=import-error
-    from urllib.parse import quote
-except ImportError:
-    from urllib import quote
-
-try:  # pylint: disable=import-error
-    from urllib import parse as _urlparse
-except ImportError:
-    import urlparse as _urlparse
-
+from urllib import parse as _urlparse
 
 from pyms.services_discovery.consulate import exceptions
 
-DURATION_PATTERN = re.compile(r'^(?:(?:-|)(?:\d+|\d+\.\d+)(?:µs|ms|s|m|h))+$')
-PYTHON3 = True if sys.version_info > (3, 0, 0) else False
+DURATION_PATTERN = re.compile(r"^(?:(?:-|)(?:\d+|\d+\.\d+)(?:µs|ms|s|m|h))+$")
 
 
 def is_string(value):
@@ -31,8 +20,6 @@ def is_string(value):
 
     """
     checks = [isinstance(value, t) for t in [bytes, str]]
-    if not PYTHON3:
-        checks.append(isinstance(value, unicode))
     return any(checks)
 
 
@@ -44,7 +31,7 @@ def maybe_encode(value):
 
     """
     try:
-        return value.encode('utf-8')
+        return value.encode("utf-8")
     except AttributeError:
         return value
 
@@ -56,9 +43,7 @@ def _response_error(response):
     :rtype: str
 
     """
-    return (response.body.decode('utf-8')
-            if hasattr(response, 'body') and response.body
-            else str(response.status_code))
+    return response.body.decode("utf-8") if hasattr(response, "body") and response.body else str(response.status_code)
 
 
 def response_ok(response, raise_on_404=False):
@@ -71,8 +56,9 @@ def response_ok(response, raise_on_404=False):
     :raises: consulate.exceptions.ConsulateException
 
     """
+    result = False
     if response.status_code == 200:
-        return True
+        result = True
     elif response.status_code == 400:
         raise exceptions.ClientError(_response_error(response))
     elif response.status_code == 401:
@@ -83,7 +69,7 @@ def response_ok(response, raise_on_404=False):
         raise exceptions.NotFound(_response_error(response))
     elif response.status_code == 500:
         raise exceptions.ServerError(_response_error(response))
-    return False
+    return result
 
 
 def validate_go_interval(value, _model=None):
