@@ -2,19 +2,16 @@
 import argparse
 import base64
 import json
-import sys
 import os
-import time
 import subprocess  # nosec
-
-
+import sys
+import time
 import urllib.parse as urlparse
 
 from requests import exceptions
 
 from pyms.services_discovery import consulate
-from pyms.services_discovery.consulate import adapters
-from pyms.services_discovery.consulate import utils
+from pyms.services_discovery.consulate import adapters, utils
 
 CONSUL_ENV_VAR = "CONSUL_RPC_ADDR"
 EPILOG = (

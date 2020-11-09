@@ -1,9 +1,9 @@
 import logging
-from typing import Text, Tuple, Iterator
+from typing import Iterator, Text, Tuple
 
 from pyms.config import ConfFile
 from pyms.config.resource import ConfigResource
-from pyms.constants import SERVICE_BASE, LOGGER_NAME
+from pyms.constants import LOGGER_NAME, SERVICE_BASE
 from pyms.utils import import_from
 
 logger = logging.getLogger(LOGGER_NAME)

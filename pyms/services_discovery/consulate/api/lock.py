@@ -6,8 +6,8 @@ import contextlib
 import logging
 import uuid
 
-from pyms.services_discovery.consulate.api import base
 from pyms.services_discovery.consulate import exceptions
+from pyms.services_discovery.consulate.api import base
 
 LOGGER = logging.getLogger(__name__)
 

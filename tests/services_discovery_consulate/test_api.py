@@ -1,10 +1,10 @@
 import json
 import unittest
 import uuid
+from unittest.mock import patch
 from urllib import parse
 
 import httmock
-from unittest.mock import patch
 
 from pyms.services_discovery import consulate
 from pyms.services_discovery.consulate import adapters

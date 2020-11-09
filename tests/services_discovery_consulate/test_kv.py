@@ -6,6 +6,7 @@ import uuid
 import httmock
 
 from pyms.services_discovery.consulate import adapters, api
+
 from . import base
 
 SCHEME = "http"

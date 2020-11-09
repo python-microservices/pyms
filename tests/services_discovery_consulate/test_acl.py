@@ -3,8 +3,8 @@ Tests for Consulate.acl
 
 """
 import json
-import uuid
 import random
+import uuid
 
 import httmock
 

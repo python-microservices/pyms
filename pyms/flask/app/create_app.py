@@ -6,12 +6,12 @@ from flask import Flask
 
 from pyms.config.conf import validate_conf
 from pyms.config.resource import ConfigResource
-from pyms.constants import LOGGER_NAME, CONFIG_BASE
+from pyms.constants import CONFIG_BASE, LOGGER_NAME
 from pyms.crypt.driver import CryptResource
-from pyms.flask.app.utils import SingletonMeta, ReverseProxied
+from pyms.flask.app.utils import ReverseProxied, SingletonMeta
 from pyms.flask.configreload import configreload_blueprint
 from pyms.flask.healthcheck import healthcheck_blueprint
-from pyms.flask.services.driver import ServicesResource, DriverService
+from pyms.flask.services.driver import DriverService, ServicesResource
 from pyms.logger import CustomJsonFormatter
 from pyms.utils import check_package_exists
 

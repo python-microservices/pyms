@@ -8,11 +8,11 @@ import pytest
 from pyms.cloud.aws.kms import Crypt as CryptAws
 from pyms.config import get_conf
 from pyms.constants import (
-    LOGGER_NAME,
+    CONFIG_BASE,
     CONFIGMAP_FILE_ENVIRONMENT,
     CRYPT_FILE_KEY_ENVIRONMENT,
-    CONFIG_BASE,
     CRYPT_FILE_KEY_ENVIRONMENT_LEGACY,
+    LOGGER_NAME,
 )
 from pyms.crypt.driver import CryptAbstract, CryptResource
 from pyms.crypt.fernet import Crypt as CryptFernet

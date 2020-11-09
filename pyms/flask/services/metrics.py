@@ -1,8 +1,8 @@
 import logging
 import time
 
-from flask import Blueprint, Response, request, Flask
-from prometheus_client import multiprocess, Counter, Histogram, generate_latest, CollectorRegistry, REGISTRY
+from flask import Blueprint, Flask, Response, request
+from prometheus_client import REGISTRY, CollectorRegistry, Counter, Histogram, generate_latest, multiprocess
 
 from pyms.flask.services.driver import DriverService
 

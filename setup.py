@@ -2,7 +2,7 @@
 import codecs
 import os
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 author = __import__("pyms").__author__
 author_email = __import__("pyms").__email__
@@ -68,6 +68,7 @@ install_tests_requires = [
     "mypy>=0.782",
     "pre-commit>=2.8.1",
     "black>=20.8b1",
+    "isort>=5.6.4",
     "httmock>=1.4.0",
 ]
 

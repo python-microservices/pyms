@@ -7,7 +7,7 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
-from pyms.constants import CRYPT_FILE_KEY_ENVIRONMENT, DEFAULT_KEY_FILENAME, CRYPT_FILE_KEY_ENVIRONMENT_LEGACY
+from pyms.constants import CRYPT_FILE_KEY_ENVIRONMENT, CRYPT_FILE_KEY_ENVIRONMENT_LEGACY, DEFAULT_KEY_FILENAME
 from pyms.crypt.driver import CryptAbstract
 from pyms.exceptions import FileDoesNotExistException
 from pyms.utils.files import LoadFile

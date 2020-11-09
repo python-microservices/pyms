@@ -4,11 +4,10 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 from opentracing import global_tracer
-from prometheus_client import generate_latest
-from prometheus_client import values
+from prometheus_client import generate_latest, values
 
 from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT
-from pyms.flask.services.metrics import LOGGER_TOTAL_MESSAGES, FLASK_REQUEST_COUNT, FLASK_REQUEST_LATENCY
+from pyms.flask.services.metrics import FLASK_REQUEST_COUNT, FLASK_REQUEST_LATENCY, LOGGER_TOTAL_MESSAGES
 from tests.common import MyMicroserviceNoSingleton
 
 

@@ -1,15 +1,15 @@
 #!/usr/bin/env python
-from __future__ import unicode_literals, print_function
+from __future__ import print_function, unicode_literals
 
 import argparse
 import os
 import sys
 from distutils.util import strtobool
 
+from pyms.config import create_conf_file
 from pyms.crypt.fernet import Crypt
 from pyms.flask.services.swagger import merge_swagger_file
 from pyms.utils import check_package_exists, import_from, utils
-from pyms.config import create_conf_file
 
 
 class Command:

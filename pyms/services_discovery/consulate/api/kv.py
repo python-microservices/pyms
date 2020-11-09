@@ -2,8 +2,8 @@
 Consul KV Endpoint Access
 
 """
+from pyms.services_discovery.consulate import exceptions, utils
 from pyms.services_discovery.consulate.api import base
-from pyms.services_discovery.consulate import utils, exceptions
 
 
 class KV(base.Endpoint):

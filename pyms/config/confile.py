@@ -2,15 +2,15 @@
 import logging
 import os
 import re
-from typing import Dict, Union, Text, Tuple, Iterable
+from typing import Dict, Iterable, Text, Tuple, Union
 
 import anyconfig
 
 from pyms.constants import (
     CONFIGMAP_FILE_ENVIRONMENT,
-    LOGGER_NAME,
-    DEFAULT_CONFIGMAP_FILENAME,
     CONFIGMAP_FILE_ENVIRONMENT_LEGACY,
+    DEFAULT_CONFIGMAP_FILENAME,
+    LOGGER_NAME,
 )
 from pyms.exceptions import AttrDoesNotExistException, ConfigDoesNotFoundException
 from pyms.utils.files import LoadFile

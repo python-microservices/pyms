@@ -1,11 +1,10 @@
 import os
 from pathlib import Path
-from typing import Dict, Any
-
-from flask import Flask
+from typing import Any, Dict
 
 import connexion
 from connexion.resolver import RestyResolver
+from flask import Flask
 
 try:
     import prance

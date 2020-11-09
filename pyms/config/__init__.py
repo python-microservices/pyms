@@ -1,4 +1,4 @@
+from .conf import create_conf_file, get_conf
 from .confile import ConfFile
-from .conf import get_conf, create_conf_file
 
 __all__ = ["get_conf", "create_conf_file", "ConfFile"]

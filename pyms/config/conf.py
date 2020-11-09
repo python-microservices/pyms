@@ -1,19 +1,21 @@
-import os
 import logging
+import os
 from typing import Union
+
 import yaml
-from pyms.utils import utils
+
 from pyms.config.confile import ConfFile
 from pyms.constants import (
-    PYMS_CONFIG_WHITELIST_KEYWORDS,
-    CONFIGMAP_FILE_ENVIRONMENT_LEGACY,
     CONFIGMAP_FILE_ENVIRONMENT,
+    CONFIGMAP_FILE_ENVIRONMENT_LEGACY,
     CRYPT_FILE_KEY_ENVIRONMENT,
     CRYPT_FILE_KEY_ENVIRONMENT_LEGACY,
-    LOGGER_NAME,
     DEFAULT_CONFIGMAP_FILENAME,
+    LOGGER_NAME,
+    PYMS_CONFIG_WHITELIST_KEYWORDS,
 )
-from pyms.exceptions import ServiceDoesNotExistException, ConfigErrorException, AttrDoesNotExistException
+from pyms.exceptions import AttrDoesNotExistException, ConfigErrorException, ServiceDoesNotExistException
+from pyms.utils import utils
 
 logger = logging.getLogger(LOGGER_NAME)
 

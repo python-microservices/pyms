@@ -1,7 +1,6 @@
 import logging
 from typing import Union
 
-
 try:
     import opentracing
 except ModuleNotFoundError:  # pragma: no cover
@@ -15,12 +14,12 @@ try:
 except ModuleNotFoundError:  # pragma: no cover
     get_current_span = None
 
-from flask import current_app, request, has_request_context
+from flask import current_app, has_request_context, request
 
 from pyms.config.conf import get_conf
 from pyms.constants import LOGGER_NAME
 from pyms.flask.services.driver import DriverService, get_service_name
-from pyms.utils import check_package_exists, import_package, import_from
+from pyms.utils import check_package_exists, import_from, import_package
 
 logger = logging.getLogger(LOGGER_NAME)
 

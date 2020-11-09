@@ -3,8 +3,9 @@ Consul client object
 
 """
 import os
-from pyms.services_discovery.consulate import adapters, api
 from urllib.parse import quote
+
+from pyms.services_discovery.consulate import adapters, api
 
 DEFAULT_HOST = os.environ.get("CONSUL_HOST") or "localhost"
 DEFAULT_PORT = os.environ.get("CONSUL_PORT") or 8500
@@ -42,17 +43,17 @@ class Consul:  # pylint: disable=too-many-instance-attributes
     """
 
     def __init__(
-        self,
-        addr=DEFAULT_ADDR,
-        host=DEFAULT_HOST,
-        port=DEFAULT_PORT,
-        datacenter=None,
-        token=DEFAULT_TOKEN,
-        scheme=DEFAULT_SCHEME,
-        adapter=None,
-        verify=True,
-        cert=None,
-        timeout=None,
+            self,
+            addr=DEFAULT_ADDR,
+            host=DEFAULT_HOST,
+            port=DEFAULT_PORT,
+            datacenter=None,
+            token=DEFAULT_TOKEN,
+            scheme=DEFAULT_SCHEME,
+            adapter=None,
+            verify=True,
+            cert=None,
+            timeout=None,
     ):  # pylint: disable=too-many-arguments
         """Create a new instance of the Consul class"""
         base_uri = self._base_uri(addr=addr, scheme=scheme, host=host, port=port)

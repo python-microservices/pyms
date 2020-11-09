@@ -7,14 +7,14 @@ from logging import NullHandler
 
 from pyms.services_discovery.consulate.client import Consul
 from pyms.services_discovery.consulate.exceptions import (
-    ConsulateException,
-    ClientError,
-    ServerError,
     ACLDisabled,
+    ClientError,
+    ConsulateException,
     Forbidden,
-    NotFound,
     LockFailure,
+    NotFound,
     RequestError,
+    ServerError,
 )
 
 __version__ = "1.0.0"

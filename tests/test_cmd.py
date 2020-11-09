@@ -1,15 +1,16 @@
 """Test common rest operations wrapper.
 """
 import os
-from pathlib import Path
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 
 import pytest
 from prance.util.url import ResolutionError
+
 from pyms.cmd import Command
-from pyms.exceptions import FileDoesNotExistException, PackageNotExists
 from pyms.crypt.fernet import Crypt
+from pyms.exceptions import FileDoesNotExistException, PackageNotExists
 from pyms.flask.services.swagger import get_bundled_specs
 from tests.common import remove_conf_file
 

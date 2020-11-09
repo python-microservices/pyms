@@ -1,6 +1,6 @@
-from __future__ import unicode_literals, print_function, absolute_import, division
-from flask import Blueprint
-from flask import current_app
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from flask import Blueprint, current_app
 
 configreload_blueprint = Blueprint("configreload", __name__, static_url_path="/static")
 

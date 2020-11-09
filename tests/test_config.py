@@ -3,21 +3,21 @@ import os
 import unittest
 from unittest import mock
 
-from pyms.config import get_conf, ConfFile, create_conf_file
+from pyms.config import ConfFile, create_conf_file, get_conf
 from pyms.config.conf import validate_conf
 from pyms.constants import (
+    CONFIG_BASE,
     CONFIGMAP_FILE_ENVIRONMENT,
     CONFIGMAP_FILE_ENVIRONMENT_LEGACY,
-    LOGGER_NAME,
-    CONFIG_BASE,
     CRYPT_FILE_KEY_ENVIRONMENT,
     CRYPT_FILE_KEY_ENVIRONMENT_LEGACY,
+    LOGGER_NAME,
 )
 from pyms.exceptions import (
     AttrDoesNotExistException,
     ConfigDoesNotFoundException,
-    ServiceDoesNotExistException,
     ConfigErrorException,
+    ServiceDoesNotExistException,
 )
 
 logger = logging.getLogger(LOGGER_NAME)

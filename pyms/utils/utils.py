@@ -1,6 +1,6 @@
 import importlib
 import importlib.util
-from typing import Union, Text
+from typing import Text, Union
 
 from pyms.exceptions import PackageNotExists
 
