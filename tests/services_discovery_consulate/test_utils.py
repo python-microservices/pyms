@@ -5,10 +5,10 @@ from pyms.services_discovery.consulate import exceptions, utils
 
 
 class MaybeEncodeTestCase(unittest.TestCase):
-    def str_test(self):
+    def test_str_test(self):
         self.assertEqual(utils.maybe_encode('foo'), b'foo')
 
-    def byte_test(self):
+    def test_byte_test(self):
         self.assertEqual(utils.maybe_encode(b'bar'), b'bar')
 
 

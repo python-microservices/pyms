@@ -166,7 +166,7 @@ class TestKVSet(base.TestCase):
         self.assertEqual(self.consul.kv[key], '128')
 
     @base.generate_key
-    def test_set_item_get_item_str_value(self, key):
+    def test_set_item_get_item_str_value_key(self, key):
         self.consul.kv[key] = b'foo'
         self.assertEqual(self.consul.kv[key], 'foo')
 
