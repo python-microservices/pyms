@@ -19,7 +19,6 @@ class ServiceDiscoveryTests(unittest.TestCase):
     def setUp(self):
         os.environ[CONFIGMAP_FILE_ENVIRONMENT] = os.path.join(self.BASE_DIR, "config-tests-service-discovery.yml")
         ms = Microservice(path=__file__)
-        ms.reload_conf()
         self.ms = ms
 
     @requests_mock.Mocker()
