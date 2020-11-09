@@ -86,7 +86,7 @@ class TestCase(base.TestCase):
         self.assertEqual(result, expectation)
 
     def test_bootstrap_raises(self):
-        with self.assertRaises(consulate.Forbidden):
+        with self.assertRaises((consulate.Forbidden, consulate.ServerError)):
             self.consul.acl.bootstrap()
 
     def test_clone_bad_acl_id(self):
