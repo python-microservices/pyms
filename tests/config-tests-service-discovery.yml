@@ -2,10 +2,8 @@ pyms:
   services:
     service_discovery:
       service: "consul"
-      host: "localhost"
       autoregister: true
   config:
     DEBUG: true
-    TESTING: false
-    APP_NAME: "Python Microservice"
-    APPLICATION_ROOT: ""
+    TESTING: true
+    APP_NAME: "Python Microservice Service Discovery"

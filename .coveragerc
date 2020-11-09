@@ -6,3 +6,4 @@ omit =
     *examples/*
     .tox/*
     venv/*
+    pyms/services_discovery/consulate/*

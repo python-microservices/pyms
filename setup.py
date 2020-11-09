@@ -29,10 +29,10 @@ install_aws_requires = [
     'boto3>=1.15.6',
 ]
 
-
 install_request_requires = [
     'requests>=2.24.0',
 ]
+
 install_swagger_requires = [
     'connexion[swagger-ui]>=2.7.0',
     'swagger-ui-bundle>=0.0.6',
@@ -66,6 +66,7 @@ install_tests_requires = [
     'lightstep>=4.4.8',
     'safety==1.9.0',
     'mypy>=0.782'
+    'httmock>=1.4.0'
 ]
 
 install_all_requires = (install_request_requires + install_swagger_requires +

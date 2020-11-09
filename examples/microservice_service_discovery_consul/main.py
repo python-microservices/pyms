@@ -8,7 +8,8 @@ app = ms.create_app()
 
 @app.route("/")
 def example():
-    return jsonify({"main": "hello world"})
+    checks = ms.service_discovery.client.agent.checks()
+    return jsonify({"main": checks})
 
 
 if __name__ == '__main__':
