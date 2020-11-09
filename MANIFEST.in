@@ -4,5 +4,6 @@ include requirements-tests.txt
 recursive-include pyms *
 recursive-exclude tests *
 recursive-exclude examples *
+recursive-exclude docker *
 prune tests
 prune examples

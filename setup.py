@@ -57,6 +57,7 @@ install_tests_requires = [
     "coverage>=5.3",
     "pytest>=6.1.0",
     "pytest-cov>=2.10.1",
+    "pytest-docker>=0.10.1",
     "pylint>=2.6.0",
     "flake8>=3.8.2",
     "tox>=3.20.0",

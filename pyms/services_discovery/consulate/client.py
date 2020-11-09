@@ -3,7 +3,8 @@ Consul client object
 
 """
 import os
-from pyms.services_discovery.consulate import adapters, api, utils
+from pyms.services_discovery.consulate import adapters, api
+from urllib.parse import quote
 
 DEFAULT_HOST = os.environ.get("CONSUL_HOST") or "localhost"
 DEFAULT_PORT = os.environ.get("CONSUL_PORT") or 8500
@@ -191,5 +192,5 @@ class Consul:  # pylint: disable=too-many-instance-attributes
         if addr is None:
             if port:
                 return "{0}://{1}:{2}/{3}".format(scheme, host, port, API_VERSION)
-            return "{0}://{1}/{2}".format(scheme, utils.quote(host, ""), API_VERSION)
+            return "{0}://{1}/{2}".format(scheme, quote(host, ""), API_VERSION)
         return "{0}/{1}".format(addr, API_VERSION)
