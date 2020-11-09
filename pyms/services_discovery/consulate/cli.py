@@ -520,7 +520,7 @@ def run_once(consul, args):
             try:
                 print(
                     subprocess.check_output(
-                        args.command_to_run[0].strip(), stderr=subprocess.STDOUT, shell=True # nosec
+                        args.command_to_run[0].strip(), stderr=subprocess.STDOUT, shell=True  # nosec
                     )
                 )
             # If the subprocess fails
