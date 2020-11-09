@@ -20,57 +20,7 @@ logger = logging.getLogger(LOGGER_NAME)
 
 class Microservice(ConfigResource, metaclass=SingletonMeta):
     """The class Microservice is the core of all microservices built with PyMS.
-    You can create a simple microservice such as:
-    ```python
-    from flask import jsonify
-
-    from pyms.flask.app import Microservice
-
-    ms = Microservice(service="my-minimal-microservice", path=__file__)
-    app = ms.create_app()
-
-
-    @app.route("/")
-    def example():
-        return jsonify({"main": "hello world"})
-
-
-    if __name__ == '__main__':
-        app.run()
-    ```
-    Environments variables of PyMS:
-    **PYMS_CONFIGMAP_FILE**: The path to the configuration file. By default, PyMS search the configuration file in your
-    actual folder with the name "config.yml"
-
-    ## Create configuration
-    Each microservice needs a config file in yaml or json format to work with it. This configuration contains
-    the Flask settings of your project and the [Services](services.md). With this way to create configuration files, we
-    solve two problems of the [12 Factor apps](https://12factor.net/):
-    - Store config out of the code
-    - Dev/prod parity: the configuration could be injected and not depends of our code, for example, Kubernetes config maps
-
-    a simple configuration file could be a config.yaml:
-
-    ```yaml
-    pyms:
-      services:
-        requests: true
-        swagger:
-          path: ""
-          file: "swagger.yaml"
-      config:
-        DEBUG: true
-        TESTING: false
-        APP_NAME: "Python Microservice"
-        APPLICATION_ROOT: ""
-    ```
-
-    Services are libraries, resources and extensions added to the Microservice in the configuration file.
-    This services are created as an attribute of the [Microservice class](ms_class.md) to use in the code.
-
-    To add a service check the [configuration section](configuration.md).
-
-    Current services are swagger, request, tracer, metrics
+    See this docs: https://python-microservices.github.io/ms_class/
     """
 
     config_resource = CONFIG_BASE

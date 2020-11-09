@@ -53,21 +53,20 @@ install_metrics_requires = [
 ]
 
 install_tests_requires = [
-    "requests-mock>=1.8.0",
-    "coverage>=5.3",
-    "pytest>=6.1.0",
-    "pytest-cov>=2.10.1",
-    "pylint>=2.6.0",
-    "flake8>=3.8.2",
-    "tox>=3.20.0",
-    "bandit>=1.6.2",
-    "mkdocs>=1.1.2",
-    "mkdocs-material>=6.0.0",
-    "lightstep>=4.4.8",
-    "safety==1.9.0",
+    'requests-mock>=1.8.0',
+    'coverage>=5.3',
+    'pytest>=6.1.0',
+    'pytest-cov>=2.10.1',
+    'pylint>=2.6.0',
+    'flake8>=3.8.2',
+    'tox>=3.20.0',
+    'bandit>=1.6.2',
+    'mkdocs>=1.1.2',
+    'lightstep>=4.4.8',
+    'safety==1.9.0',
+    'mypy>=0.782'
     "pre-commit>=2.8.1",
     "black>=20.8b1",
-    "mypy>=0.782",
     "httmock>=1.4.0",
 ]
 
