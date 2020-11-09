@@ -1,12 +1,11 @@
 """Consulate CLI commands"""
-# pragma: no cover
 import argparse
 import base64
 import json
 import sys
 import os
 import time
-import subprocess
+import subprocess  # nosec
 
 
 import urllib.parse as urlparse
@@ -522,7 +521,7 @@ def run_once(consul, args):
 
             # Should the subprocess return an error code, release the lock
             try:
-                print(subprocess.check_output(args.command_to_run[0].strip(), stderr=subprocess.STDOUT, shell=True))
+                print(subprocess.check_output(args.command_to_run[0].strip(), stderr=subprocess.STDOUT, shell=True))  # nosec
             # If the subprocess fails
             except subprocess.CalledProcessError as err:
                 error_code = 1

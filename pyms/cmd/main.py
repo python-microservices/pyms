@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
 import argparse
@@ -143,9 +142,9 @@ class Command:
         return True
 
     def yes_no_input(self, msg=""):  # pragma: no cover
-        answer = input(
+        answer = input(  # nosec
             utils.colored_text(f'{msg}{"?" if not msg.endswith("?") else ""} [Y/n] :', utils.Colors.BLUE, True)
-        )  # nosec
+        )
         try:
             return strtobool(answer)
         except ValueError:
