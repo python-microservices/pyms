@@ -157,7 +157,7 @@ class Response:
             return None
         if self.status_code == 200:  # pylint: disable=too-many-nested-blocks
             try:
-                if utils.PYTHON3 and isinstance(body, bytes):
+                if isinstance(body, bytes):
                     try:
                         body = body.decode("utf-8")
                     except UnicodeDecodeError:
