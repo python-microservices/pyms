@@ -10,9 +10,9 @@ import pytest
 from pyms.services_discovery import consulate
 from pyms.services_discovery.consulate import exceptions
 
-CONSUL_TESTING_JSON = 'tests/services_discovery_consulate/consul.json'
+CONSUL_TESTING_JSON = "tests/services_discovery_consulate/consul.json"
 
-with open(CONSUL_TESTING_JSON, 'r') as handle:
+with open(CONSUL_TESTING_JSON, "r") as handle:
     CONSUL_CONFIG = json.load(handle)
 
 
@@ -35,13 +35,13 @@ def raise_oserror(_url_unused, _request):
 class TestCase(unittest.TestCase):
     def setUp(self):
         self.consul = consulate.Consul(
-            host=os.environ['CONSUL_HOST'],
-            port=os.environ['CONSUL_PORT'],
-            token=CONSUL_CONFIG['acl']['tokens']['master'])
+            host=os.environ["CONSUL_HOST"],
+            port=os.environ["CONSUL_PORT"],
+            token=CONSUL_CONFIG["acl"]["tokens"]["master"],
+        )
         self.forbidden_consul = consulate.Consul(
-            host=os.environ['CONSUL_HOST'],
-            port=os.environ['CONSUL_PORT'],
-            token=str(uuid.uuid4()))
+            host=os.environ["CONSUL_HOST"], port=os.environ["CONSUL_PORT"], token=str(uuid.uuid4())
+        )
         self.used_keys = list()
 
     def tearDown(self):
@@ -50,17 +50,17 @@ class TestCase(unittest.TestCase):
 
         checks = self.consul.agent.checks()
         for name in checks:
-            self.consul.agent.check.deregister(checks[name]['CheckID'])
+            self.consul.agent.check.deregister(checks[name]["CheckID"])
 
         services = self.consul.agent.services()
         for name in services:
-            self.consul.agent.service.deregister(services[name]['ID'])
+            self.consul.agent.service.deregister(services[name]["ID"])
 
         for acl in self.consul.acl.list_tokens():
-            if acl['AccessorID'] == CONSUL_CONFIG['acl']['tokens']['master']:
+            if acl["AccessorID"] == CONSUL_CONFIG["acl"]["tokens"]["master"]:
                 continue
             try:
-                uuid.UUID(acl['AccessorID'])
-                self.consul.acl.delete_token(acl['AccessorID'])
+                uuid.UUID(acl["AccessorID"])
+                self.consul.acl.delete_token(acl["AccessorID"])
             except (ValueError, exceptions.ConsulateException):
                 pass

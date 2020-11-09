@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-os.environ['ASYNC_TEST_TIMEOUT'] = os.environ.get('ASYNC_TEST_TIMEOUT', '15')
+os.environ["ASYNC_TEST_TIMEOUT"] = os.environ.get("ASYNC_TEST_TIMEOUT", "15")
 
 
 @pytest.fixture(scope="session")

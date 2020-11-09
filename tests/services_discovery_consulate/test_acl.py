@@ -41,10 +41,7 @@ POLICYLINKS_SAMPLE = [
     dict(Name="policylink_sample"),
 ]
 
-POLICYLINKS_UPDATE_SAMPLE = [
-    dict(Name="policylink_sample"),
-    dict(Name="policylink_update_sample")
-]
+POLICYLINKS_UPDATE_SAMPLE = [dict(Name="policylink_sample"), dict(Name="policylink_update_sample")]
 
 SERVICE_IDENTITIES_SAMPLE = [dict(ServiceName="db", Datacenters=list("dc1"))]
 
@@ -81,8 +78,7 @@ class TestCase(base.TestCase):
 
         @httmock.all_requests
         def response_content(_url_unused, request):
-            return httmock.response(200, json.dumps({'ID': expectation}), {},
-                                    None, 0, request)
+            return httmock.response(200, json.dumps({"ID": expectation}), {}, None, 0, request)
 
         with httmock.HTTMock(response_content):
             result = self.consul.acl.bootstrap()
@@ -108,32 +104,32 @@ class TestCase(base.TestCase):
     def test_create_with_rules(self):
         acl_id = self.consul.acl.create(self.uuidv4(), rules=ACL_OLD_RULES)
         value = self.consul.acl.info(acl_id)
-        self.assertEqual(value['Rules'], ACL_OLD_RULES)
+        self.assertEqual(value["Rules"], ACL_OLD_RULES)
 
     def test_create_and_info(self):
         acl_id = self.consul.acl.create(self.uuidv4())
         self.assertIsNotNone(acl_id)
         data = self.consul.acl.info(acl_id)
         self.assertIsNotNone(data)
-        self.assertEqual(acl_id, data.get('ID'))
+        self.assertEqual(acl_id, data.get("ID"))
 
     def test_create_and_list(self):
         acl_id = self.consul.acl.create(self.uuidv4())
         data = self.consul.acl.list()
-        self.assertIn(acl_id, [r.get('ID') for r in data])
+        self.assertIn(acl_id, [r.get("ID") for r in data])
 
     def test_create_and_clone(self):
         acl_id = self.consul.acl.create(self.uuidv4())
         clone_id = self.consul.acl.clone(acl_id)
         data = self.consul.acl.list()
-        self.assertIn(clone_id, [r.get('ID') for r in data])
+        self.assertIn(clone_id, [r.get("ID") for r in data])
 
     def test_create_and_update(self):
         acl_id = str(self.consul.acl.create(self.uuidv4()))
-        self.consul.acl.update(acl_id, 'Foo')
+        self.consul.acl.update(acl_id, "Foo")
         data = self.consul.acl.list()
-        self.assertIn('Foo', [r.get('Name') for r in data])
-        self.assertIn(acl_id, [r.get('ID') for r in data])
+        self.assertIn("Foo", [r.get("Name") for r in data])
+        self.assertIn(acl_id, [r.get("ID") for r in data])
 
     def test_create_forbidden(self):
         with self.assertRaises(consulate.Forbidden):
@@ -154,45 +150,41 @@ class TestCase(base.TestCase):
 
     def test_replication(self):
         result = self.forbidden_consul.acl.replication()
-        self.assertFalse(result['Enabled'])
-        self.assertFalse(result['Running'])
+        self.assertFalse(result["Enabled"])
+        self.assertFalse(result["Running"])
 
     def test_update_not_found_adds_new_key(self):
-        acl_id = self.consul.acl.update(self.uuidv4(), 'Foo2')
+        acl_id = self.consul.acl.update(self.uuidv4(), "Foo2")
         data = self.consul.acl.list()
-        self.assertIn('Foo2', [r.get('Name') for r in data])
-        self.assertIn(acl_id, [r.get('ID') for r in data])
+        self.assertIn("Foo2", [r.get("Name") for r in data])
+        self.assertIn(acl_id, [r.get("ID") for r in data])
 
     def test_update_with_rules(self):
-        acl_id = self.consul.acl.update(self.uuidv4(),
-                                        name='test',
-                                        rules=ACL_OLD_RULES)
+        acl_id = self.consul.acl.update(self.uuidv4(), name="test", rules=ACL_OLD_RULES)
         value = self.consul.acl.info(acl_id)
-        self.assertEqual(value['Rules'], ACL_OLD_RULES)
+        self.assertEqual(value["Rules"], ACL_OLD_RULES)
 
     def test_update_forbidden(self):
         with self.assertRaises(consulate.Forbidden):
-            self.forbidden_consul.acl.update(self.uuidv4(), name='test')
+            self.forbidden_consul.acl.update(self.uuidv4(), name="test")
 
     # NOTE: Everything above here is deprecated post consul-1.4.0
 
     def test_create_policy(self):
         name = self.random()
         result = self.consul.acl.create_policy(name=name, rules=ACL_NEW_RULES)
-        self.assertEqual(result['Rules'], ACL_NEW_RULES)
+        self.assertEqual(result["Rules"], ACL_NEW_RULES)
 
     def test_create_and_read_policy(self):
         name = self.random()
         value = self.consul.acl.create_policy(name=name, rules=ACL_NEW_RULES)
         result = self.consul.acl.read_policy(value["ID"])
-        self.assertEqual(result['Rules'], ACL_NEW_RULES)
+        self.assertEqual(result["Rules"], ACL_NEW_RULES)
 
     def test_create_and_update_policy(self):
         name = self.random()
         value = self.consul.acl.create_policy(name=name, rules=ACL_NEW_RULES)
-        result = self.consul.acl.update_policy(value["ID"],
-                                               str(value["Name"]),
-                                               rules=ACL_NEW_UPDATE_RULES)
+        result = self.consul.acl.update_policy(value["ID"], str(value["Name"]), rules=ACL_NEW_UPDATE_RULES)
         self.assertGreater(result["ModifyIndex"], result["CreateIndex"])
 
     def test_create_and_delete_policy(self):
@@ -209,38 +201,31 @@ class TestCase(base.TestCase):
     def test_create_role(self):
         name = self.random()
         result = self.consul.acl.create_role(
-            name=name,
-            policies=self._generate_policies(),
-            service_identities=SERVICE_IDENTITIES_SAMPLE)
-        self.assertEqual(result['Name'], name)
+            name=name, policies=self._generate_policies(), service_identities=SERVICE_IDENTITIES_SAMPLE
+        )
+        self.assertEqual(result["Name"], name)
 
     def test_create_and_read_role(self):
         name = self.random()
         value = self.consul.acl.create_role(
-            name=name,
-            policies=self._generate_policies(),
-            service_identities=SERVICE_IDENTITIES_SAMPLE)
+            name=name, policies=self._generate_policies(), service_identities=SERVICE_IDENTITIES_SAMPLE
+        )
         result = self.consul.acl.read_role(value["ID"])
-        self.assertEqual(result['ID'], value['ID'])
+        self.assertEqual(result["ID"], value["ID"])
 
     def test_create_and_update_role(self):
         name = self.random()
         value = self.consul.acl.create_role(
-            name=name,
-            policies=self._generate_policies(),
-            service_identities=SERVICE_IDENTITIES_SAMPLE)
-        result = self.consul.acl.update_role(
-            value["ID"],
-            str(value["Name"]),
-            policies=self._generate_policies())
+            name=name, policies=self._generate_policies(), service_identities=SERVICE_IDENTITIES_SAMPLE
+        )
+        result = self.consul.acl.update_role(value["ID"], str(value["Name"]), policies=self._generate_policies())
         self.assertGreater(result["ModifyIndex"], result["CreateIndex"])
 
     def test_create_and_delete_role(self):
         name = self.random()
         value = self.consul.acl.create_role(
-            name=name,
-            policies=self._generate_policies(),
-            service_identities=SERVICE_IDENTITIES_SAMPLE)
+            name=name, policies=self._generate_policies(), service_identities=SERVICE_IDENTITIES_SAMPLE
+        )
         result = self.consul.acl.delete_role(value["ID"])
         self.assertTrue(result)
 
@@ -257,9 +242,10 @@ class TestCase(base.TestCase):
             secret_id=secret_id,
             roles=self._generate_roles(),
             policies=self._generate_policies(),
-            service_identities=SERVICE_IDENTITIES_SAMPLE)
-        self.assertEqual(result['AccessorID'], accessor_id)
-        self.assertEqual(result['SecretID'], secret_id)
+            service_identities=SERVICE_IDENTITIES_SAMPLE,
+        )
+        self.assertEqual(result["AccessorID"], accessor_id)
+        self.assertEqual(result["SecretID"], secret_id)
 
     def test_create_and_read_token(self):
         secret_id = self.uuidv4()
@@ -269,9 +255,10 @@ class TestCase(base.TestCase):
             secret_id=secret_id,
             roles=self._generate_roles(),
             policies=self._generate_policies(),
-            service_identities=SERVICE_IDENTITIES_SAMPLE)
+            service_identities=SERVICE_IDENTITIES_SAMPLE,
+        )
         result = self.consul.acl.read_token(value["AccessorID"])
-        self.assertEqual(result['AccessorID'], accessor_id)
+        self.assertEqual(result["AccessorID"], accessor_id)
 
     def test_create_and_update_token(self):
         secret_id = self.uuidv4()
@@ -281,9 +268,9 @@ class TestCase(base.TestCase):
             secret_id=secret_id,
             roles=self._generate_roles(),
             policies=self._generate_policies(),
-            service_identities=SERVICE_IDENTITIES_SAMPLE)
-        result = self.consul.acl.update_token(
-            str(value["AccessorID"]), policies=self._generate_policies())
+            service_identities=SERVICE_IDENTITIES_SAMPLE,
+        )
+        result = self.consul.acl.update_token(str(value["AccessorID"]), policies=self._generate_policies())
         self.assertGreater(result["ModifyIndex"], result["CreateIndex"])
 
     def test_create_and_clone_token(self):
@@ -295,9 +282,9 @@ class TestCase(base.TestCase):
             secret_id=secret_id,
             roles=self._generate_roles(),
             policies=self._generate_policies(),
-            service_identities=SERVICE_IDENTITIES_SAMPLE)
-        result = self.consul.acl.clone_token(value["AccessorID"],
-                                             description=clone_description)
+            service_identities=SERVICE_IDENTITIES_SAMPLE,
+        )
+        result = self.consul.acl.clone_token(value["AccessorID"], description=clone_description)
         self.assertEqual(result["Description"], clone_description)
 
     def test_create_and_delete_token(self):
@@ -308,6 +295,7 @@ class TestCase(base.TestCase):
             secret_id=secret_id,
             roles=self._generate_roles(),
             policies=self._generate_policies(),
-            service_identities=SERVICE_IDENTITIES_SAMPLE)
+            service_identities=SERVICE_IDENTITIES_SAMPLE,
+        )
         result = self.consul.acl.delete_token(value["AccessorID"])
         self.assertTrue(result)

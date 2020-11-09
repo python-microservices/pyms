@@ -330,7 +330,7 @@ def kv_get(consul, args):
                     if args.trim >= len(keyparts):
                         displaykey = keyparts[-1]
                     else:
-                        displaykey = "/".join(keyparts[args.trim:])  # noqa: E203
+                        displaykey = "/".join(keyparts[args.trim :])  # noqa: E203
                 sys.stdout.write("%s\t%s\n" % (displaykey, consul.kv.get(key)))
         else:
             sys.stdout.write("%s\n" % consul.kv.get(args.key))
@@ -521,7 +521,9 @@ def run_once(consul, args):
 
             # Should the subprocess return an error code, release the lock
             try:
-                print(subprocess.check_output(args.command_to_run[0].strip(), stderr=subprocess.STDOUT, shell=True))  # nosec
+                print(
+                    subprocess.check_output(args.command_to_run[0].strip(), stderr=subprocess.STDOUT, shell=True)
+                )  # nosec
             # If the subprocess fails
             except subprocess.CalledProcessError as err:
                 error_code = 1
