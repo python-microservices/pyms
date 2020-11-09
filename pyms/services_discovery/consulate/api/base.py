@@ -146,7 +146,7 @@ class Response:
         self.body = self._demarshal(response.content)
         self.headers = response.headers
 
-    def _demarshal(self, body):  # pylint: disable=too-many-branches,too-many-return-statements
+    def _demarshal(self, body):  # pylint: disable=too-many-branches,too-many-return-statements; # noqa: C901
         """Demarshal the request payload.
 
         :param str body: The string response body

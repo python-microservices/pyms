@@ -331,7 +331,7 @@ def kv_get(consul, args):
                     if args.trim >= len(keyparts):
                         displaykey = keyparts[-1]
                     else:
-                        displaykey = "/".join(keyparts[args.trim :])
+                        displaykey = "/".join(keyparts[args.trim:])  # noqa: E203
                 sys.stdout.write("%s\t%s\n" % (displaykey, consul.kv.get(key)))
         else:
             sys.stdout.write("%s\n" % consul.kv.get(args.key))
@@ -379,7 +379,7 @@ def kv_mkdir(consul, args):
         connection_error()
 
 
-def kv_restore(consul, args):  # pylint: disable=too-many-branches,too-many-format-args
+def kv_restore(consul, args):  # pylint: disable=too-many-branches,too-many-format-args; # noqa: C901
     """Restore the Consul KV store
 
     :param consulate.api_old.Consul consul: The Consul instance
@@ -531,9 +531,7 @@ def run_once(consul, args):
                 )
             except OSError as err:
                 error_code = 1
-                error_msg = '"{0}" command does not exist'.format(  # pylint: disable=too-many-format-args
-                    args.command_to_run, err
-                )
+                error_msg = '"{0}" command does not exist "{1}"'.format(args.command_to_run, err)
             except Exception as err:
                 error_code = 1
                 error_msg = '"{0}" exited with error "{1}"'.format(args.command_to_run, err)

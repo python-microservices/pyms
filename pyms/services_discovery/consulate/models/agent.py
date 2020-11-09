@@ -12,13 +12,8 @@ def _validate_args(value, model):
     :rtype: bool
 
     """
-    return (
-        all([isinstance(v, str) for v in value])
-        and not model.args
-        and not model.grpc
-        and not model.http
-        and not model.ttl
-    )
+    is_instance = all([isinstance(v, str) for v in value])
+    return is_instance and not model.args and not model.grpc and not model.http and not model.ttl
 
 
 def _validate_grpc(value, model):
@@ -75,14 +70,8 @@ def _validate_ttl(value, model):
     :rtype: bool
 
     """
-    return (
-        utils.validate_go_interval(value)
-        and not model.args
-        and not model.grpc
-        and not model.http
-        and not model.tcp
-        and not model.interval
-    )
+    is_valid = utils.validate_go_interval(value)
+    return is_valid and not model.args and not model.grpc and not model.http and not model.tcp and not model.interval
 
 
 class Check(base.Model):
