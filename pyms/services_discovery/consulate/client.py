@@ -43,17 +43,17 @@ class Consul:  # pylint: disable=too-many-instance-attributes
     """
 
     def __init__(
-            self,
-            addr=DEFAULT_ADDR,
-            host=DEFAULT_HOST,
-            port=DEFAULT_PORT,
-            datacenter=None,
-            token=DEFAULT_TOKEN,
-            scheme=DEFAULT_SCHEME,
-            adapter=None,
-            verify=True,
-            cert=None,
-            timeout=None,
+        self,
+        addr=DEFAULT_ADDR,
+        host=DEFAULT_HOST,
+        port=DEFAULT_PORT,
+        datacenter=None,
+        token=DEFAULT_TOKEN,
+        scheme=DEFAULT_SCHEME,
+        adapter=None,
+        verify=True,
+        cert=None,
+        timeout=None,
     ):  # pylint: disable=too-many-arguments
         """Create a new instance of the Consul class"""
         base_uri = self._base_uri(addr=addr, scheme=scheme, host=host, port=port)
