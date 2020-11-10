@@ -1,9 +1,0 @@
-version: '2'
-
-services:
-  consul:
-    image: consul:1.6.0
-    ports:
-      - "8500:8500"
-    volumes:
-      - './testing:/consul/config'

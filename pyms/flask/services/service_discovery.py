@@ -1,9 +1,13 @@
 import logging
 import uuid
 
+try:
+    import consulate
+except ModuleNotFoundError:  # pragma: no cover
+    consulate = None
+
 from pyms.constants import LOGGER_NAME
 from pyms.flask.services.driver import DriverService
-from pyms.services_discovery import consulate
 from pyms.utils import import_from
 
 logger = logging.getLogger(LOGGER_NAME)

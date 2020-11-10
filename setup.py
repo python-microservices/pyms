@@ -52,12 +52,15 @@ install_metrics_requires = [
     "prometheus_client>=0.8.0",
 ]
 
+install_service_discovery_requires = [
+    "py-ms-consulate>=1.0.0",
+]
+
 install_tests_requires = [
     "requests-mock>=1.8.0",
     "coverage>=5.3",
     "pytest>=6.1.0",
     "pytest-cov>=2.10.1",
-    "pytest-docker>=0.10.1",
     "pylint>=2.6.0",
     "flake8>=3.8.2",
     "tox>=3.20.0",
@@ -69,7 +72,6 @@ install_tests_requires = [
     "pre-commit>=2.8.1",
     "black>=20.8b1",
     "isort>=5.6.4",
-    "httmock>=1.4.0",
 ]
 
 install_all_requires = (
@@ -79,6 +81,7 @@ install_all_requires = (
     + install_metrics_requires
     + install_crypt_requires
     + install_aws_requires
+    + install_service_discovery_requires
 )
 
 setup(
@@ -117,6 +120,7 @@ setup(
         "metrics": install_metrics_requires,
         "crypt": install_crypt_requires,
         "aws": install_aws_requires,
+        "consul": install_service_discovery_requires,
         "tests": install_tests_requires,
     },
     tests_require=install_all_requires + install_tests_requires,
