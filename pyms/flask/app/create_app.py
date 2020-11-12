@@ -59,8 +59,6 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
             if service_name not in self.services or not getattr(self, service_name, False):
                 self.services.append(service_name)
                 setattr(self, service_name, service)
-                # if getattr(service, "init_action"):
-                #     service.init_action(self)
 
     def init_services_actions(self):
         for service_name in self.services:
