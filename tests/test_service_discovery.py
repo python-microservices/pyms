@@ -11,7 +11,7 @@ from pyms.flask.services.service_discovery import ServiceDiscoveryConsul
 
 
 class ServiceDiscoveryTests(unittest.TestCase):
-    """Test common rest operations wrapper."""
+    """Test service discovery services"""
 
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -22,6 +22,7 @@ class ServiceDiscoveryTests(unittest.TestCase):
 
     @requests_mock.Mocker()
     def test_init(self, mock_request):
+        """ test if the initializacion of service discovery call to the Service Discovery server to autoregister"""
         url = "http://localhost:8500/v1/agent/check/register"
 
         mock_request.put(url)
