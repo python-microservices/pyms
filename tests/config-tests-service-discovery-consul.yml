@@ -1,7 +1,7 @@
 pyms:
   services:
     service_discovery:
-      service: "tests.test_service_discovery.MockServiceDiscovery"
+      service: "consul"
       autoregister: true
   config:
     DEBUG: true
