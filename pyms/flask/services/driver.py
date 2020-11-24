@@ -1,9 +1,9 @@
 import logging
-from typing import Text, Tuple, Iterator
+from typing import Iterator, Text, Tuple
 
 from pyms.config import ConfFile
 from pyms.config.resource import ConfigResource
-from pyms.constants import SERVICE_BASE, LOGGER_NAME
+from pyms.constants import LOGGER_NAME, SERVICE_BASE
 from pyms.utils import import_from
 
 logger = logging.getLogger(LOGGER_NAME)
@@ -19,7 +19,10 @@ class DriverService(ConfigResource):
     * https://python-microservices.github.io/configuration/
     * https://python-microservices.github.io/services/
     """
+
     enabled = True
+
+    init_action = False
 
     def __init__(self, *args, **kwargs):
         self.config_resource = get_service_name(service=self.config_resource)
@@ -27,8 +30,11 @@ class DriverService(ConfigResource):
 
     def __getattr__(self, attr, *args, **kwargs):
         config_attribute = getattr(self.config, attr)
-        return config_attribute if config_attribute == "" or config_attribute != {} else self.default_values.get(attr,
-                                                                                                                 None)
+        return (
+            config_attribute
+            if config_attribute == "" or config_attribute != {}
+            else self.default_values.get(attr, None)
+        )
 
     def is_enabled(self) -> bool:
         return self.enabled
@@ -44,6 +50,7 @@ class ServicesResource(ConfigResource):
     * https://python-microservices.github.io/configuration/
     * https://python-microservices.github.io/services/
     """
+
     config_resource = SERVICE_BASE
 
     def get_services(self) -> Iterator[Tuple[Text, DriverService]]:

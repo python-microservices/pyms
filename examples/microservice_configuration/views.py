@@ -9,5 +9,5 @@ def example():
         "GLOBAL_VARIABLE": GLOBAL_VARIABLE,
         "GLOBAL_VARIABLE2": GLOBAL_VARIABLE2,
         "test1": config().test1,
-        "test2": config().test2
+        "test2": config().test2,
     }

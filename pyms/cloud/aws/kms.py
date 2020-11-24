@@ -12,7 +12,7 @@ class Crypt(CryptAbstract):
         self._init_boto()
         super().__init__(*args, **kwargs)
 
-    def encrypt(self, message: str) -> str:   # pragma: no cover
+    def encrypt(self, message: str) -> str:  # pragma: no cover
         ciphertext = self.client.encrypt(
             KeyId=self.config.key_id,
             Plaintext=bytes(message, encoding="UTF-8"),
@@ -22,16 +22,14 @@ class Crypt(CryptAbstract):
     def _init_boto(self) -> None:  # pragma: no cover
         check_package_exists("boto3")
         boto3 = import_package("boto3")
-        boto3.set_stream_logger(name='botocore')
-        self.client = boto3.client('kms')
+        boto3.set_stream_logger(name="botocore")
+        self.client = boto3.client("kms")
 
     def _aws_decrypt(self, blob_text: bytes) -> str:  # pragma: no cover
         response = self.client.decrypt(
-            CiphertextBlob=blob_text,
-            KeyId=self.config.key_id,
-            EncryptionAlgorithm=self.encryption_algorithm
+            CiphertextBlob=blob_text, KeyId=self.config.key_id, EncryptionAlgorithm=self.encryption_algorithm
         )
-        return str(response['Plaintext'], encoding="UTF-8")
+        return str(response["Plaintext"], encoding="UTF-8")
 
     def _parse_encrypted(self, encrypted: str) -> bytes:
         blob_text = base64.b64decode(encrypted)

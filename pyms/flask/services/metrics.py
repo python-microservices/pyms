@@ -1,10 +1,9 @@
-import time
 import logging
+import time
 
-from typing import Text
+from flask import Blueprint, Flask, Response, request
+from prometheus_client import REGISTRY, CollectorRegistry, Counter, Histogram, generate_latest, multiprocess
 
-from flask import Blueprint, Response, request, Flask
-from prometheus_client import multiprocess, Counter, Histogram, generate_latest, CollectorRegistry, REGISTRY
 from pyms.flask.services.driver import DriverService
 
 # Based on https://github.com/sbarratt/flask-prometheus
@@ -24,7 +23,7 @@ LOGGER_TOTAL_MESSAGES = Counter(
 )
 
 
-class FlaskMetricsWrapper():
+class FlaskMetricsWrapper:
     def __init__(self, app_name):
         self.app_name = app_name
 
@@ -47,13 +46,19 @@ class Service(DriverService):
     """
     Adds [Prometheus](https://prometheus.io/) metrics using the [Prometheus Client Library](https://github.com/prometheus/client_python).
     """
-    config_resource: Text = "metrics"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.metrics_blueprint = Blueprint("metrics", __name__)
         self.init_registry()
         self.serve_metrics()
+
+    def init_action(self, microservice_instance):
+        microservice_instance.application.register_blueprint(microservice_instance.metrics.metrics_blueprint)
+        self.add_logger_handler(
+            microservice_instance.application.logger, microservice_instance.application.config["APP_NAME"]
+        )
+        self.monitor(microservice_instance.application.config["APP_NAME"], microservice_instance.application)
 
     def init_registry(self) -> None:
         try:

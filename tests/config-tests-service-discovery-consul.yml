@@ -1,0 +1,9 @@
+pyms:
+  services:
+    service_discovery:
+      service: "consul"
+      autoregister: true
+  config:
+    DEBUG: true
+    TESTING: true
+    APP_NAME: "Python Microservice Service Discovery"

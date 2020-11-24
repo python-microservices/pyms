@@ -45,6 +45,7 @@ class Service(DriverService):
     Encapsulate common rest operations between business services propagating trace headers if set up.
     All default values keys are created as class attributes in `DriverService`
     """
+
     config_resource = "requests"
     default_values = {
         "data": "",
@@ -72,8 +73,8 @@ class Service(DriverService):
             status_forcelist=self.status_retries,
         )
         adapter = HTTPAdapter(max_retries=max_retries)
-        session_r.mount('http://', adapter)
-        session_r.mount('https://', adapter)
+        session_r.mount("http://", adapter)
+        session_r.mount("https://", adapter)
         return session_r
 
     @staticmethod
@@ -143,8 +144,15 @@ class Service(DriverService):
             return {}
 
     @retry
-    def get(self, url: str, path_params: dict = None, params: dict = None, headers: dict = None,
-            propagate_headers: bool = False, **kwargs) -> Response:
+    def get(
+        self,
+        url: str,
+        path_params: dict = None,
+        params: dict = None,
+        headers: dict = None,
+        propagate_headers: bool = False,
+        **kwargs
+    ) -> Response:
         """Sends a GET request.
 
         :param url: URL for the new :class:`Request` object. Could contain path parameters
@@ -161,16 +169,16 @@ class Service(DriverService):
         full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers=headers, propagate_headers=propagate_headers)
         headers = self.insert_trace_headers(headers)
-        logger.debug("Get with url {}, params {}, headers {}, kwargs {}".
-                     format(full_url, params, headers, kwargs))
+        logger.debug("Get with url {}, params {}, headers {}, kwargs {}".format(full_url, params, headers, kwargs))
 
         session = requests.Session()
         response = self.requests(session=session).get(full_url, params=params, headers=headers, **kwargs)
 
         return response
 
-    def get_for_object(self, url: str, path_params: dict = None, params: dict = None, headers: dict = None,
-                       **kwargs) -> dict:
+    def get_for_object(
+        self, url: str, path_params: dict = None, params: dict = None, headers: dict = None, **kwargs
+    ) -> dict:
         """Sends a GET request and returns the json representation found in response's content data node.
 
         :param url: URL for the new :class:`Request` object. Could contain path parameters
@@ -187,8 +195,9 @@ class Service(DriverService):
         return self.parse_response(response)
 
     @retry
-    def post(self, url: str, path_params: dict = None, data: dict = None, json: dict = None, headers: dict = None,
-             **kwargs) -> Response:
+    def post(
+        self, url: str, path_params: dict = None, data: dict = None, json: dict = None, headers: dict = None, **kwargs
+    ) -> Response:
         """Sends a POST request.
 
         :param url: URL for the new :class:`Request` object. Could contain path parameters
@@ -205,8 +214,9 @@ class Service(DriverService):
         full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers)
         headers = self.insert_trace_headers(headers)
-        logger.debug("Post with url {}, data {}, json {}, headers {}, kwargs {}".format(full_url, data, json,
-                                                                                        headers, kwargs))
+        logger.debug(
+            "Post with url {}, data {}, json {}, headers {}, kwargs {}".format(full_url, data, json, headers, kwargs)
+        )
 
         session = requests.Session()
         response = self.requests(session=session).post(full_url, data=data, json=json, headers=headers, **kwargs)
@@ -214,8 +224,9 @@ class Service(DriverService):
 
         return response
 
-    def post_for_object(self, url: str, path_params: dict = None, data: dict = None, json: dict = None,
-                        headers: dict = None, **kwargs) -> dict:
+    def post_for_object(
+        self, url: str, path_params: dict = None, data: dict = None, json: dict = None, headers: dict = None, **kwargs
+    ) -> dict:
         """Sends a POST request and returns the json representation found in response's content data node.
 
         :param url: URL for the new :class:`Request` object. Could contain path parameters
@@ -250,8 +261,7 @@ class Service(DriverService):
         full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers)
         headers = self.insert_trace_headers(headers)
-        logger.debug("Put with url {}, data {}, headers {}, kwargs {}".format(full_url, data, headers,
-                                                                              kwargs))
+        logger.debug("Put with url {}, data {}, headers {}, kwargs {}".format(full_url, data, headers, kwargs))
 
         session = requests.Session()
         response = self.requests(session=session).put(full_url, data, headers=headers, **kwargs)
@@ -259,8 +269,9 @@ class Service(DriverService):
 
         return response
 
-    def put_for_object(self, url: str, path_params: dict = None, data: dict = None, headers: dict = None,
-                       **kwargs) -> dict:
+    def put_for_object(
+        self, url: str, path_params: dict = None, data: dict = None, headers: dict = None, **kwargs
+    ) -> dict:
         """Sends a PUT request and returns the json representation found in response's content data node.
 
         :param url: URL for the new :class:`Request` object. Could contain path parameters
@@ -295,8 +306,7 @@ class Service(DriverService):
         full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers)
         headers = self.insert_trace_headers(headers)
-        logger.debug("Patch with url {}, data {}, headers {}, kwargs {}".format(full_url, data, headers,
-                                                                                kwargs))
+        logger.debug("Patch with url {}, data {}, headers {}, kwargs {}".format(full_url, data, headers, kwargs))
 
         session = requests.Session()
         response = self.requests(session=session).patch(full_url, data, headers=headers, **kwargs)
@@ -304,8 +314,9 @@ class Service(DriverService):
 
         return response
 
-    def patch_for_object(self, url: str, path_params: dict = None, data: dict = None, headers: dict = None,
-                         **kwargs) -> dict:
+    def patch_for_object(
+        self, url: str, path_params: dict = None, data: dict = None, headers: dict = None, **kwargs
+    ) -> dict:
         """Sends a PATCH request and returns the json representation found in response's content data node.
 
         :param url: URL for the new :class:`Request` object. Could contain path parameters

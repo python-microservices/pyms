@@ -11,7 +11,6 @@ CRYPT_RESOURCES_CLASS = "Crypt"
 
 
 class CryptAbstract(ABC):
-
     def __init__(self, *args, **kwargs):
         self.config = kwargs.get("config")
 
@@ -25,7 +24,6 @@ class CryptAbstract(ABC):
 
 
 class CryptNone(CryptAbstract):
-
     def encrypt(self, message):
         return message
 
@@ -37,6 +35,7 @@ class CryptResource(ConfigResource):
     """This class works between `pyms.flask.create_app.Microservice` and `pyms.flask.services.[THESERVICE]`. Search
     for a file with the name you want to load, set the configuration and return a instance of the class you want
     """
+
     config_resource = CRYPT_BASE
 
     def get_crypt(self, *args, **kwargs) -> CryptAbstract:

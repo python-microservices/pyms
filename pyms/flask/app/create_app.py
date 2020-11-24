@@ -6,14 +6,14 @@ from flask import Flask
 
 from pyms.config.conf import validate_conf
 from pyms.config.resource import ConfigResource
-from pyms.constants import LOGGER_NAME, CONFIG_BASE
+from pyms.constants import CONFIG_BASE, LOGGER_NAME
 from pyms.crypt.driver import CryptResource
-from pyms.flask.app.utils import SingletonMeta, ReverseProxied
-from pyms.flask.healthcheck import healthcheck_blueprint
+from pyms.flask.app.utils import ReverseProxied, SingletonMeta
 from pyms.flask.configreload import configreload_blueprint
-from pyms.flask.services.driver import ServicesResource, DriverService
+from pyms.flask.healthcheck import healthcheck_blueprint
+from pyms.flask.services.driver import DriverService, ServicesResource
 from pyms.logger import CustomJsonFormatter
-from pyms.utils import check_package_exists, import_from
+from pyms.utils import check_package_exists
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -22,6 +22,7 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
     """The class Microservice is the core of all microservices built with PyMS.
     See this docs: https://python-microservices.github.io/ms_class/
     """
+
     config_resource = CONFIG_BASE
     services: List[str] = []
     application = Flask
@@ -59,6 +60,12 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
                 self.services.append(service_name)
                 setattr(self, service_name, service)
 
+    def init_services_actions(self):
+        for service_name in self.services:
+            srv_action = getattr(getattr(self, service_name), "init_action")
+            if srv_action:
+                srv_action(self)
+
     def init_crypt(self, *args, **kwargs) -> None:
         """
         Set the Attributes of all service defined in config.yml and exists in `pyms.flask.service` module
@@ -85,22 +92,13 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         """
         return self.application
 
-    def init_tracer(self) -> None:
-        """Set attribute in flask `tracer`. See in `pyms.flask.services.tracer` how it works
-        :return: None
-        """
-        if self.tracer:
-            FlaskTracing = import_from("flask_opentracing", "FlaskTracing")
-            client = self.tracer.get_client()
-            self.application.tracer = FlaskTracing(client, True, self.application)
-
     def init_logger(self) -> None:
         """
         Set a logger and return in JSON format.
         :return:
         """
         self.application.logger = logger
-        os.environ['WERKZEUG_RUN_MAIN'] = "true"
+        os.environ["WERKZEUG_RUN_MAIN"] = "true"
 
         formatter = CustomJsonFormatter()
         formatter.add_service_name(self.application.config["APP_NAME"])
@@ -125,8 +123,11 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
             application = self.swagger.init_app(config=self.config.to_flask(), path=self.path)
         else:
             check_package_exists("flask")
-            application = Flask(__name__, static_folder=os.path.join(self.path, 'static'),
-                                template_folder=os.path.join(self.path, 'templates'))
+            application = Flask(
+                __name__,
+                static_folder=os.path.join(self.path, "static"),
+                template_folder=os.path.join(self.path, "templates"),
+            )
 
         application.root_path = self.path
 
@@ -134,18 +135,6 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         application.wsgi_app = ReverseProxied(application.wsgi_app)
 
         return application
-
-    def init_metrics(self) -> None:
-        """Set attribute in flask `metrics`. See in `pyms.flask.services.metrics` how it works
-        :return: None
-        """
-        if self.metrics:
-            self.application.register_blueprint(self.metrics.metrics_blueprint)
-            self.metrics.add_logger_handler(
-                self.application.logger,
-                self.application.config["APP_NAME"]
-            )
-            self.metrics.monitor(self.application.config["APP_NAME"], self.application)
 
     def reload_conf(self):
         self.delete_services()
@@ -164,7 +153,6 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         """
         self.application = self.init_app()
         self.application.config.from_object(self.config.to_flask())
-        self.application.tracer = None
         self.application.ms = self
 
         # Initialize Blueprints
@@ -173,12 +161,9 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
 
         self.init_libs()
         self.add_error_handlers()
-
-        self.init_tracer()
-
         self.init_logger()
 
-        self.init_metrics()
+        self.init_services_actions()
 
         logger.debug("Started app with PyMS and this services: {}".format(self.services))
 

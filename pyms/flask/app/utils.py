@@ -7,6 +7,7 @@ class SingletonMeta(type):
     possible methods include: base class, decorator, metaclass. We will use the
     metaclass because it is best suited for this purpose.
     """
+
     _instances: Dict[type, type] = {}
     _singleton = True
 
@@ -43,10 +44,10 @@ class ReverseProxied:
         :return:
         """
         # Get path from Traefik, Nginx and Apache
-        path = environ.get('HTTP_X_SCRIPT_NAME', '')
+        path = environ.get("HTTP_X_SCRIPT_NAME", "")
         if not path:
             # Get path from Zuul
-            path = environ.get('HTTP_X_FORWARDED_PREFIX', '')
+            path = environ.get("HTTP_X_FORWARDED_PREFIX", "")
         if path and not path.startswith("/"):
             path = "/" + path
         return path
@@ -54,12 +55,12 @@ class ReverseProxied:
     def __call__(self, environ, start_response):
         script_name = self._extract_prefix(environ)
         if script_name:
-            environ['SCRIPT_NAME'] = script_name
-            path_info = environ['PATH_INFO']
+            environ["SCRIPT_NAME"] = script_name
+            path_info = environ["PATH_INFO"]
             if path_info.startswith(script_name):
-                environ['PATH_INFO'] = path_info[len(script_name):]
+                environ["PATH_INFO"] = path_info[len(script_name) :]  # noqa: E203
 
-        scheme = environ.get('HTTP_X_SCHEME', '')
+        scheme = environ.get("HTTP_X_SCHEME", "")
         if scheme:
-            environ['wsgi.url_scheme'] = scheme
+            environ["wsgi.url_scheme"] = scheme
         return self.app(environ, start_response)

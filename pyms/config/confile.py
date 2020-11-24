@@ -2,12 +2,16 @@
 import logging
 import os
 import re
-from typing import Dict, Union, Text, Tuple, Iterable
+from typing import Dict, Iterable, Text, Tuple, Union
 
 import anyconfig
 
-from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT, LOGGER_NAME, DEFAULT_CONFIGMAP_FILENAME, \
-    CONFIGMAP_FILE_ENVIRONMENT_LEGACY
+from pyms.constants import (
+    CONFIGMAP_FILE_ENVIRONMENT,
+    CONFIGMAP_FILE_ENVIRONMENT_LEGACY,
+    DEFAULT_CONFIGMAP_FILENAME,
+    LOGGER_NAME,
+)
 from pyms.exceptions import AttrDoesNotExistException, ConfigDoesNotFoundException
 from pyms.utils.files import LoadFile
 
@@ -22,6 +26,7 @@ class ConfFile(dict):
     * empty_init: Allow blank variables
     * config: Allow to pass a dictionary to ConfFile without use a file
     """
+
     _empty_init = False
     _crypt = None
 
@@ -73,8 +78,8 @@ class ConfFile(dict):
         add_decripted_keys = []
         for k, v in config.items():
             if k.lower().startswith("enc_"):
-                k_not_crypt = re.compile(re.escape('enc_'), re.IGNORECASE)
-                decrypted_key = k_not_crypt.sub('', k)
+                k_not_crypt = re.compile(re.escape("enc_"), re.IGNORECASE)
+                decrypted_key = k_not_crypt.sub("", k)
                 decrypted_value = self._crypt.decrypt(v) if self._crypt else None
                 setattr(self, decrypted_key, decrypted_value)
                 add_decripted_keys.append((decrypted_key, decrypted_value))
@@ -134,6 +139,8 @@ class ConfFile(dict):
     @staticmethod
     def __get_updated_configmap_file_env() -> str:
         result = CONFIGMAP_FILE_ENVIRONMENT
-        if (os.getenv(CONFIGMAP_FILE_ENVIRONMENT_LEGACY) is not None) and (os.getenv(CONFIGMAP_FILE_ENVIRONMENT) is None):
+        if (os.getenv(CONFIGMAP_FILE_ENVIRONMENT_LEGACY) is not None) and (
+            os.getenv(CONFIGMAP_FILE_ENVIRONMENT) is None
+        ):
             result = CONFIGMAP_FILE_ENVIRONMENT_LEGACY
         return result

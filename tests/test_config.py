@@ -3,12 +3,22 @@ import os
 import unittest
 from unittest import mock
 
-from pyms.config import get_conf, ConfFile, create_conf_file
+from pyms.config import ConfFile, create_conf_file, get_conf
 from pyms.config.conf import validate_conf
-from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT, CONFIGMAP_FILE_ENVIRONMENT_LEGACY, LOGGER_NAME, CONFIG_BASE, \
-    CRYPT_FILE_KEY_ENVIRONMENT, CRYPT_FILE_KEY_ENVIRONMENT_LEGACY
-from pyms.exceptions import AttrDoesNotExistException, ConfigDoesNotFoundException, ServiceDoesNotExistException, \
-    ConfigErrorException
+from pyms.constants import (
+    CONFIG_BASE,
+    CONFIGMAP_FILE_ENVIRONMENT,
+    CONFIGMAP_FILE_ENVIRONMENT_LEGACY,
+    CRYPT_FILE_KEY_ENVIRONMENT,
+    CRYPT_FILE_KEY_ENVIRONMENT_LEGACY,
+    LOGGER_NAME,
+)
+from pyms.exceptions import (
+    AttrDoesNotExistException,
+    ConfigDoesNotFoundException,
+    ConfigErrorException,
+    ServiceDoesNotExistException,
+)
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -133,7 +143,7 @@ class GetConfig(unittest.TestCase):
         assert config.APP_NAME == "Python Microservice"
         assert config.SUBSERVICE1.test == "input"
 
-    @mock.patch('pyms.config.conf.ConfFile')
+    @mock.patch("pyms.config.conf.ConfFile")
     def test_without_params(self, mock_confile):
         with self.assertRaises(ServiceDoesNotExistException):
             get_conf()

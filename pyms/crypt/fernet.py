@@ -7,7 +7,7 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
-from pyms.constants import CRYPT_FILE_KEY_ENVIRONMENT, DEFAULT_KEY_FILENAME, CRYPT_FILE_KEY_ENVIRONMENT_LEGACY
+from pyms.constants import CRYPT_FILE_KEY_ENVIRONMENT, CRYPT_FILE_KEY_ENVIRONMENT_LEGACY, DEFAULT_KEY_FILENAME
 from pyms.crypt.driver import CryptAbstract
 from pyms.exceptions import FileDoesNotExistException
 from pyms.utils.files import LoadFile
@@ -24,15 +24,11 @@ class Crypt(CryptAbstract):
         byte_password = password.encode()  # Convert to type bytes
         salt = os.urandom(16)
         kdf = PBKDF2HMAC(
-            algorithm=hashes.SHA512_256(),
-            length=32,
-            salt=salt,
-            iterations=100000,
-            backend=default_backend()
+            algorithm=hashes.SHA512_256(), length=32, salt=salt, iterations=100000, backend=default_backend()
         )
         key = base64.urlsafe_b64encode(kdf.derive(byte_password))  # Can only use kdf once
         if write_to_file:
-            self._loader.put_file(key, 'wb')
+            self._loader.put_file(key, "wb")
         return key
 
     def read_key(self):
@@ -42,7 +38,8 @@ class Crypt(CryptAbstract):
             crypt_file_key_env = self.__get_updated_crypt_file_key_env()  # Temporally backward compatibility
             raise FileDoesNotExistException(
                 "Decrypt key {} not exists. You must set a correct env var {} "
-                "or run `pyms crypt create-key` command".format(self._loader.path, crypt_file_key_env))
+                "or run `pyms crypt create-key` command".format(self._loader.path, crypt_file_key_env)
+            )
         return key
 
     def encrypt(self, message):
@@ -65,6 +62,8 @@ class Crypt(CryptAbstract):
     @staticmethod
     def __get_updated_crypt_file_key_env() -> str:
         result = CRYPT_FILE_KEY_ENVIRONMENT
-        if (os.getenv(CRYPT_FILE_KEY_ENVIRONMENT_LEGACY) is not None) and (os.getenv(CRYPT_FILE_KEY_ENVIRONMENT) is None):
+        if (os.getenv(CRYPT_FILE_KEY_ENVIRONMENT_LEGACY) is not None) and (
+            os.getenv(CRYPT_FILE_KEY_ENVIRONMENT) is None
+        ):
             result = CRYPT_FILE_KEY_ENVIRONMENT_LEGACY
         return result

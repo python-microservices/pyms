@@ -49,7 +49,7 @@ class LoadFile:
             if fn:
                 files_cached[path] = fn(path)
             else:
-                file_to_read = open(path, 'rb')
+                file_to_read = open(path, "rb")
                 content = file_to_read.read()  # The key will be type bytes
                 file_to_read.close()
                 files_cached[path] = content

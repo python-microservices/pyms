@@ -1,6 +1,8 @@
 import os
-from pyms.flask.app import Microservice
+
 from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT, DEFAULT_CONFIGMAP_FILENAME
+from pyms.flask.app import Microservice
+
 
 class MyMicroserviceNoSingleton(Microservice):
     _singleton = False

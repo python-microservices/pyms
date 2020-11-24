@@ -23,3 +23,7 @@ class ConfigErrorException(Exception):
 
 class PackageNotExists(Exception):
     pass
+
+
+class ServiceDiscoveryConnectionException(Exception):
+    pass

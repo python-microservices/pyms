@@ -5,9 +5,9 @@ import unittest
 
 import pytest
 
-from pyms.exceptions import PackageNotExists, FileDoesNotExistException
-from pyms.utils import check_package_exists, import_package
 from pyms.crypt.fernet import Crypt
+from pyms.exceptions import FileDoesNotExistException, PackageNotExists
+from pyms.utils import check_package_exists, import_package
 
 
 class ConfUtils(unittest.TestCase):
@@ -16,11 +16,10 @@ class ConfUtils(unittest.TestCase):
     def test_check_package_exists_exception(self):
         with pytest.raises(PackageNotExists) as excinfo:
             check_package_exists("this-package-not-exists")
-        assert "this-package-not-exists is not installed. try with pip install -U this-package-not-exists" \
-               in str(excinfo.value)
+        assert "this-package-not-exists is not installed. try with pip install -U this-package-not-exists" in str(
+            excinfo.value
+        )
 
     def test_import_package(self):
         os_import = import_package("os")
         assert os_import == os
-
-

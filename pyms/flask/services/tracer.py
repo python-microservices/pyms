@@ -1,7 +1,6 @@
 import logging
 from typing import Union
 
-
 try:
     import opentracing
 except ModuleNotFoundError:  # pragma: no cover
@@ -15,12 +14,12 @@ try:
 except ModuleNotFoundError:  # pragma: no cover
     get_current_span = None
 
-from flask import current_app, request, has_request_context
+from flask import current_app, has_request_context, request
 
 from pyms.config.conf import get_conf
 from pyms.constants import LOGGER_NAME
 from pyms.flask.services.driver import DriverService, get_service_name
-from pyms.utils import check_package_exists, import_package, import_from
+from pyms.utils import check_package_exists, import_from, import_package
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -53,10 +52,16 @@ class Service(DriverService):
     Add trace to all executions with [opentracing](https://github.com/opentracing-contrib/python-flask).
     All default values keys are created as class attributes in `DriverService`
     """
+
     config_resource = "tracer"
     default_values = {
         "client": DEFAULT_CLIENT,
     }
+
+    def init_action(self, microservice_instance):
+        FlaskTracing = import_from("flask_opentracing", "FlaskTracing")
+        client = self.get_client()
+        microservice_instance.application.tracer = FlaskTracing(client, True, microservice_instance.application)
 
     def get_client(self) -> Union[bool, type]:
         opentracing_tracer = False
@@ -78,11 +83,7 @@ class Service(DriverService):
         Config = import_from("jaeger_client", "Config")
         host = {}
         if self.host:
-            host = {
-                'local_agent': {
-                    'reporting_host': self.host
-                }
-            }
+            host = {"local_agent": {"reporting_host": self.host}}
         metrics_config = get_conf(service=get_service_name(service="metrics"), empty_init=True)
         metrics = ""
         if metrics_config:
@@ -91,17 +92,18 @@ class Service(DriverService):
         config = Config(
             config={
                 **{
-                    'sampler': {
-                        'type': 'const',
-                        'param': 1,
+                    "sampler": {
+                        "type": "const",
+                        "param": 1,
                     },
-                    'propagation': 'b3',
-                    'logging': True
+                    "propagation": "b3",
+                    "logging": True,
                 },
-                **host
-            }, service_name=self.component_name,
+                **host,
+            },
+            service_name=self.component_name,
             metrics_factory=metrics,
-            validate=True
+            validate=True,
         )
         return config.initialize_tracer()
 

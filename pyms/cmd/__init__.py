@@ -1,3 +1,3 @@
 from .main import Command
 
-__all__ = ['Command']
+__all__ = ["Command"]

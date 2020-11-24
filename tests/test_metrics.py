@@ -1,28 +1,31 @@
 import os
 import unittest.mock
-from tempfile import TemporaryDirectory
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
-from prometheus_client import generate_latest
-from prometheus_client import values
 from opentracing import global_tracer
+from prometheus_client import generate_latest, values
+
 from pyms.constants import CONFIGMAP_FILE_ENVIRONMENT
-from pyms.flask.services.metrics import LOGGER_TOTAL_MESSAGES, FLASK_REQUEST_COUNT, FLASK_REQUEST_LATENCY
+from pyms.flask.services.metrics import FLASK_REQUEST_COUNT, FLASK_REQUEST_LATENCY, LOGGER_TOTAL_MESSAGES
 from tests.common import MyMicroserviceNoSingleton
 
+
 def reset_metric(metric):
-    metric._metric_init() # pylint: disable=protected-access
-    metric._metrics = {} # pylint: disable=protected-access
+    metric._metric_init()  # pylint: disable=protected-access
+    metric._metrics = {}  # pylint: disable=protected-access
+
 
 def reset_metrics():
     reset_metric(LOGGER_TOTAL_MESSAGES)
     reset_metric(FLASK_REQUEST_COUNT)
     reset_metric(FLASK_REQUEST_LATENCY)
     try:
-        for metric in global_tracer().metrics_factory._cache.values(): # pylint: disable=protected-access
+        for metric in global_tracer().metrics_factory._cache.values():  # pylint: disable=protected-access
             reset_metric(metric)
-    except AttributeError: # Not a  Jaeger tracer
+    except AttributeError:  # Not a  Jaeger tracer
         pass
+
 
 class TestMetricsFlask(unittest.TestCase):
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -59,8 +62,9 @@ class TestMetricsFlask(unittest.TestCase):
     def test_metrics_jaeger(self):
         self.client.get("/")
         self.client.get("/metrics")
-        generated_logger = b'jaeger:reporter_spans_total'
+        generated_logger = b"jaeger:reporter_spans_total"
         assert generated_logger in generate_latest()
+
 
 class TestMultiprocessMetricsFlask(unittest.TestCase):
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -74,7 +78,9 @@ class TestMultiprocessMetricsFlask(unittest.TestCase):
     def setUpClass(cls):
         cls.temp_dir = TemporaryDirectory()
         os.environ["prometheus_multiproc_dir"] = cls.temp_dir.name
-        cls.patch_value_class = unittest.mock.patch.object(values, "ValueClass", values.MultiProcessValue(cls.current_test))
+        cls.patch_value_class = unittest.mock.patch.object(
+            values, "ValueClass", values.MultiProcessValue(cls.current_test)
+        )
         cls.patch_value_class.start()
 
     def setUp(self):
@@ -129,5 +135,5 @@ class TestMultiprocessMetricsFlask(unittest.TestCase):
     def test_metrics_jaeger(self):
         self.client.get("/")
         self.client.get("/metrics")
-        generated_logger = b'jaeger:reporter_spans_total'
+        generated_logger = b"jaeger:reporter_spans_total"
         assert generated_logger in generate_latest(self.app.ms.metrics.registry)

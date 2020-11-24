@@ -1,11 +1,10 @@
 import os
 from pathlib import Path
-from typing import Dict, Any
-
-from flask import Flask
+from typing import Any, Dict
 
 import connexion
 from connexion.resolver import RestyResolver
+from flask import Flask
 
 try:
     import prance
@@ -29,8 +28,7 @@ def get_bundled_specs(main_file: Path) -> Dict[str, Any]:
     :param main_file: Swagger file path
     :return:
     """
-    parser = prance.ResolvingParser(str(main_file.absolute()),
-                                    lazy=True, backend='openapi-spec-validator')
+    parser = prance.ResolvingParser(str(main_file.absolute()), lazy=True, backend="openapi-spec-validator")
     parser.parse()
     return parser.specification
 
@@ -42,15 +40,13 @@ def merge_swagger_file(main_file: str) -> None:
     :return:
     """
     input_file = Path(main_file)
-    output_file = Path(input_file.parent, 'swagger-complete.yaml')
+    output_file = Path(input_file.parent, "swagger-complete.yaml")
 
     contents = formats.serialize_spec(
         specs=get_bundled_specs(input_file),
         filename=output_file,
     )
-    fs.write_file(filename=output_file,
-                  contents=contents,
-                  encoding='utf-8')
+    fs.write_file(filename=output_file, contents=contents, encoding="utf-8")
 
 
 class Service(DriverService):
@@ -64,13 +60,9 @@ class Service(DriverService):
 
     All default values keys are created as class attributes in `DriverService`
     """
+
     config_resource = "swagger"
-    default_values = {
-        "path": SWAGGER_PATH,
-        "file": SWAGGER_FILE,
-        "url": SWAGGER_URL,
-        "project_dir": PROJECT_DIR
-    }
+    default_values = {"path": SWAGGER_PATH, "file": SWAGGER_FILE, "url": SWAGGER_URL, "project_dir": PROJECT_DIR}
 
     @staticmethod
     def _get_application_root(config) -> str:
@@ -110,14 +102,13 @@ class Service(DriverService):
         if not os.path.isabs(self.path):
             specification_dir = os.path.join(path, self.path)
 
-        app = connexion.App(__name__,
-                            specification_dir=specification_dir,
-                            resolver=RestyResolver(self.project_dir))
+        app = connexion.App(__name__, specification_dir=specification_dir, resolver=RestyResolver(self.project_dir))
 
         params = {
-            "specification": get_bundled_specs(
-                Path(os.path.join(specification_dir, self.file))) if prance else self.file,
-            "arguments": {'title': config.APP_NAME},
+            "specification": get_bundled_specs(Path(os.path.join(specification_dir, self.file)))
+            if prance
+            else self.file,
+            "arguments": {"title": config.APP_NAME},
             "base_path": application_root,
             "options": {"swagger_url": self.url},
         }

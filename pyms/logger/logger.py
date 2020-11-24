@@ -17,21 +17,21 @@ class CustomJsonFormatter(jsonlogger.JsonFormatter):
 
     def add_fields(self, log_record, record, message_dict):
         super().add_fields(log_record, record, message_dict)
-        if not log_record.get('timestamp'):
+        if not log_record.get("timestamp"):
             # this doesn't use record.created, so it is slightly off
-            now = datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%fZ')
-            log_record['timestamp'] = now
-        if log_record.get('level'):
-            log_record['severity'] = log_record['level'].upper()
+            now = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+            log_record["timestamp"] = now
+        if log_record.get("level"):
+            log_record["severity"] = log_record["level"].upper()
         else:
-            log_record['severity'] = record.levelname
+            log_record["severity"] = record.levelname
         log_record["service"] = self.service_name
 
         try:
             headers = inject_span_in_headers({})
-            log_record["trace"] = headers.get('X-B3-TraceId', "")
-            log_record["span"] = headers.get('X-B3-SpanId', "")
-            log_record["parent"] = headers.get('X-B3-ParentSpanId', "")
+            log_record["trace"] = headers.get("X-B3-TraceId", "")
+            log_record["span"] = headers.get("X-B3-SpanId", "")
+            log_record["parent"] = headers.get("X-B3-ParentSpanId", "")
         except Exception as ex:  # pragma: no cover
             logger.error("Tracer error: {}".format(ex))
 

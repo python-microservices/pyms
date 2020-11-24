@@ -1,16 +1,15 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
+from __future__ import print_function, unicode_literals
 
 import argparse
 import os
 import sys
 from distutils.util import strtobool
 
+from pyms.config import create_conf_file
 from pyms.crypt.fernet import Crypt
 from pyms.flask.services.swagger import merge_swagger_file
 from pyms.utils import check_package_exists, import_from, utils
-from pyms.config import create_conf_file
 
 
 class Command:
@@ -27,37 +26,40 @@ class Command:
         if not arguments:  # pragma: no cover
             arguments = sys.argv[1:]
 
-        parser = argparse.ArgumentParser(description='Python Microservices')
+        parser = argparse.ArgumentParser(description="Python Microservices")
 
-        commands = parser.add_subparsers(title="Commands", description='Available commands', dest='command_name')
+        commands = parser.add_subparsers(title="Commands", description="Available commands", dest="command_name")
 
-        parser_encrypt = commands.add_parser('encrypt', help='Encrypt a string')
-        parser_encrypt.add_argument("encrypt", default='', type=str, help='Encrypt a string')
+        parser_encrypt = commands.add_parser("encrypt", help="Encrypt a string")
+        parser_encrypt.add_argument("encrypt", default="", type=str, help="Encrypt a string")
 
-        parser_create_key = commands.add_parser('create-key', help='Generate a Key to encrypt strings in config')
-        parser_create_key.add_argument("create_key", action='store_true',
-                                       help='Generate a Key to encrypt strings in config')
+        parser_create_key = commands.add_parser("create-key", help="Generate a Key to encrypt strings in config")
+        parser_create_key.add_argument(
+            "create_key", action="store_true", help="Generate a Key to encrypt strings in config"
+        )
 
         parser_startproject = commands.add_parser(
-            'startproject',
-            help='Generate a project from https://github.com/python-microservices/microservices-template')
+            "startproject",
+            help="Generate a project from https://github.com/python-microservices/microservices-template",
+        )
         parser_startproject.add_argument(
-            "startproject", action='store_true',
-            help='Generate a project from https://github.com/python-microservices/microservices-template')
+            "startproject",
+            action="store_true",
+            help="Generate a project from https://github.com/python-microservices/microservices-template",
+        )
 
         parser_startproject.add_argument(
-            "-b", "--branch",
-            help='Select a branch from https://github.com/python-microservices/microservices-template')
+            "-b", "--branch", help="Select a branch from https://github.com/python-microservices/microservices-template"
+        )
 
-        parser_merge_swagger = commands.add_parser('merge-swagger', help='Merge swagger into a single file')
-        parser_merge_swagger.add_argument("merge_swagger", action='store_true',
-                                          help='Merge swagger into a single file')
+        parser_merge_swagger = commands.add_parser("merge-swagger", help="Merge swagger into a single file")
+        parser_merge_swagger.add_argument("merge_swagger", action="store_true", help="Merge swagger into a single file")
         parser_merge_swagger.add_argument(
-            "-f", "--file", default=os.path.join('project', 'swagger', 'swagger.yaml'),
-            help='Swagger file path')
+            "-f", "--file", default=os.path.join("project", "swagger", "swagger.yaml"), help="Swagger file path"
+        )
 
-        parser_create_config = commands.add_parser('create-config', help='Generate a config file')
-        parser_create_config.add_argument("create_config", action='store_true', help='Generate a config file')
+        parser_create_config = commands.add_parser("create-config", help="Generate a config file")
+        parser_create_config.add_argument("create_config", action="store_true", help="Generate a config file")
 
         parser.add_argument("-v", "--verbose", default="", type=str, help="Verbose ")
 
@@ -100,10 +102,10 @@ class Command:
         crypt = Crypt()
         if self.create_key:
             path = crypt._loader.get_path_from_env()  # pylint: disable=protected-access
-            pwd = self.get_input('Type a password to generate the key file: ')
+            pwd = self.get_input("Type a password to generate the key file: ")
             # Should use yes_no_input insted of get input below
             # the result should be validated for Yes (Y|y) rather allowing anything other than 'n'
-            generate_file = self.get_input('Do you want to generate a file in {}? [Y/n]'.format(path))
+            generate_file = self.get_input("Do you want to generate a file in {}? [Y/n]".format(path))
             generate_file = generate_file.lower() != "n"
             key = crypt.generate_key(pwd, generate_file)
             if generate_file:
@@ -118,7 +120,7 @@ class Command:
         if self.startproject:
             check_package_exists("cookiecutter")
             cookiecutter = import_from("cookiecutter.main", "cookiecutter")
-            cookiecutter('gh:python-microservices/cookiecutter-pyms', checkout=self.branch)
+            cookiecutter("gh:python-microservices/cookiecutter-pyms", checkout=self.branch)
             self.print_ok("Created project OK")
         if self.merge_swagger:
             try:
@@ -128,8 +130,8 @@ class Command:
                 self.print_error(ex.__str__())
                 return False
         if self.create_config:
-            use_requests = self.yes_no_input('Do you want to use request')
-            use_swagger = self.yes_no_input('Do you want to use swagger')
+            use_requests = self.yes_no_input("Do you want to use request")
+            use_swagger = self.yes_no_input("Do you want to use swagger")
             try:
                 conf_file_path = create_conf_file(use_requests, use_swagger)
                 self.print_ok(f'Config file "{conf_file_path}" created')
@@ -140,7 +142,9 @@ class Command:
         return True
 
     def yes_no_input(self, msg=""):  # pragma: no cover
-        answer = input(utils.colored_text(f'{msg}{"?" if not msg.endswith("?") else ""} [Y/n] :', utils.Colors.BLUE, True))  # nosec
+        answer = input(  # nosec
+            utils.colored_text(f'{msg}{"?" if not msg.endswith("?") else ""} [Y/n] :', utils.Colors.BLUE, True)
+        )
         try:
             return strtobool(answer)
         except ValueError:
@@ -168,6 +172,6 @@ class Command:
         sys.exit(0)
 
 
-if __name__ == '__main__':  # pragma: no cover
+if __name__ == "__main__":  # pragma: no cover
     cmd = Command(arguments=sys.argv[1:], autorun=False)
     cmd.run()

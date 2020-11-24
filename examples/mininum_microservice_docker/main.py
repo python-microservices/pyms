@@ -11,5 +11,5 @@ def example():
     return jsonify({"main": ms.config.environment})
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run()

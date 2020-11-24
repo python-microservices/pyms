@@ -12,8 +12,7 @@ from pyms.flask.services.requests import DEFAULT_RETRIES
 
 
 class RequestServiceNoDataTests(unittest.TestCase):
-    """Test common rest operations wrapper.
-    """
+    """Test common rest operations wrapper."""
 
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -28,8 +27,12 @@ class RequestServiceNoDataTests(unittest.TestCase):
     def test_get(self, mock_request):
         url = "http://www.my-site.com/users"
         full_url = url
-        text = json.dumps([{'id': 1, 'name': 'Peter', 'email': 'peter@my-site.com.com'},
-                           {'id': 2, 'name': 'Jon', 'email': 'jon@my-site.com.com'}])
+        text = json.dumps(
+            [
+                {"id": 1, "name": "Peter", "email": "peter@my-site.com.com"},
+                {"id": 2, "name": "Jon", "email": "jon@my-site.com.com"},
+            ]
+        )
 
         with self.app.app_context():
             mock_request.get(full_url, text=text)
@@ -40,8 +43,7 @@ class RequestServiceNoDataTests(unittest.TestCase):
 
 
 class RequestServiceTests(unittest.TestCase):
-    """Test common rest operations wrapper.
-    """
+    """Test common rest operations wrapper."""
 
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -56,8 +58,14 @@ class RequestServiceTests(unittest.TestCase):
     def test_get(self, mock_request):
         url = "http://www.my-site.com/users"
         full_url = url
-        text = json.dumps({'data': [{'id': 1, 'name': 'Peter', 'email': 'peter@my-site.com.com'},
-                                    {'id': 2, 'name': 'Jon', 'email': 'jon@my-site.com.com'}]})
+        text = json.dumps(
+            {
+                "data": [
+                    {"id": 1, "name": "Peter", "email": "peter@my-site.com.com"},
+                    {"id": 2, "name": "Jon", "email": "jon@my-site.com.com"},
+                ]
+            }
+        )
 
         with self.app.app_context():
             mock_request.get(full_url, text=text)
@@ -69,7 +77,7 @@ class RequestServiceTests(unittest.TestCase):
     @requests_mock.Mocker()
     def test_get_for_object_without_json(self, mock_request):
         url = "http://www.my-site.com/users/{user-id}/posts"
-        path_params = {'user-id': 123}
+        path_params = {"user-id": 123}
         full_url = "http://www.my-site.com/users/123/posts"
         expected = {}
 
@@ -82,10 +90,16 @@ class RequestServiceTests(unittest.TestCase):
     @requests_mock.Mocker()
     def test_get_for_object_without_valid_json_data(self, mock_request):
         url = "http://www.my-site.com/users/{user-id}/posts"
-        path_params = {'user-id': 123}
+        path_params = {"user-id": 123}
         full_url = "http://www.my-site.com/users/123/posts"
-        text = json.dumps({'another_data': [{'id': 1, 'name': 'Peter', 'email': 'peter@my-site.com.com'},
-                                            {'id': 2, 'name': 'Jon', 'email': 'jon@my-site.com.com'}]})
+        text = json.dumps(
+            {
+                "another_data": [
+                    {"id": 1, "name": "Peter", "email": "peter@my-site.com.com"},
+                    {"id": 2, "name": "Jon", "email": "jon@my-site.com.com"},
+                ]
+            }
+        )
         expected = {}
 
         with self.app.app_context():
@@ -97,12 +111,20 @@ class RequestServiceTests(unittest.TestCase):
     @requests_mock.Mocker()
     def test_get_for_object_with_valid_data(self, mock_request):
         url = "http://www.my-site.com/users/{user-id}/posts"
-        path_params = {'user-id': 123}
+        path_params = {"user-id": 123}
         full_url = "http://www.my-site.com/users/123/posts"
-        text = json.dumps({'data': [{'id': 1, 'name': 'Peter', 'email': 'peter@my-site.com.com'},
-                                    {'id': 2, 'name': 'Jon', 'email': 'jon@my-site.com.com'}]})
-        expected = [{'id': 1, 'name': 'Peter', 'email': 'peter@my-site.com.com'},
-                    {'id': 2, 'name': 'Jon', 'email': 'jon@my-site.com.com'}]
+        text = json.dumps(
+            {
+                "data": [
+                    {"id": 1, "name": "Peter", "email": "peter@my-site.com.com"},
+                    {"id": 2, "name": "Jon", "email": "jon@my-site.com.com"},
+                ]
+            }
+        )
+        expected = [
+            {"id": 1, "name": "Peter", "email": "peter@my-site.com.com"},
+            {"id": 2, "name": "Jon", "email": "jon@my-site.com.com"},
+        ]
 
         with self.app.app_context():
             mock_request.get(full_url, text=text)
@@ -114,8 +136,8 @@ class RequestServiceTests(unittest.TestCase):
     def test_post(self, mock_request):
         url = "http://www.my-site.com/users"
         full_url = url
-        user = {'name': 'Peter', 'email': 'peter@my-site.com'}
-        text = json.dumps({'data': {'id': 1, 'name': 'Peter', 'email': 'peter@my-site.com'}})
+        user = {"name": "Peter", "email": "peter@my-site.com"}
+        text = json.dumps({"data": {"id": 1, "name": "Peter", "email": "peter@my-site.com"}})
 
         with self.app.app_context():
             mock_request.post(full_url, text=text, status_code=201)
@@ -128,7 +150,7 @@ class RequestServiceTests(unittest.TestCase):
     def test_post_for_object_without_json(self, mock_request):
         url = "http://www.my-site.com/users"
         full_url = url
-        user = {'name': 'Peter', 'email': 'peter@my-site.com'}
+        user = {"name": "Peter", "email": "peter@my-site.com"}
         expected = {}
 
         with self.app.app_context():
@@ -141,8 +163,8 @@ class RequestServiceTests(unittest.TestCase):
     def test_post_for_object_without_valid_json_data(self, mock_request):
         url = "http://www.my-site.com/users"
         full_url = url
-        user = {'name': 'Peter', 'email': 'peter@my-site.com'}
-        text = json.dumps({'another_data': {'id': 1, 'name': 'Peter', 'email': 'peter@my-site.com.com'}})
+        user = {"name": "Peter", "email": "peter@my-site.com"}
+        text = json.dumps({"another_data": {"id": 1, "name": "Peter", "email": "peter@my-site.com.com"}})
         expected = {}
 
         with self.app.app_context():
@@ -155,9 +177,9 @@ class RequestServiceTests(unittest.TestCase):
     def test_post_for_object_with_valid_data(self, mock_request):
         url = "http://www.my-site.com/users"
         full_url = url
-        user = {'name': 'Peter', 'email': 'peter@my-site.com'}
-        text = json.dumps({'data': {'id': 1, 'name': 'Peter', 'email': 'peter@my-site.com.com'}})
-        expected = {'id': 1, 'name': 'Peter', 'email': 'peter@my-site.com.com'}
+        user = {"name": "Peter", "email": "peter@my-site.com"}
+        text = json.dumps({"data": {"id": 1, "name": "Peter", "email": "peter@my-site.com.com"}})
+        expected = {"id": 1, "name": "Peter", "email": "peter@my-site.com.com"}
 
         with self.app.app_context():
             mock_request.post(full_url, text=text, status_code=201)
@@ -168,10 +190,10 @@ class RequestServiceTests(unittest.TestCase):
     @requests_mock.Mocker()
     def test_put(self, mock_request):
         url = "http://www.my-site.com/users/{user-id}"
-        path_params = {'user-id': 123}
+        path_params = {"user-id": 123}
         full_url = "http://www.my-site.com/users/123"
-        user = {'name': 'Peter', 'email': 'peter@my-site.com'}
-        text = json.dumps({'data': {'id': 123, 'name': 'Peter', 'email': 'peter@my-site.com'}})
+        user = {"name": "Peter", "email": "peter@my-site.com"}
+        text = json.dumps({"data": {"id": 123, "name": "Peter", "email": "peter@my-site.com"}})
 
         with self.app.app_context():
             mock_request.put(full_url, text=text, status_code=200)
@@ -183,9 +205,9 @@ class RequestServiceTests(unittest.TestCase):
     @requests_mock.Mocker()
     def test_put_for_object_without_json(self, mock_request):
         url = "http://www.my-site.com/users/{user-id}"
-        path_params = {'user-id': 123}
+        path_params = {"user-id": 123}
         full_url = "http://www.my-site.com/users/123"
-        user = {'name': 'Peter', 'email': 'peter@my-site.com'}
+        user = {"name": "Peter", "email": "peter@my-site.com"}
         expected = {}
 
         with self.app.app_context():
@@ -197,10 +219,10 @@ class RequestServiceTests(unittest.TestCase):
     @requests_mock.Mocker()
     def test_put_for_object_without_valid_json_data(self, mock_request):
         url = "http://www.my-site.com/users/{user-id}"
-        path_params = {'user-id': 123}
+        path_params = {"user-id": 123}
         full_url = "http://www.my-site.com/users/123"
-        user = {'name': 'Peter', 'email': 'peter@my-site.com'}
-        text = json.dumps({'another_data': {'id': 123, 'name': 'Peter', 'email': 'peter@my-site.com.com'}})
+        user = {"name": "Peter", "email": "peter@my-site.com"}
+        text = json.dumps({"another_data": {"id": 123, "name": "Peter", "email": "peter@my-site.com.com"}})
         expected = {}
 
         with self.app.app_context():
@@ -212,11 +234,11 @@ class RequestServiceTests(unittest.TestCase):
     @requests_mock.Mocker()
     def test_put_for_object_with_valid_data(self, mock_request):
         url = "http://www.my-site.com/users/{user-id}"
-        path_params = {'user-id': 123}
+        path_params = {"user-id": 123}
         full_url = "http://www.my-site.com/users/123"
-        user = {'name': 'Peter', 'email': 'peter@my-site.com'}
-        text = json.dumps({'data': {'id': 123, 'name': 'Peter', 'email': 'peter@my-site.com.com'}})
-        expected = {'id': 123, 'name': 'Peter', 'email': 'peter@my-site.com.com'}
+        user = {"name": "Peter", "email": "peter@my-site.com"}
+        text = json.dumps({"data": {"id": 123, "name": "Peter", "email": "peter@my-site.com.com"}})
+        expected = {"id": 123, "name": "Peter", "email": "peter@my-site.com.com"}
 
         with self.app.app_context():
             mock_request.put(full_url, text=text, status_code=200)
@@ -227,10 +249,10 @@ class RequestServiceTests(unittest.TestCase):
     @requests_mock.Mocker()
     def test_patch(self, mock_request):
         url = "http://www.my-site.com/users/{user-id}"
-        path_params = {'user-id': 123}
+        path_params = {"user-id": 123}
         full_url = "http://www.my-site.com/users/123"
-        user = {'name': 'Peter', 'email': 'peter@my-site.com'}
-        text = json.dumps({'data': {'id': 123, 'name': 'Peter', 'email': 'peter@my-site.com'}})
+        user = {"name": "Peter", "email": "peter@my-site.com"}
+        text = json.dumps({"data": {"id": 123, "name": "Peter", "email": "peter@my-site.com"}})
 
         with self.app.app_context():
             mock_request.patch(full_url, text=text, status_code=200)
@@ -242,9 +264,9 @@ class RequestServiceTests(unittest.TestCase):
     @requests_mock.Mocker()
     def test_patch_for_object_without_json(self, mock_request):
         url = "http://www.my-site.com/users/{user-id}"
-        path_params = {'user-id': 123}
+        path_params = {"user-id": 123}
         full_url = "http://www.my-site.com/users/123"
-        user = {'name': 'Peter', 'email': 'peter@my-site.com'}
+        user = {"name": "Peter", "email": "peter@my-site.com"}
         expected = {}
 
         with self.app.app_context():
@@ -256,10 +278,10 @@ class RequestServiceTests(unittest.TestCase):
     @requests_mock.Mocker()
     def test_patch_for_object_without_valid_json_data(self, mock_request):
         url = "http://www.my-site.com/users/{user-id}"
-        path_params = {'user-id': 123}
+        path_params = {"user-id": 123}
         full_url = "http://www.my-site.com/users/123"
-        user = {'name': 'Peter', 'email': 'peter@my-site.com'}
-        text = json.dumps({'another_data': {'id': 123, 'name': 'Peter', 'email': 'peter@my-site.com.com'}})
+        user = {"name": "Peter", "email": "peter@my-site.com"}
+        text = json.dumps({"another_data": {"id": 123, "name": "Peter", "email": "peter@my-site.com.com"}})
         expected = {}
 
         with self.app.app_context():
@@ -271,11 +293,11 @@ class RequestServiceTests(unittest.TestCase):
     @requests_mock.Mocker()
     def test_patch_for_object_with_valid_data(self, mock_request):
         url = "http://www.my-site.com/users/{user-id}"
-        path_params = {'user-id': 123}
+        path_params = {"user-id": 123}
         full_url = "http://www.my-site.com/users/123"
-        user = {'name': 'Peter', 'email': 'peter@my-site.com'}
-        text = json.dumps({'data': {'id': 123, 'name': 'Peter', 'email': 'peter@my-site.com.com'}})
-        expected = {'id': 123, 'name': 'Peter', 'email': 'peter@my-site.com.com'}
+        user = {"name": "Peter", "email": "peter@my-site.com"}
+        text = json.dumps({"data": {"id": 123, "name": "Peter", "email": "peter@my-site.com.com"}})
+        expected = {"id": 123, "name": "Peter", "email": "peter@my-site.com.com"}
 
         with self.app.app_context():
             mock_request.patch(full_url, text=text, status_code=200)
@@ -286,7 +308,7 @@ class RequestServiceTests(unittest.TestCase):
     @requests_mock.Mocker()
     def test_delete(self, mock_request):
         url = "http://www.my-site.com/users/{user-id}"
-        path_params = {'user-id': 123}
+        path_params = {"user-id": 123}
         full_url = "http://www.my-site.com/users/123"
 
         with self.app.app_context():
@@ -294,63 +316,54 @@ class RequestServiceTests(unittest.TestCase):
             response = self.request.delete(url, path_params)
 
         self.assertEqual(204, response.status_code)
-        self.assertEqual('', response.text)
+        self.assertEqual("", response.text)
 
-    def test_propagate_headers_empty(self, ):
-        input_headers = {
-
-        }
+    def test_propagate_headers_empty(
+        self,
+    ):
+        input_headers = {}
         expected_headers = {
-            'Content-Length': '12',
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Host': 'localhost'
+            "Content-Length": "12",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Host": "localhost",
         }
-        with self.app.test_request_context(
-                '/tests/', data={'format': 'short'}):
+        with self.app.test_request_context("/tests/", data={"format": "short"}):
             headers = self.request.set_propagate_headers(input_headers)
 
         self.assertEqual(expected_headers, headers)
 
     def test_propagate_headers_no_override(self):
-        input_headers = {
-            'Host': 'my-server'
-        }
-        expected_headers = {
-            'Host': 'my-server'
-        }
-        with self.app.test_request_context(
-                '/tests/'):
+        input_headers = {"Host": "my-server"}
+        expected_headers = {"Host": "my-server"}
+        with self.app.test_request_context("/tests/"):
             headers = self.request.set_propagate_headers(input_headers)
 
         self.assertEqual(expected_headers, headers)
 
     def test_propagate_headers_propagate(self):
-        input_headers = {
-        }
+        input_headers = {}
         expected_headers = {
-            'Content-Length': '12',
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Host': 'localhost',
-            'A': 'b',
+            "Content-Length": "12",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Host": "localhost",
+            "A": "b",
         }
-        with self.app.test_request_context(
-                '/tests/', data={'format': 'short'}, headers={'a': 'b'}):
+        with self.app.test_request_context("/tests/", data={"format": "short"}, headers={"a": "b"}):
             headers = self.request.set_propagate_headers(input_headers)
 
         self.assertEqual(expected_headers, headers)
 
     def test_propagate_headers_propagate_no_override(self):
         input_headers = {
-            'Host': 'my-server',
-            'Span': '1234',
+            "Host": "my-server",
+            "Span": "1234",
         }
         expected_headers = {
-            'Host': 'my-server',
-            'A': 'b',
-            'Span': '1234',
+            "Host": "my-server",
+            "A": "b",
+            "Span": "1234",
         }
-        with self.app.test_request_context(
-                '/tests/', headers={'a': 'b', 'span': '5678'}):
+        with self.app.test_request_context("/tests/", headers={"a": "b", "span": "5678"}):
             headers = self.request.set_propagate_headers(input_headers)
 
         self.assertEqual(expected_headers, headers)
@@ -358,12 +371,11 @@ class RequestServiceTests(unittest.TestCase):
     def test_propagate_headers_on_get(self):
         url = "http://www.my-site.com/users"
         mock_headers = {
-            'A': 'b',
+            "A": "b",
         }
         self.request.set_propagate_headers = unittest.mock.Mock()
         self.request.set_propagate_headers.return_value = mock_headers
-        with self.app.test_request_context(
-                '/tests/', data={'format': 'short'}, headers=mock_headers):
+        with self.app.test_request_context("/tests/", data={"format": "short"}, headers=mock_headers):
             self.request.get(url, propagate_headers=True)
 
         self.request.set_propagate_headers.assert_called_once_with({})
@@ -371,22 +383,21 @@ class RequestServiceTests(unittest.TestCase):
     def test_propagate_headers_on_get_with_headers(self):
         url = "http://www.my-site.com/users"
         mock_headers = {
-            'A': 'b',
+            "A": "b",
         }
         get_headers = {
-            'C': 'd',
+            "C": "d",
         }
         self.request.set_propagate_headers = unittest.mock.Mock()
         self.request.set_propagate_headers.return_value = mock_headers
-        with self.app.test_request_context(
-                '/tests/', data={'format': 'short'}, headers=mock_headers):
+        with self.app.test_request_context("/tests/", data={"format": "short"}, headers=mock_headers):
             self.request.get(url, headers=get_headers, propagate_headers=True)
 
         self.request.set_propagate_headers.assert_called_once_with(get_headers)
 
     @requests_mock.Mocker()
     def test_retries_with_500(self, mock_request):
-        url = 'http://localhost:9999'
+        url = "http://localhost:9999"
         with self.app.app_context():
             mock_request.get(url, text="", status_code=500)
             response = self.request.get(url)
@@ -396,7 +407,7 @@ class RequestServiceTests(unittest.TestCase):
 
     @requests_mock.Mocker()
     def test_retries_with_200(self, mock_request):
-        url = 'http://localhost:9999'
+        url = "http://localhost:9999"
         with self.app.app_context():
             mock_request.get(url, text="", status_code=200)
             response = self.request.get(url)

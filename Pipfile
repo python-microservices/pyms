@@ -4,7 +4,10 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-py-ms = {editable = true,extras = ["tests"], path = "."}
+py-ms = {editable = true,extras = ["tests"],path = "."}
 
 [packages]
-py-ms = {editable = true,extras = ["all"], path = "."}
+py-ms = {editable = true,extras = ["all"],path = "."}
+
+[pipenv]
+allow_prereleases = true
