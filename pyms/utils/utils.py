@@ -27,6 +27,13 @@ def import_package(package: Text):
     return importlib.import_module(package)
 
 
+def import_class(module_class_text: Text) -> type:
+    module_class_paths = module_class_text.split(".")
+    package = ".".join(module_class_paths[:-1])
+    module_class = import_from(package, module_class_paths[-1])
+    return module_class
+
+
 def check_package_exists(package_name: Text) -> Union[Exception, bool]:
     spec = importlib.util.find_spec(package_name)
     if spec is None:
