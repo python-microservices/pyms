@@ -3,6 +3,3 @@ site_url: https://github.com/python-microservices/pyms
 repo_url: https://github.com/python-microservices/pyms
 repo_name: python-microservices/pyms
 site_author: Alberto Vara
-
-nav:
-  - Home: index.md

@@ -26,11 +26,11 @@ install_crypt_requires = [
 ]
 
 install_aws_requires = [
-    "boto3>=1.15.6",
+    "boto3>=1.16.25",
 ]
 
 install_request_requires = [
-    "requests>=2.24.0",
+    "requests>=2.25.0",
 ]
 
 install_swagger_requires = [
@@ -43,7 +43,7 @@ install_swagger_requires = [
 install_traces_requires = [
     "jaeger-client>=4.3.0",
     "flask-opentracing>=1.1.0",
-    "opentracing>=2.1",
+    "opentracing>=2.4.0",
     "opentracing-instrumentation>=3.2.1",
     "tornado>=4.3,<6.0",
 ]
@@ -69,7 +69,7 @@ install_tests_requires = [
     "lightstep>=4.4.8",
     "safety==1.9.0",
     "mypy>=0.782",
-    "pre-commit>=2.8.1",
+    "pre-commit>=2.9.2",
     "black>=20.8b1",
     "isort>=5.6.4",
 ]
