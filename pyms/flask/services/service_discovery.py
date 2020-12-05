@@ -7,7 +7,7 @@ except ModuleNotFoundError:  # pragma: no cover
 
 from pyms.constants import LOGGER_NAME
 from pyms.flask.services.driver import DriverService
-from pyms.utils import import_from
+from pyms.utils.utils import import_class
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -65,9 +65,7 @@ class Service(DriverService):
         if self.service == CONSUL_SERVICE_DISCOVERY:
             client = ServiceDiscoveryConsul(self)
         else:
-            service_paths = self.service.split(".")
-            package = ".".join(service_paths[:-1])
-            client = import_from(package, service_paths[-1])(self)
+            client = import_class(self.service)(self)
 
         logger.debug("Init %s as service discovery", client)
         return client

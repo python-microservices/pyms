@@ -14,7 +14,7 @@ except ModuleNotFoundError:  # pragma: no cover
 
 from pyms.exceptions import AttrDoesNotExistException
 from pyms.flask.services.driver import DriverService
-from pyms.utils import check_package_exists
+from pyms.utils.utils import check_package_exists, import_class
 
 SWAGGER_PATH = "swagger"
 SWAGGER_FILE = "swagger.yaml"
@@ -62,7 +62,14 @@ class Service(DriverService):
     """
 
     config_resource = "swagger"
-    default_values = {"path": SWAGGER_PATH, "file": SWAGGER_FILE, "url": SWAGGER_URL, "project_dir": PROJECT_DIR}
+    default_values = {
+        "path": SWAGGER_PATH,
+        "file": SWAGGER_FILE,
+        "url": SWAGGER_URL,
+        "project_dir": PROJECT_DIR,
+        "validator_map": {},
+        "validate_responses": True,
+    }
 
     @staticmethod
     def _get_application_root(config) -> str:
@@ -97,13 +104,15 @@ class Service(DriverService):
         :return: Flask
         """
         check_package_exists("connexion")
+
+        # Set paths
         specification_dir = self.path
         application_root = self._get_application_root(config)
         if not os.path.isabs(self.path):
             specification_dir = os.path.join(path, self.path)
 
-        app = connexion.App(__name__, specification_dir=specification_dir, resolver=RestyResolver(self.project_dir))
-
+        # Prepare params
+        validator_map = {k: import_class(v) for k, v in self.validator_map.items()}
         params = {
             "specification": get_bundled_specs(Path(os.path.join(specification_dir, self.file)))
             if prance
@@ -111,13 +120,18 @@ class Service(DriverService):
             "arguments": {"title": config.APP_NAME},
             "base_path": application_root,
             "options": {"swagger_url": self.url},
+            "validator_map": validator_map,
+            "validate_responses": self.validate_responses,
         }
 
         # Fix Connexion issue https://github.com/zalando/connexion/issues/1135
         if application_root == "/":
             del params["base_path"]
 
+        # Initialize connexion
+        app = connexion.App(__name__, specification_dir=specification_dir, resolver=RestyResolver(self.project_dir))
         app.add_api(**params)
+
         # Invert the objects, instead connexion with a Flask object, a Flask object with
         application = app.app
         application.connexion_app = app
