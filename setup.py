@@ -17,16 +17,16 @@ install_min_requires = [
     "flask>=1.1.2",
     "python-json-logger>=2.0.0",
     "pyyaml>=5.3.1",
-    "anyconfig>=0.9.11",
-    "cryptography>=3.2",
+    "anyconfig>=0.10.0",
+    "cryptography>=3.3.1",
 ]
 
 install_crypt_requires = [
-    "cryptography>=3.1.1",
+    "cryptography>=3.3.1",
 ]
 
 install_aws_requires = [
-    "boto3>=1.16.25",
+    "boto3>=1.16.59",
 ]
 
 install_request_requires = [
@@ -37,7 +37,7 @@ install_swagger_requires = [
     "connexion[swagger-ui]>=2.7.0",
     "swagger-ui-bundle>=0.0.6",
     "semver>=2.10.1",
-    "prance>=0.18.2",
+    "prance>=0.20.2",
 ]
 
 install_traces_requires = [
@@ -58,20 +58,21 @@ install_service_discovery_requires = [
 
 install_tests_requires = [
     "requests-mock>=1.8.0",
-    "coverage>=5.3",
+    "coverage>=5.4",
     "pytest>=6.1.0",
     "pytest-cov>=2.10.1",
     "pylint>=2.6.0",
     "flake8>=3.8.2",
     "tox>=3.20.0",
-    "bandit>=1.6.2",
+    "bandit>=1.7.0",
     "mkdocs>=1.1.2",
     "lightstep>=4.4.8",
     "safety==1.9.0",
-    "mypy>=0.782",
+    "mypy>=0.800",
     "pre-commit>=2.9.2",
     "black>=20.8b1",
     "isort>=5.6.4",
+    "importlib-metadata >=0.12,<3",
 ]
 
 install_all_requires = (
