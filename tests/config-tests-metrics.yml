@@ -2,6 +2,8 @@
 pyms:
   services:
     metrics: true
+    requests:
+      data: /
     tracer:
       client: "jaeger"
       component_name: "Python Microservice with Jaeger"

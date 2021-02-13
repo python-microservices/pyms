@@ -7,16 +7,31 @@ import requests
 from flask import request
 from requests.adapters import HTTPAdapter, Response
 from urllib3.util.retry import Retry
+try:
+    from prometheus_client import Counter, Histogram
+except ModuleNotFoundError:  # pragma: no cover
+    Counter = None
+    Counter = Histogram
 
 from pyms.constants import LOGGER_NAME
-from pyms.flask.services.driver import DriverService
+from pyms.flask.services.driver import DriverService, get_service_name
 from pyms.flask.services.tracer import inject_span_in_headers
+from pyms.config.conf import get_conf
 
 logger = logging.getLogger(LOGGER_NAME)
 
 DEFAULT_RETRIES = 3
 
 DEFAULT_STATUS_RETRIES = (500, 502, 504)
+
+METRICS_CONFIG = get_conf(service=get_service_name(
+    service="metrics"), empty_init=True)
+
+REQUESTS_COUNT = Counter("http_server_responses_count", "Python requests count", [
+                         "service", "method", "uri", "status"])
+
+REQUESTS_LATENCY = Histogram("http_server_responses_seconds", "Python requests latency", [
+                             "service", "method", "uri", "status"])
 
 
 def retry(f) -> Any:
@@ -55,6 +70,9 @@ class Service(DriverService):
     }
     tracer = None
 
+    def init_action(self, microservice_instance):
+        self.app_name = microservice_instance.application.config["APP_NAME"]
+
     def requests(self, session: requests.Session) -> requests.Session:
         """
         A backoff factor to apply between attempts after the second try (most errors are resolved immediately by a
@@ -75,6 +93,11 @@ class Service(DriverService):
         adapter = HTTPAdapter(max_retries=max_retries)
         session_r.mount("http://", adapter)
         session_r.mount("https://", adapter)
+
+        metrics_config = get_conf(service=get_service_name(
+            service="metrics"), empty_init=True)
+        if metrics_config:
+            session_r.hooks["response"] = [self.observe_requests]
         return session_r
 
     @staticmethod
@@ -355,3 +378,9 @@ class Service(DriverService):
         logger.debug("Response {}".format(response))
 
         return response
+
+    def observe_requests(self, response, *args, **kwargs):
+        REQUESTS_COUNT.labels(self.app_name, response.request.method,
+                              response.url, response.status_code).inc()
+        REQUESTS_LATENCY.labels(self.app_name, response.request.method, response.url,
+                                response.status_code).observe(float(response.elapsed.total_seconds()))
