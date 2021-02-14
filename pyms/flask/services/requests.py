@@ -11,7 +11,6 @@ try:
     from prometheus_client import Counter, Histogram
 except ModuleNotFoundError:  # pragma: no cover
     Counter = None
-    Counter = None
     Histogram = None
 
 from pyms.constants import LOGGER_NAME
