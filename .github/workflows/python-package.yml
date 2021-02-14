@@ -40,9 +40,9 @@ jobs:
     - name: Lint with pylint
       run: |
         pylint --rcfile=pylintrc pyms
-    - name: Security safety
-      run: |
-        safety check
+#    - name: Security safety
+#      run: |
+#        safety check
     - name: Security bandit
       run: |
         bandit -r pyms/
