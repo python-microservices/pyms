@@ -11,7 +11,8 @@ try:
     from prometheus_client import Counter, Histogram
 except ModuleNotFoundError:  # pragma: no cover
     Counter = None
-    Counter = Histogram
+    Counter = None
+    Histogram = None
 
 from pyms.constants import LOGGER_NAME
 from pyms.flask.services.driver import DriverService, get_service_name
