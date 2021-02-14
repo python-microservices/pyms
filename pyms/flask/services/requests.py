@@ -7,6 +7,7 @@ import requests
 from flask import request
 from requests.adapters import HTTPAdapter, Response
 from urllib3.util.retry import Retry
+
 try:
     from prometheus_client import Counter, Histogram
 except ModuleNotFoundError:  # pragma: no cover
@@ -24,14 +25,13 @@ DEFAULT_RETRIES = 3
 
 DEFAULT_STATUS_RETRIES = (500, 502, 504)
 
-METRICS_CONFIG = get_conf(service=get_service_name(
-    service="metrics"), empty_init=True)
+METRICS_CONFIG = get_conf(service=get_service_name(service="metrics"), empty_init=True)
 
-REQUESTS_COUNT = Counter("http_server_responses_count", "Python requests count", [
-                         "service", "method", "uri", "status"])
+REQUESTS_COUNT = Counter("http_server_responses_count", "Python requests count", ["service", "method", "uri", "status"])
 
-REQUESTS_LATENCY = Histogram("http_server_responses_seconds", "Python requests latency", [
-                             "service", "method", "uri", "status"])
+REQUESTS_LATENCY = Histogram(
+    "http_server_responses_seconds", "Python requests latency", ["service", "method", "uri", "status"]
+)
 
 
 def retry(f) -> Any:
@@ -94,8 +94,7 @@ class Service(DriverService):
         session_r.mount("http://", adapter)
         session_r.mount("https://", adapter)
 
-        metrics_config = get_conf(service=get_service_name(
-            service="metrics"), empty_init=True)
+        metrics_config = get_conf(service=get_service_name(service="metrics"), empty_init=True)
         if metrics_config:
             session_r.hooks["response"] = [self.observe_requests]
         return session_r
@@ -163,8 +162,7 @@ class Service(DriverService):
                 data = data.get(self.data, {})
             return data
         except ValueError:
-            logger.warning(
-                "Response.content is not a valid json {}".format(response.content))
+            logger.warning("Response.content is not a valid json {}".format(response.content))
             return {}
 
     @retry
@@ -191,15 +189,12 @@ class Service(DriverService):
         """
 
         full_url = self._build_url(url, path_params)
-        headers = self._get_headers(
-            headers=headers, propagate_headers=propagate_headers)
+        headers = self._get_headers(headers=headers, propagate_headers=propagate_headers)
         headers = self.insert_trace_headers(headers)
-        logger.debug("Get with url {}, params {}, headers {}, kwargs {}".format(
-            full_url, params, headers, kwargs))
+        logger.debug("Get with url {}, params {}, headers {}, kwargs {}".format(full_url, params, headers, kwargs))
 
         session = requests.Session()
-        response = self.requests(session=session).get(
-            full_url, params=params, headers=headers, **kwargs)
+        response = self.requests(session=session).get(full_url, params=params, headers=headers, **kwargs)
 
         return response
 
@@ -218,8 +213,7 @@ class Service(DriverService):
         :rtype: requests.Response
         """
 
-        response = self.get(url, path_params=path_params,
-                            params=params, headers=headers, **kwargs)
+        response = self.get(url, path_params=path_params, params=params, headers=headers, **kwargs)
         return self.parse_response(response)
 
     @retry
@@ -243,13 +237,11 @@ class Service(DriverService):
         headers = self._get_headers(headers)
         headers = self.insert_trace_headers(headers)
         logger.debug(
-            "Post with url {}, data {}, json {}, headers {}, kwargs {}".format(
-                full_url, data, json, headers, kwargs)
+            "Post with url {}, data {}, json {}, headers {}, kwargs {}".format(full_url, data, json, headers, kwargs)
         )
 
         session = requests.Session()
-        response = self.requests(session=session).post(
-            full_url, data=data, json=json, headers=headers, **kwargs)
+        response = self.requests(session=session).post(full_url, data=data, json=json, headers=headers, **kwargs)
         logger.debug("Response {}".format(response))
 
         return response
@@ -270,8 +262,7 @@ class Service(DriverService):
         :rtype: requests.Response
         """
 
-        response = self.post(url, path_params=path_params,
-                             data=data, json=json, headers=headers, **kwargs)
+        response = self.post(url, path_params=path_params, data=data, json=json, headers=headers, **kwargs)
         return self.parse_response(response)
 
     @retry
@@ -292,12 +283,10 @@ class Service(DriverService):
         full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers)
         headers = self.insert_trace_headers(headers)
-        logger.debug("Put with url {}, data {}, headers {}, kwargs {}".format(
-            full_url, data, headers, kwargs))
+        logger.debug("Put with url {}, data {}, headers {}, kwargs {}".format(full_url, data, headers, kwargs))
 
         session = requests.Session()
-        response = self.requests(session=session).put(
-            full_url, data, headers=headers, **kwargs)
+        response = self.requests(session=session).put(full_url, data, headers=headers, **kwargs)
         logger.debug("Response {}".format(response))
 
         return response
@@ -318,8 +307,7 @@ class Service(DriverService):
         :rtype: requests.Response
         """
 
-        response = self.put(url, path_params=path_params,
-                            data=data, headers=headers, **kwargs)
+        response = self.put(url, path_params=path_params, data=data, headers=headers, **kwargs)
         return self.parse_response(response)
 
     @retry
@@ -340,12 +328,10 @@ class Service(DriverService):
         full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers)
         headers = self.insert_trace_headers(headers)
-        logger.debug("Patch with url {}, data {}, headers {}, kwargs {}".format(
-            full_url, data, headers, kwargs))
+        logger.debug("Patch with url {}, data {}, headers {}, kwargs {}".format(full_url, data, headers, kwargs))
 
         session = requests.Session()
-        response = self.requests(session=session).patch(
-            full_url, data, headers=headers, **kwargs)
+        response = self.requests(session=session).patch(full_url, data, headers=headers, **kwargs)
         logger.debug("Response {}".format(response))
 
         return response
@@ -366,8 +352,7 @@ class Service(DriverService):
         :rtype: requests.Response
         """
 
-        response = self.patch(url, path_params=path_params,
-                              data=data, headers=headers, **kwargs)
+        response = self.patch(url, path_params=path_params, data=data, headers=headers, **kwargs)
         return self.parse_response(response)
 
     @retry
@@ -385,18 +370,16 @@ class Service(DriverService):
         full_url = self._build_url(url, path_params)
         headers = self._get_headers(headers)
         headers = self.insert_trace_headers(headers)
-        logger.debug("Delete with url {}, headers {}, kwargs {}".format(
-            full_url, headers, kwargs))
+        logger.debug("Delete with url {}, headers {}, kwargs {}".format(full_url, headers, kwargs))
 
         session = requests.Session()
-        response = self.requests(session=session).delete(
-            full_url, headers=headers, **kwargs)
+        response = self.requests(session=session).delete(full_url, headers=headers, **kwargs)
         logger.debug("Response {}".format(response))
 
         return response
 
     def observe_requests(self, response, *args, **kwargs):
-        REQUESTS_COUNT.labels(self.app_name, response.request.method,
-                              response.url, response.status_code).inc()
-        REQUESTS_LATENCY.labels(self.app_name, response.request.method, response.url,
-                                response.status_code).observe(float(response.elapsed.total_seconds()))
+        REQUESTS_COUNT.labels(self.app_name, response.request.method, response.url, response.status_code).inc()
+        REQUESTS_LATENCY.labels(self.app_name, response.request.method, response.url, response.status_code).observe(
+            float(response.elapsed.total_seconds())
+        )
