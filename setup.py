@@ -18,11 +18,11 @@ install_min_requires = [
     "python-json-logger>=2.0.0",
     "pyyaml>=5.3.1",
     "anyconfig>=0.10.0",
-    "cryptography>=3.3.1",
+    "cryptography>=3.4.5",
 ]
 
 install_crypt_requires = [
-    "cryptography>=3.3.1",
+    "cryptography>=3.4.5",
 ]
 
 install_aws_requires = [
@@ -67,12 +67,11 @@ install_tests_requires = [
     "bandit>=1.7.0",
     "mkdocs>=1.1.2",
     "lightstep>=4.4.8",
-    "safety==1.9.0",
+    "safety>=1.10.3",
     "mypy>=0.800",
-    "pre-commit>=2.9.2",
+    "pre-commit>=2.10.1",
     "black>=20.8b1",
     "isort>=5.6.4",
-    "importlib-metadata >=0.12,<3",
 ]
 
 install_all_requires = (
@@ -110,7 +109,7 @@ setup(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests", "*.examples", "*.examples.*", "examples.*", "examples"]
     ),
     setup_requires=[
-        "pytest-runner>=5.2",
+        "pytest-runner>=5.3.0",
     ],
     install_requires=install_min_requires,
     extras_require={
