@@ -27,11 +27,14 @@ DEFAULT_STATUS_RETRIES = (500, 502, 504)
 
 METRICS_CONFIG = get_conf(service=get_service_name(service="metrics"), empty_init=True)
 
-REQUESTS_COUNT = Counter("http_server_responses_count", "Python requests count", ["service", "method", "uri", "status"])
+if METRICS_CONFIG:
+    REQUESTS_COUNT = Counter(
+        "http_server_responses_count", "Python requests count", ["service", "method", "uri", "status"]
+    )
 
-REQUESTS_LATENCY = Histogram(
-    "http_server_responses_seconds", "Python requests latency", ["service", "method", "uri", "status"]
-)
+    REQUESTS_LATENCY = Histogram(
+        "http_server_responses_seconds", "Python requests latency", ["service", "method", "uri", "status"]
+    )
 
 
 def retry(f) -> Any:
