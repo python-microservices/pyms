@@ -63,7 +63,7 @@ class TestMetricsFlask(unittest.TestCase):
             mock_request.get(full_url)
             self.request.get(url)
         self.client.get("/metrics")
-        generated_latency_url = b'http_server_responses_seconds_bucket{le="0.005",method="GET",service="Python Microservice with Jaeger",status="200",uri="http://www.my-site.com/users"}'
+        generated_latency_url = b'http_client_requests_seconds_bucket{le="0.005",method="GET",service="Python Microservice with Jaeger",status="200",uri="http://www.my-site.com/users"}'
         assert generated_latency_url in generate_latest()
 
     @requests_mock.Mocker()
@@ -74,7 +74,7 @@ class TestMetricsFlask(unittest.TestCase):
             mock_request.get(full_url)
             self.request.get(url)
         self.client.get("/metrics")
-        generated_count_url = b'http_server_responses_count_total{method="GET",service="Python Microservice with Jaeger",status="200",uri="http://www.my-site.com/users"}'
+        generated_count_url = b'http_client_requests_count_total{method="GET",service="Python Microservice with Jaeger",status="200",uri="http://www.my-site.com/users"}'
         assert generated_count_url in generate_latest()
 
     def test_metrics_logger(self):
@@ -143,7 +143,7 @@ class TestMultiprocessMetricsFlask(unittest.TestCase):
             mock_request.get(full_url)
             self.request.get(url)
         self.client.get("/metrics")
-        generated_latency_url = b'http_server_responses_seconds_bucket{le="0.005",method="GET",service="Python Microservice with Jaeger",status="200",uri="http://www.my-site.com/users"}'
+        generated_latency_url = b'http_client_requests_seconds_bucket{le="0.005",method="GET",service="Python Microservice with Jaeger",status="200",uri="http://www.my-site.com/users"}'
         assert generated_latency_url in generate_latest()
 
     @requests_mock.Mocker()
@@ -154,7 +154,7 @@ class TestMultiprocessMetricsFlask(unittest.TestCase):
             mock_request.get(full_url)
             self.request.get(url)
         self.client.get("/metrics")
-        generated_count_url = b'http_server_responses_count_total{method="GET",service="Python Microservice with Jaeger",status="200",uri="http://www.my-site.com/users"}'
+        generated_count_url = b'http_client_requests_count_total{method="GET",service="Python Microservice with Jaeger",status="200",uri="http://www.my-site.com/users"}'
         assert generated_count_url in generate_latest()
 
     def test_metrics_logger(self):

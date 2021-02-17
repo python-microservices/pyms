@@ -29,11 +29,11 @@ METRICS_CONFIG = get_conf(service=get_service_name(service="metrics"), empty_ini
 
 if METRICS_CONFIG:
     REQUESTS_COUNT = Counter(
-        "http_server_responses_count", "Python requests count", ["service", "method", "uri", "status"]
+        "http_client_requests_count", "Python requests count", ["service", "method", "uri", "status"]
     )
 
     REQUESTS_LATENCY = Histogram(
-        "http_server_responses_seconds", "Python requests latency", ["service", "method", "uri", "status"]
+        "http_client_requests_seconds", "Python requests latency", ["service", "method", "uri", "status"]
     )
 
 
