@@ -8,33 +8,28 @@ from flask import request
 from requests.adapters import HTTPAdapter, Response
 from urllib3.util.retry import Retry
 
-try:
-    from prometheus_client import Counter, Histogram
-except ModuleNotFoundError:  # pragma: no cover
-    Counter = None
-    Histogram = None
-
 from pyms.constants import LOGGER_NAME
 from pyms.flask.services.driver import DriverService, get_service_name
 from pyms.flask.services.tracer import inject_span_in_headers
 from pyms.config.conf import get_conf
+
+try:
+    from prometheus_client import Counter, Histogram
+
+    REQUESTS_COUNT = Counter(
+        "http_client_requests_count", "Python requests count", ["service", "method", "uri", "status"]
+    )
+    REQUESTS_LATENCY = Histogram(
+        "http_client_requests_seconds", "Python requests latency", ["service", "method", "uri", "status"]
+    )
+except ModuleNotFoundError:  # pragma: no cover
+    pass
 
 logger = logging.getLogger(LOGGER_NAME)
 
 DEFAULT_RETRIES = 3
 
 DEFAULT_STATUS_RETRIES = (500, 502, 504)
-
-METRICS_CONFIG = get_conf(service=get_service_name(service="metrics"), empty_init=True)
-
-if METRICS_CONFIG:
-    REQUESTS_COUNT = Counter(
-        "http_client_requests_count", "Python requests count", ["service", "method", "uri", "status"]
-    )
-
-    REQUESTS_LATENCY = Histogram(
-        "http_client_requests_seconds", "Python requests latency", ["service", "method", "uri", "status"]
-    )
 
 
 def retry(f) -> Any:
@@ -97,8 +92,8 @@ class Service(DriverService):
         session_r.mount("http://", adapter)
         session_r.mount("https://", adapter)
 
-        metrics_config = get_conf(service=get_service_name(service="metrics"), empty_init=True)
-        if metrics_config:
+        metrics_enabled = get_conf(service=get_service_name(service="metrics"), empty_init=True)
+        if metrics_enabled:
             session_r.hooks["response"] = [self.observe_requests]
         return session_r
 
