@@ -3,6 +3,7 @@ import unittest.mock
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
+import requests_mock
 from opentracing import global_tracer
 from prometheus_client import generate_latest, values
 
@@ -36,8 +37,9 @@ class TestMetricsFlask(unittest.TestCase):
         ms.reload_conf()
         self.app = ms.create_app()
         self.client = self.app.test_client()
+        self.request = ms.requests
 
-    def test_metrics_latency(self):
+    def test_metrics_requests_latency(self):
         self.client.get("/")
         self.client.get("/metrics")
         generated_latency_root = b'http_server_requests_seconds_bucket{le="0.005",method="GET",service="Python Microservice with Jaeger",status="404",uri="/"}'
@@ -45,13 +47,35 @@ class TestMetricsFlask(unittest.TestCase):
         assert generated_latency_root in generate_latest()
         assert generated_latency_metrics in generate_latest()
 
-    def test_metrics_count(self):
+    def test_metrics_requests_count(self):
         self.client.get("/")
         self.client.get("/metrics")
         generated_count_root = b'http_server_requests_count_total{method="GET",service="Python Microservice with Jaeger",status="404",uri="/"}'
         generated_count_metrics = b'http_server_requests_count_total{method="GET",service="Python Microservice with Jaeger",status="200",uri="/metrics"}'
         assert generated_count_root in generate_latest()
         assert generated_count_metrics in generate_latest()
+
+    @requests_mock.Mocker()
+    def test_metrics_responses_latency(self, mock_request):
+        url = "http://www.my-site.com/users"
+        full_url = url
+        with self.app.app_context():
+            mock_request.get(full_url)
+            self.request.get(url)
+        self.client.get("/metrics")
+        generated_latency_url = b'http_client_requests_seconds_bucket{le="0.005",method="GET",service="Python Microservice with Jaeger",status="200",uri="http://www.my-site.com/users"}'
+        assert generated_latency_url in generate_latest()
+
+    @requests_mock.Mocker()
+    def test_metrics_responses_count(self, mock_request):
+        url = "http://www.my-site.com/users"
+        full_url = url
+        with self.app.app_context():
+            mock_request.get(full_url)
+            self.request.get(url)
+        self.client.get("/metrics")
+        generated_count_url = b'http_client_requests_count_total{method="GET",service="Python Microservice with Jaeger",status="200",uri="http://www.my-site.com/users"}'
+        assert generated_count_url in generate_latest()
 
     def test_metrics_logger(self):
         self.client.get("/")
@@ -94,6 +118,7 @@ class TestMultiprocessMetricsFlask(unittest.TestCase):
         for path in Path(self.temp_dir.name).iterdir():
             if self._testMethodName not in path.name:
                 path.unlink()
+        self.request = ms.requests
 
     @classmethod
     def tearDownClass(cls):
@@ -110,21 +135,27 @@ class TestMultiprocessMetricsFlask(unittest.TestCase):
         assert f"counter_{self._testMethodName}.db" in metrics
         assert f"histogram_{self._testMethodName}.db" in metrics
 
-    def test_metrics_latency(self):
-        self.client.get("/")
+    @requests_mock.Mocker()
+    def test_metrics_responses_latency(self, mock_request):
+        url = "http://www.my-site.com/users"
+        full_url = url
+        with self.app.app_context():
+            mock_request.get(full_url)
+            self.request.get(url)
         self.client.get("/metrics")
-        generated_latency_root = b'http_server_requests_seconds_bucket{le="0.005",method="GET",service="Python Microservice with Jaeger",status="404",uri="/"}'
-        generated_latency_metrics = b'http_server_requests_seconds_bucket{le="0.005",method="GET",service="Python Microservice with Jaeger",status="200",uri="/metrics"}'
-        assert generated_latency_root in generate_latest(self.app.ms.metrics.registry)
-        assert generated_latency_metrics in generate_latest(self.app.ms.metrics.registry)
+        generated_latency_url = b'http_client_requests_seconds_bucket{le="0.005",method="GET",service="Python Microservice with Jaeger",status="200",uri="http://www.my-site.com/users"}'
+        assert generated_latency_url in generate_latest()
 
-    def test_metrics_count(self):
-        self.client.get("/")
+    @requests_mock.Mocker()
+    def test_metrics_responses_count(self, mock_request):
+        url = "http://www.my-site.com/users"
+        full_url = url
+        with self.app.app_context():
+            mock_request.get(full_url)
+            self.request.get(url)
         self.client.get("/metrics")
-        generated_count_root = b'http_server_requests_count_total{method="GET",service="Python Microservice with Jaeger",status="404",uri="/"}'
-        generated_count_metrics = b'http_server_requests_count_total{method="GET",service="Python Microservice with Jaeger",status="200",uri="/metrics"}'
-        assert generated_count_root in generate_latest(self.app.ms.metrics.registry)
-        assert generated_count_metrics in generate_latest(self.app.ms.metrics.registry)
+        generated_count_url = b'http_client_requests_count_total{method="GET",service="Python Microservice with Jaeger",status="200",uri="http://www.my-site.com/users"}'
+        assert generated_count_url in generate_latest()
 
     def test_metrics_logger(self):
         self.client.get("/")
