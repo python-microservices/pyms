@@ -69,7 +69,7 @@ class Service(DriverService):
     tracer = None
 
     def init_action(self, microservice_instance):
-        self.app_name = microservice_instance.application.config["APP_NAME"]
+        self.app_name = microservice_instance.application.config["APP_NAME"]  # pylint: disable=W0201
 
     def requests(self, session: requests.Session) -> requests.Session:
         """
