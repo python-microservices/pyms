@@ -14,19 +14,19 @@ else:
     long_description = ""
 
 install_min_requires = [
-    "flask>=1.1.2",
+    "flask>=2.0.0",
     "python-json-logger>=2.0.0",
     "pyyaml>=5.3.1",
-    "anyconfig>=0.10.0",
+    "anyconfig>=0.10.1",
     "cryptography>=3.4.5",
 ]
 
 install_crypt_requires = [
-    "cryptography>=3.4.5",
+    "cryptography>=3.4.7",
 ]
 
 install_aws_requires = [
-    "boto3>=1.16.59",
+    "boto3>=1.17.71",
 ]
 
 install_request_requires = [
@@ -49,7 +49,7 @@ install_traces_requires = [
 ]
 
 install_metrics_requires = [
-    "prometheus_client>=0.8.0",
+    "prometheus_client>=0.10.1",
 ]
 
 install_service_discovery_requires = [
@@ -57,13 +57,13 @@ install_service_discovery_requires = [
 ]
 
 install_tests_requires = [
-    "requests-mock>=1.8.0",
+    "requests-mock>=1.9.2",
     "coverage>=5.4",
     "pytest>=6.1.0",
     "pytest-cov>=2.10.1",
     "pylint>=2.6.0",
     "flake8>=3.8.2",
-    "tox>=3.20.0",
+    "tox>=3.23.1",
     "bandit>=1.7.0",
     "mkdocs>=1.1.2",
     "lightstep>=4.4.8",

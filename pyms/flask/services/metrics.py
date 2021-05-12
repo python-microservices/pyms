@@ -35,7 +35,7 @@ class FlaskMetricsWrapper:
         self.app_name = app_name
 
     def before_request(self) -> None:  # pylint: disable=R0201
-        request.start_time = time.time()
+        request.start_time = time.time()  # pylint: disable=assigning-non-slot
 
     def after_request(self, response: Response) -> Response:
         if hasattr(request.url_rule, "rule"):
