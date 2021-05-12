@@ -150,6 +150,7 @@ class Command:
         except ValueError:
             self.print_error('Invalid input, Please answer with a "Y" or "n"')
             self.yes_no_input(msg)
+        return False
 
     @staticmethod
     def print_ok(msg=""):

@@ -23,9 +23,8 @@ class LoadFile:
 
     def put_file(self, content, mode="w"):
         path = self.get_path_from_env()
-        file_to_write = open(path, mode)
-        file_to_write.write(content)  # The key is type bytes still
-        file_to_write.close()
+        with open(path, mode) as file_to_write:
+            file_to_write.write(content)  # The key is type bytes still
 
     def get_path_from_env(self):
         config_file = os.environ.get(self.file_env_location, self.default_file)
@@ -49,9 +48,8 @@ class LoadFile:
             if fn:
                 files_cached[path] = fn(path)
             else:
-                file_to_read = open(path, "rb")
-                content = file_to_read.read()  # The key will be type bytes
-                file_to_read.close()
+                with open(path, "rb") as file_to_read:
+                    content = file_to_read.read()  # The key will be type bytes
                 files_cached[path] = content
         return files_cached[path]
 
