@@ -4,23 +4,20 @@ import time
 from flask import Blueprint, Flask, Response, request
 from prometheus_client import REGISTRY, CollectorRegistry, Counter, Histogram, generate_latest, multiprocess
 
-from pyms.flask.services.driver import DriverService, get_service_name
 from pyms.config.conf import get_conf
+from pyms.flask.services.driver import DriverService, get_service_name
 
 # Based on https://github.com/sbarratt/flask-prometheus
 # and https://github.com/korfuri/python-logging-prometheus/
 
-METRICS_CONFIG = get_conf(service=get_service_name(
-    service="metrics"), empty_init=True)
+METRICS_CONFIG = get_conf(service=get_service_name(service="metrics"), empty_init=True)
 
 FLASK_REQUEST_COUNT = Counter(
-    "http_server_requests_count", "Flask Request Count", [
-        "service", "method", "uri", "status"]
+    "http_server_requests_count", "Flask Request Count", ["service", "method", "uri", "status"]
 )
 
 FLASK_REQUEST_LATENCY = Histogram(
-    "http_server_requests_seconds", "Flask Request Latency", [
-        "service", "method", "uri", "status"]
+    "http_server_requests_seconds", "Flask Request Latency", ["service", "method", "uri", "status"]
 )
 
 LOGGER_TOTAL_MESSAGES = Counter(
@@ -43,10 +40,8 @@ class FlaskMetricsWrapper:
         else:
             path = request.path
         request_latency = time.time() - request.start_time
-        FLASK_REQUEST_COUNT.labels(
-            self.app_name, request.method, path, response.status_code).inc()
-        FLASK_REQUEST_LATENCY.labels(
-            self.app_name, request.method, path, response.status_code).observe(request_latency)
+        FLASK_REQUEST_COUNT.labels(self.app_name, request.method, path, response.status_code).inc()
+        FLASK_REQUEST_LATENCY.labels(self.app_name, request.method, path, response.status_code).observe(request_latency)
 
         return response
 
@@ -63,14 +58,11 @@ class Service(DriverService):
         self.serve_metrics()
 
     def init_action(self, microservice_instance):
-        microservice_instance.application.register_blueprint(
-            microservice_instance.metrics.metrics_blueprint)
+        microservice_instance.application.register_blueprint(microservice_instance.metrics.metrics_blueprint)
         self.add_logger_handler(
-            microservice_instance.application.logger, microservice_instance.application.config[
-                "APP_NAME"]
+            microservice_instance.application.logger, microservice_instance.application.config["APP_NAME"]
         )
-        self.monitor(
-            microservice_instance.application.config["APP_NAME"], microservice_instance.application)
+        self.monitor(microservice_instance.application.config["APP_NAME"], microservice_instance.application)
 
     def init_registry(self) -> None:
         try:
