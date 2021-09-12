@@ -26,6 +26,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install poetry
         poetry install --extras "all" --no-interaction --no-root
+      env:
+        POETRY_VIRTUALENVS_CREATE: false
     - name: Test with pytest
       run: |
         pytest --cov=pyms --cov=tests tests/
