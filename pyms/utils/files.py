@@ -23,7 +23,7 @@ class LoadFile:
 
     def put_file(self, content, mode="w"):
         path = self.get_path_from_env()
-        with open(path, mode) as file_to_write:
+        with open(path, mode) as file_to_write:  # pylint: disable=unspecified-encoding
             file_to_write.write(content)  # The key is type bytes still
 
     def get_path_from_env(self):

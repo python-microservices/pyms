@@ -8,10 +8,10 @@ from flask import request
 from requests.adapters import HTTPAdapter, Response
 from urllib3.util.retry import Retry
 
+from pyms.config.conf import get_conf
 from pyms.constants import LOGGER_NAME
 from pyms.flask.services.driver import DriverService, get_service_name
 from pyms.flask.services.tracer import inject_span_in_headers
-from pyms.config.conf import get_conf
 
 try:
     from prometheus_client import Counter, Histogram
