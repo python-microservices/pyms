@@ -1,5 +1,6 @@
 """Return a JSON as log to insert, i.e, elasticsearch
 """
+
 import datetime
 import logging
 

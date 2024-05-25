@@ -3,8 +3,8 @@ from pathlib import Path
 from typing import Any, Dict
 
 import connexion
-from connexion.resolver import RestyResolver
 from connexion.options import SwaggerUIOptions
+from connexion.resolver import RestyResolver
 from flask import Flask
 
 try:
@@ -116,9 +116,9 @@ class Service(DriverService):
         validator_map = {k: import_class(v) for k, v in self.validator_map.items()}
         options = SwaggerUIOptions(swagger_ui_path=self.url)
         params = {
-            "specification": get_bundled_specs(Path(os.path.join(specification_dir, self.file)))
-            if prance
-            else self.file,
+            "specification": (
+                get_bundled_specs(Path(os.path.join(specification_dir, self.file))) if prance else self.file
+            ),
             "arguments": {"title": config.APP_NAME},
             "base_path": application_root,
             "swagger_ui_options": options,

@@ -1,5 +1,6 @@
 """Encapsulate common rest operations between business services propagating trace headers if configured.
 """
+
 import logging
 from typing import Any
 

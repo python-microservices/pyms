@@ -1,5 +1,6 @@
 """Test common rest operations wrapper.
 """
+
 import os
 import unittest
 from unittest.mock import patch
@@ -27,7 +28,7 @@ class ServiceDiscoveryConsulTests(unittest.TestCase):
 
     @patch.object(ServiceDiscoveryConsul, "register_service", return_value=None)
     def test_init(self, mock_consul):
-        """ test if the initializacion of service discovery call to the Service Discovery server to autoregister"""
+        """test if the initializacion of service discovery call to the Service Discovery server to autoregister"""
         self.ms.create_app()
 
         mock_consul.assert_called_once_with(

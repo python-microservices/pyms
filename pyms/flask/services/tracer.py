@@ -1,7 +1,6 @@
 import logging
 from typing import Union
 
-
 opentracing = None
 
 PrometheusMetricsFactory = None

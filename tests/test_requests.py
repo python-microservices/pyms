@@ -1,5 +1,6 @@
 """Test common rest operations wrapper.
 """
+
 import json
 import os
 import unittest

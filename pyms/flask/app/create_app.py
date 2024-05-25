@@ -8,7 +8,7 @@ from pyms.config.conf import validate_conf
 from pyms.config.resource import ConfigResource
 from pyms.constants import CONFIG_BASE, LOGGER_NAME
 from pyms.crypt.driver import CryptResource
-from pyms.flask.app.utils import ReverseProxied, SingletonMeta
+from pyms.flask.app.utils import SingletonMeta
 from pyms.flask.configreload import configreload_blueprint
 from pyms.flask.healthcheck import healthcheck_blueprint
 from pyms.flask.services.driver import DriverService, ServicesResource
