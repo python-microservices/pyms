@@ -183,17 +183,17 @@ files = [
 
 [[package]]
 name = "boto3"
-version = "1.34.112"
+version = "1.34.113"
 description = "The AWS SDK for Python"
 optional = true
 python-versions = ">=3.8"
 files = [
-    {file = "boto3-1.34.112-py3-none-any.whl", hash = "sha256:4cf28ce2c19a4e4963f1cb1f9b659a548f840f88af3e2da727b35ceb104f9223"},
-    {file = "boto3-1.34.112.tar.gz", hash = "sha256:1092ac6c68acdd33051ed0d2b7cb6f5a4527c5d1535a48cda53f7012accde206"},
+    {file = "boto3-1.34.113-py3-none-any.whl", hash = "sha256:7e59f0a848be477a4c98a90e7a18a0e284adfb643f7879d2b303c5f493661b7a"},
+    {file = "boto3-1.34.113.tar.gz", hash = "sha256:009cd143509f2ff4c37582c3f45d50f28c95eed68e8a5c36641206bdb597a9ea"},
 ]
 
 [package.dependencies]
-botocore = ">=1.34.112,<1.35.0"
+botocore = ">=1.34.113,<1.35.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.10.0,<0.11.0"
 
@@ -202,13 +202,13 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.34.112"
+version = "1.34.113"
 description = "Low-level, data-driven core of boto 3."
 optional = true
 python-versions = ">=3.8"
 files = [
-    {file = "botocore-1.34.112-py3-none-any.whl", hash = "sha256:637f568a6c3322fb7e5ee55e0c5367324a15a331e87a497783ac6209253dde30"},
-    {file = "botocore-1.34.112.tar.gz", hash = "sha256:053495953910bcf95d336ab1adb13efb70edc5462932eff180560737ad069319"},
+    {file = "botocore-1.34.113-py3-none-any.whl", hash = "sha256:8ca87776450ef41dd25c327eb6e504294230a5756940d68bcfdedc4a7cdeca97"},
+    {file = "botocore-1.34.113.tar.gz", hash = "sha256:449912ba3c4ded64f21d09d428146dd9c05337b2a112e15511bf2c4888faae79"},
 ]
 
 [package.dependencies]
@@ -511,17 +511,6 @@ swagger-ui = ["swagger-ui-bundle (>=1.1.0)"]
 uvicorn = ["uvicorn[standard] (>=0.17.6)"]
 
 [[package]]
-name = "contextlib2"
-version = "21.6.0"
-description = "Backports and enhancements for the contextlib module"
-optional = true
-python-versions = ">=3.6"
-files = [
-    {file = "contextlib2-21.6.0-py2.py3-none-any.whl", hash = "sha256:3fbdb64466afd23abaf6c977627b75b6139a5a3e8ce38405c5b413aed7a0471f"},
-    {file = "contextlib2-21.6.0.tar.gz", hash = "sha256:ab1e2bfe1d01d968e1b7e8d9023bc51ef3509bba217bb730cee3827e1ee82869"},
-]
-
-[[package]]
 name = "coverage"
 version = "7.5.1"
 description = "Code coverage measurement for Python"
@@ -737,13 +726,13 @@ pyflakes = ">=2.3.0,<2.4.0"
 
 [[package]]
 name = "flask"
-version = "3.0.3"
+version = "2.3.3"
 description = "A simple framework for building complex web applications."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "flask-3.0.3-py3-none-any.whl", hash = "sha256:34e815dfaa43340d1d15a5c3a02b8476004037eb4840b34910c6e21679d288f3"},
-    {file = "flask-3.0.3.tar.gz", hash = "sha256:ceb27b0af3823ea2737928a4d99d125a06175b8512c445cbd9a9ce200ef76842"},
+    {file = "flask-2.3.3-py3-none-any.whl", hash = "sha256:f69fcd559dc907ed196ab9df0e48471709175e696d6e698dd4dbe940f96ce66b"},
+    {file = "flask-2.3.3.tar.gz", hash = "sha256:09c347a92aa7ff4a8e7f3206795f30d826654baf38b873d0744cd571ca609efc"},
 ]
 
 [package.dependencies]
@@ -753,39 +742,11 @@ click = ">=8.1.3"
 importlib-metadata = {version = ">=3.6.0", markers = "python_version < \"3.10\""}
 itsdangerous = ">=2.1.2"
 Jinja2 = ">=3.1.2"
-Werkzeug = ">=3.0.0"
+Werkzeug = ">=2.3.7"
 
 [package.extras]
 async = ["asgiref (>=3.2)"]
 dotenv = ["python-dotenv"]
-
-[[package]]
-name = "flask-opentracing"
-version = "1.1.0"
-description = "OpenTracing support for Flask applications"
-optional = true
-python-versions = "*"
-files = [
-    {file = "Flask-OpenTracing-1.1.0.tar.gz", hash = "sha256:a9a39d367fbe7e9ed9c77b90ac48159c1a3e82982a5abf84d3f4d710d24580ac"},
-]
-
-[package.dependencies]
-Flask = "*"
-opentracing = ">=2.0,<3"
-
-[package.extras]
-tests = ["flake8", "flake8-quotes", "mock", "pytest", "pytest-cov"]
-
-[[package]]
-name = "future"
-version = "1.0.0"
-description = "Clean single-source support for Python 3 and 2"
-optional = true
-python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
-files = [
-    {file = "future-1.0.0-py3-none-any.whl", hash = "sha256:929292d34f5872e70396626ef385ec22355a1fae8ad29e1a734c3e43f9fbc216"},
-    {file = "future-1.0.0.tar.gz", hash = "sha256:bd2968309307861edae1458a4f8a4f3598c03be43b97521076aebf5d94c07b05"},
-]
 
 [[package]]
 name = "ghp-import"
@@ -985,25 +946,6 @@ files = [
     {file = "itsdangerous-2.2.0-py3-none-any.whl", hash = "sha256:c6242fc49e35958c8b15141343aa660db5fc54d4f13a1db01a3f5891b98700ef"},
     {file = "itsdangerous-2.2.0.tar.gz", hash = "sha256:e0050c0b7da1eea53ffaf149c0cfbb5c6e2e2b69c4bef22c81fa6eb73e5f6173"},
 ]
-
-[[package]]
-name = "jaeger-client"
-version = "4.8.0"
-description = "Jaeger Python OpenTracing Tracer implementation"
-optional = true
-python-versions = ">=3.7"
-files = [
-    {file = "jaeger-client-4.8.0.tar.gz", hash = "sha256:3157836edab8e2c209bd2d6ae61113db36f7ee399e66b1dcbb715d87ab49bfe0"},
-]
-
-[package.dependencies]
-opentracing = ">=2.1,<3.0"
-threadloop = ">=1,<2"
-thrift = "*"
-tornado = ">=4.3"
-
-[package.extras]
-tests = ["codecov", "coverage", "flake8", "flake8-quotes", "flake8-typing-imports", "mock", "mypy", "opentracing_instrumentation (>=3,<4)", "prometheus_client (==0.11.0)", "pycurl", "pytest", "pytest-benchmark[histogram]", "pytest-cov", "pytest-localserver", "pytest-timeout", "pytest-tornado", "tchannel (==2.1.0)"]
 
 [[package]]
 name = "jinja2"
@@ -1501,28 +1443,6 @@ files = [
 tests = ["Sphinx", "doubles", "flake8", "flake8-quotes", "gevent", "mock", "pytest", "pytest-cov", "pytest-mock", "six (>=1.10.0,<2.0)", "sphinx_rtd_theme", "tornado"]
 
 [[package]]
-name = "opentracing-instrumentation"
-version = "3.3.1"
-description = "Tracing Instrumentation using OpenTracing API (http://opentracing.io)"
-optional = true
-python-versions = "*"
-files = [
-    {file = "opentracing_instrumentation-3.3.1-py3-none-any.whl", hash = "sha256:ae9b48a5b6e47189887fff9785230b13141659bb3bf3e2700e4c7470ae5d27b4"},
-    {file = "opentracing_instrumentation-3.3.1.tar.gz", hash = "sha256:d94801aebab95b7e8f3eeb80ee0e5e886ad4f1761bcadff9b5d1d3d04560c04a"},
-]
-
-[package.dependencies]
-contextlib2 = "*"
-future = "*"
-opentracing = ">=2,<3"
-six = "*"
-tornado = ">=4.1,<6"
-wrapt = "*"
-
-[package.extras]
-tests = ["MySQL-python", "Sphinx", "basictracer (>=3,<4)", "boto3", "botocore", "celery", "doubles", "flake8", "flake8-quotes", "mock", "moto", "psycopg2-binary", "pytest", "pytest-cov", "pytest-localserver", "pytest-mock", "pytest-tornado", "redis", "sphinx-rtd-theme", "sqlalchemy (>=1.3.7)", "testfixtures"]
-
-[[package]]
 name = "packaging"
 version = "24.0"
 description = "Core utilities for Python packages"
@@ -1699,13 +1619,13 @@ files = [
 
 [[package]]
 name = "py-ms-consulate"
-version = "1.0.0"
+version = "1.1.0"
 description = "A Client library and command line application for the Consul"
 optional = true
 python-versions = "*"
 files = [
-    {file = "py-ms-consulate-1.0.0.tar.gz", hash = "sha256:99a03fbd23587403b8e84ac22ee05f0ecb0f9939525b80d3e0c63fdf4f4d1e0c"},
-    {file = "py_ms_consulate-1.0.0-py2.py3-none-any.whl", hash = "sha256:577e16e11ff01739755450c87f93b98bedda66811ebcde6e2292408622eb3fa9"},
+    {file = "py_ms_consulate-1.1.0-py2.py3-none-any.whl", hash = "sha256:25e67b5b852495599c66a8787a11ae237a2e89679a8731158a741f9264a3e1b6"},
+    {file = "py_ms_consulate-1.1.0.tar.gz", hash = "sha256:1b0903f51dd77a65b13543335613c4cda11f3bdcf6e544dc927362af7525bca5"},
 ]
 
 [package.dependencies]
@@ -2425,17 +2345,6 @@ ruamel-yaml = ">=0.17.21"
 typing-extensions = ">=4.7.1"
 
 [[package]]
-name = "semver"
-version = "3.0.2"
-description = "Python helper for Semantic Versioning (https://semver.org)"
-optional = true
-python-versions = ">=3.7"
-files = [
-    {file = "semver-3.0.2-py3-none-any.whl", hash = "sha256:b1ea4686fe70b981f85359eda33199d60c53964284e0cfb4977d243e37cf4bf4"},
-    {file = "semver-3.0.2.tar.gz", hash = "sha256:6253adb39c70f6e51afed2fa7152bcd414c411286088fb4b9effb133885ab4cc"},
-]
-
-[[package]]
 name = "setuptools"
 version = "70.0.0"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
@@ -2531,20 +2440,6 @@ importlib_resources = {version = ">=5.7.1,<6.0.0", markers = "python_version < \
 Jinja2 = ">=3.0.0,<4.0.0"
 
 [[package]]
-name = "threadloop"
-version = "1.0.2"
-description = "Tornado IOLoop Backed Concurrent Futures"
-optional = true
-python-versions = "*"
-files = [
-    {file = "threadloop-1.0.2-py2-none-any.whl", hash = "sha256:5c90dbefab6ffbdba26afb4829d2a9df8275d13ac7dc58dccb0e279992679599"},
-    {file = "threadloop-1.0.2.tar.gz", hash = "sha256:8b180aac31013de13c2ad5c834819771992d350267bddb854613ae77ef571944"},
-]
-
-[package.dependencies]
-tornado = "*"
-
-[[package]]
 name = "thrift"
 version = "0.20.0"
 description = "Python bindings for the Apache Thrift RPC system"
@@ -2582,22 +2477,6 @@ python-versions = ">=3.7"
 files = [
     {file = "tomlkit-0.12.5-py3-none-any.whl", hash = "sha256:af914f5a9c59ed9d0762c7b64d3b5d5df007448eb9cd2edc8a46b1eafead172f"},
     {file = "tomlkit-0.12.5.tar.gz", hash = "sha256:eef34fba39834d4d6b73c9ba7f3e4d1c417a4e56f89a7e96e090dd0d24b8fb3c"},
-]
-
-[[package]]
-name = "tornado"
-version = "5.1.1"
-description = "Tornado is a Python web framework and asynchronous networking library, originally developed at FriendFeed."
-optional = true
-python-versions = ">= 2.7, !=3.0.*, !=3.1.*, !=3.2.*, != 3.3.*"
-files = [
-    {file = "tornado-5.1.1-cp35-cp35m-win32.whl", hash = "sha256:732e836008c708de2e89a31cb2fa6c0e5a70cb60492bee6f1ea1047500feaf7f"},
-    {file = "tornado-5.1.1-cp35-cp35m-win_amd64.whl", hash = "sha256:0662d28b1ca9f67108c7e3b77afabfb9c7e87bde174fbda78186ecedc2499a9d"},
-    {file = "tornado-5.1.1-cp36-cp36m-win32.whl", hash = "sha256:8154ec22c450df4e06b35f131adc4f2f3a12ec85981a203301d310abf580500f"},
-    {file = "tornado-5.1.1-cp36-cp36m-win_amd64.whl", hash = "sha256:d4b3e5329f572f055b587efc57d29bd051589fb5a43ec8898c77a47ec2fa2bbb"},
-    {file = "tornado-5.1.1-cp37-cp37m-win32.whl", hash = "sha256:e5f2585afccbff22390cddac29849df463b252b711aa2ce7c5f3f342a5b3b444"},
-    {file = "tornado-5.1.1-cp37-cp37m-win_amd64.whl", hash = "sha256:8e9d728c4579682e837c92fdd98036bd5cdefa1da2aaf6acf26947e6dd0c01c5"},
-    {file = "tornado-5.1.1.tar.gz", hash = "sha256:4e5158d97583502a7e2739951553cbd88a72076f152b4b11b64b9a10c4c49409"},
 ]
 
 [[package]]
@@ -2754,13 +2633,13 @@ watchmedo = ["PyYAML (>=3.10)"]
 
 [[package]]
 name = "werkzeug"
-version = "3.0.3"
+version = "2.3.7"
 description = "The comprehensive WSGI web application library."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "werkzeug-3.0.3-py3-none-any.whl", hash = "sha256:fc9645dc43e03e4d630d23143a04a7f947a9a3b5727cd535fdfe155a17cc48c8"},
-    {file = "werkzeug-3.0.3.tar.gz", hash = "sha256:097e5bfda9f0aba8da6b8545146def481d06aa7d3266e7448e2cccf67dd8bd18"},
+    {file = "werkzeug-2.3.7-py3-none-any.whl", hash = "sha256:effc12dba7f3bd72e605ce49807bbe692bd729c3bb122a3b91747a6ae77df528"},
+    {file = "werkzeug-2.3.7.tar.gz", hash = "sha256:2b8c0e447b4b9dbcc85dd97b6eeb4dcbaf6c8b6c3be0bd654e25553e0a2157d8"},
 ]
 
 [package.dependencies]
@@ -2795,15 +2674,15 @@ docs = ["furo", "jaraco.packaging (>=9.3)", "jaraco.tidelift (>=1.4)", "rst.link
 testing = ["big-O", "jaraco.functools", "jaraco.itertools", "jaraco.test", "more-itertools", "pytest (>=6,!=8.1.*)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=2.2)", "pytest-ignore-flaky", "pytest-mypy", "pytest-ruff (>=0.2.1)"]
 
 [extras]
-all = ["Flask-OpenTracing", "boto3", "connexion", "jaeger-client", "openapi-spec-validator", "opentracing", "opentracing-instrumentation", "prance", "prometheus-client", "py-ms-consulate", "requests", "semver", "swagger-ui-bundle"]
+all = ["boto3", "connexion", "openapi-spec-validator", "prance", "prometheus-client", "py-ms-consulate", "requests", "swagger-ui-bundle"]
 aws = ["boto3"]
 consul = ["py-ms-consulate"]
 metrics = ["prometheus-client"]
 requests = ["requests"]
-swagger = ["connexion", "openapi-spec-validator", "prance", "semver", "swagger-ui-bundle"]
-traces = ["Flask-OpenTracing", "jaeger-client", "opentracing", "opentracing-instrumentation"]
+swagger = ["connexion", "openapi-spec-validator", "prance", "swagger-ui-bundle"]
+traces = []
 
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<4.0"
-content-hash = "331d67dfb94a3a4432721d8451fb85b4e077c2e6956742a86b1c9baf0e273369"
+content-hash = "3d83261d8d440e55a6840050b7b45e48985333732c9ffa6d7c846e35c54f9e86"

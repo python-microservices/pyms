@@ -98,7 +98,6 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         :return:
         """
         self.application.logger = logger
-        os.environ["WERKZEUG_RUN_MAIN"] = "true"
 
         formatter = CustomJsonFormatter()
         formatter.add_service_name(self.application.config["APP_NAME"])
@@ -132,7 +131,7 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         application.root_path = self.path
 
         # Fix connexion issue https://github.com/spec-first/connexion/issues/527
-        application.wsgi_app = ReverseProxied(application.wsgi_app)
+        # application.wsgi_app = ReverseProxied(application.wsgi_app)
 
         return application
 
@@ -152,12 +151,21 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         :return:
         """
         self.application = self.init_app()
-        self.application.config.from_object(self.config.to_flask())
-        self.application.ms = self
+        if hasattr(self.application, "connexion_app"):
+            self.application.connexion_app.app.config.from_object(self.config.to_flask())
+            self.application.ms = self
 
-        # Initialize Blueprints
-        self.application.register_blueprint(healthcheck_blueprint)
-        self.application.register_blueprint(configreload_blueprint)
+            # Initialize Blueprints
+            self.application.connexion_app.app.register_blueprint(healthcheck_blueprint)
+            self.application.connexion_app.app.register_blueprint(configreload_blueprint)
+
+        else:
+            self.application.config.from_object(self.config.to_flask())
+            self.application.ms = self
+
+            # Initialize Blueprints
+            self.application.register_blueprint(healthcheck_blueprint)
+            self.application.register_blueprint(configreload_blueprint)
 
         self.init_libs()
         self.add_error_handlers()

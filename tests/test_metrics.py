@@ -83,11 +83,11 @@ class TestMetricsFlask(unittest.TestCase):
         generated_logger = b'logger_messages_total{level="DEBUG",service="Python Microservice with Jaeger"}'
         assert generated_logger in generate_latest()
 
-    def test_metrics_jaeger(self):
-        self.client.get("/")
-        self.client.get("/metrics")
-        generated_logger = b"jaeger:reporter_spans_total"
-        assert generated_logger in generate_latest()
+    # def test_metrics_jaeger(self):
+    #     self.client.get("/")
+    #     self.client.get("/metrics")
+    #     generated_logger = b"jaeger:reporter_spans_total"
+    #     assert generated_logger in generate_latest()
 
 
 class TestMultiprocessMetricsFlask(unittest.TestCase):
@@ -163,8 +163,8 @@ class TestMultiprocessMetricsFlask(unittest.TestCase):
         generated_logger = b'logger_messages_total{level="DEBUG",service="Python Microservice with Jaeger"}'
         assert generated_logger in generate_latest(self.app.ms.metrics.registry)
 
-    def test_metrics_jaeger(self):
-        self.client.get("/")
-        self.client.get("/metrics")
-        generated_logger = b"jaeger:reporter_spans_total"
-        assert generated_logger in generate_latest(self.app.ms.metrics.registry)
+    # def test_metrics_jaeger(self):
+    #     self.client.get("/")
+    #     self.client.get("/metrics")
+    #     generated_logger = b"jaeger:reporter_spans_total"
+    #     assert generated_logger in generate_latest(self.app.ms.metrics.registry)

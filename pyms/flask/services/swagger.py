@@ -4,6 +4,7 @@ from typing import Any, Dict
 
 import connexion
 from connexion.resolver import RestyResolver
+from connexion.options import SwaggerUIOptions
 from flask import Flask
 
 try:
@@ -113,13 +114,14 @@ class Service(DriverService):
 
         # Prepare params
         validator_map = {k: import_class(v) for k, v in self.validator_map.items()}
+        options = SwaggerUIOptions(swagger_ui_path=self.url)
         params = {
             "specification": get_bundled_specs(Path(os.path.join(specification_dir, self.file)))
             if prance
             else self.file,
             "arguments": {"title": config.APP_NAME},
             "base_path": application_root,
-            "options": {"swagger_url": self.url},
+            "swagger_ui_options": options,
             "validator_map": validator_map,
             "validate_responses": self.validate_responses,
         }
@@ -129,7 +131,7 @@ class Service(DriverService):
         #     del params["base_path"]
 
         # Initialize connexion
-        app = connexion.FlaskApp(__name__, specification_dir=specification_dir, resolver=RestyResolver(self.project_dir))
+        app = connexion.FlaskApp(__name__, swagger_ui_options=options, resolver=RestyResolver(self.project_dir))
         app.add_api(**params)
 
         # Invert the objects, instead connexion with a Flask object, a Flask object with
