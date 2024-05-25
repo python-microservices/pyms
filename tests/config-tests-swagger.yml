@@ -5,7 +5,7 @@ pyms:
     swagger:
       path: ""
       file: "swagger.yaml"
-      url: "ws-doc/"
+      url: "/ws-doc/"
   config:
     DEBUG: true
     TESTING: true

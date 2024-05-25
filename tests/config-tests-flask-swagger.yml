@@ -3,6 +3,7 @@ pyms:
     swagger:
       path: ""
       file: "swagger.yaml"
+      url: "/ui"
   config:
     DEBUG: true
     TESTING: true

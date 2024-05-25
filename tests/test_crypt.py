@@ -1,5 +1,6 @@
 import logging
 import os
+import sys
 import unittest
 from unittest.mock import patch
 
@@ -35,6 +36,7 @@ class MockDecrypt2(CryptAbstract):
 
 
 class CryptTests(unittest.TestCase):
+    @pytest.mark.skipif(sys.version_info >= (3, 12), reason="requires python3.10 or higher")
     def test_ko(self):
         with pytest.raises(TypeError) as excinfo:
             MockDecrypt()

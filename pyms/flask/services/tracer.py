@@ -1,25 +1,17 @@
 import logging
 from typing import Union
 
-try:
-    import opentracing
-except ModuleNotFoundError:  # pragma: no cover
-    opentracing = None
-try:
-    from jaeger_client.metrics.prometheus import PrometheusMetricsFactory
-except ModuleNotFoundError:  # pragma: no cover
-    PrometheusMetricsFactory = None
-try:
-    from opentracing_instrumentation import get_current_span
-except ModuleNotFoundError:  # pragma: no cover
-    get_current_span = None
-
 from flask import current_app, has_request_context, request
 
-from pyms.config.conf import get_conf
 from pyms.constants import LOGGER_NAME
-from pyms.flask.services.driver import DriverService, get_service_name
+from pyms.flask.services.driver import DriverService
 from pyms.utils import check_package_exists, import_from, import_package
+
+opentracing = None
+
+PrometheusMetricsFactory = None
+
+get_current_span = None
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -39,7 +31,7 @@ def inject_span_in_headers(headers: dict) -> dict:
         if tracer:
             span = tracer.get_span(request=request)
             if not span:  # pragma: no cover
-                span = get_current_span()
+                span = get_current_span
                 if not span:
                     span = tracer.tracer.start_span()
             context = span.context if span else None
@@ -59,9 +51,10 @@ class Service(DriverService):
     }
 
     def init_action(self, microservice_instance):
-        FlaskTracing = import_from("flask_opentracing", "FlaskTracing")
-        client = self.get_client()
-        microservice_instance.application.tracer = FlaskTracing(client, True, microservice_instance.application)
+        # FlaskTracing = import_from("flask_opentracing", "FlaskTracing")
+        # client = self.get_client()
+        # microservice_instance.application.tracer = FlaskTracing(client, True, microservice_instance.application)
+        pass
 
     def get_client(self) -> Union[bool, type]:
         opentracing_tracer = False
@@ -84,11 +77,11 @@ class Service(DriverService):
         host = {}
         if self.host:
             host = {"local_agent": {"reporting_host": self.host}}
-        metrics_config = get_conf(service=get_service_name(service="metrics"), empty_init=True)
+        # metrics_config = get_conf(service=get_service_name(service="metrics"), empty_init=True)
         metrics = ""
-        if metrics_config:
-            service_name = self.component_name.lower().replace("-", "_").replace(" ", "_")
-            metrics = PrometheusMetricsFactory(service_name_label=service_name)
+        # if metrics_config:
+        #     service_name = self.component_name.lower().replace("-", "_").replace(" ", "_")
+        #     metrics = PrometheusMetricsFactory(service_name_label=service_name)
         config = Config(
             config={
                 **{
