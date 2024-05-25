@@ -100,7 +100,7 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
         self.application.logger = logger
 
         formatter = CustomJsonFormatter()
-        formatter.add_service_name(self.application.config["APP_NAME"])
+        formatter.add_service_name(self.application.config.get("APP_NAME", "no_service_name"))
         log_handler = logging.StreamHandler()
         log_handler.setFormatter(formatter)
 
