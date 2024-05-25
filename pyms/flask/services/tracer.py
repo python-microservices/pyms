@@ -59,9 +59,10 @@ class Service(DriverService):
     }
 
     def init_action(self, microservice_instance):
-        FlaskTracing = import_from("flask_opentracing", "FlaskTracing")
-        client = self.get_client()
-        microservice_instance.application.tracer = FlaskTracing(client, True, microservice_instance.application)
+        # FlaskTracing = import_from("flask_opentracing", "FlaskTracing")
+        # client = self.get_client()
+        # microservice_instance.application.tracer = FlaskTracing(client, True, microservice_instance.application)
+        pass
 
     def get_client(self) -> Union[bool, type]:
         opentracing_tracer = False

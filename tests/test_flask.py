@@ -64,7 +64,7 @@ class FlaskWithSwaggerTests(unittest.TestCase):
         self.assertEqual(200, response.status_code)
 
     def test_swagger(self):
-        response = self.client.get("/ui/")
+        response = self.client.get("/ui")
         self.assertEqual(200, response.status_code)
 
     def test_exists_service(self):

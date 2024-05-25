@@ -55,7 +55,7 @@ class Service(DriverService):
     * **file:** The name of you swagger yaml file. The default value is `swagger.yaml`
     * **url:** The url where swagger run in your server. The default value is `/ui/`.
     * **project_dir:** Relative path of the project folder to automatic routing,
-      see [this link for more info](https://github.com/zalando/connexion#automatic-routing).
+      see [this link for more info](https://github.com/spec-first/connexion#automatic-routing).
       The default value is `project`
 
     All default values keys are created as class attributes in `DriverService`
@@ -81,7 +81,7 @@ class Service(DriverService):
 
     def init_app(self, config, path: Path) -> Flask:
         """
-        Initialize Connexion App. See more info in [Connexion Github](https://github.com/zalando/connexion)
+        Initialize Connexion App. See more info in [Connexion Github](https://github.com/spec-first/connexion)
         :param config: The Flask configuration defined in the config.yaml:
         ```yaml
         pyms:
@@ -124,12 +124,12 @@ class Service(DriverService):
             "validate_responses": self.validate_responses,
         }
 
-        # Fix Connexion issue https://github.com/zalando/connexion/issues/1135
-        if application_root == "/":
-            del params["base_path"]
+        # Fix Connexion issue https://github.com/spec-first/connexion/issues/1135
+        # if application_root == "/":
+        #     del params["base_path"]
 
         # Initialize connexion
-        app = connexion.App(__name__, specification_dir=specification_dir, resolver=RestyResolver(self.project_dir))
+        app = connexion.FlaskApp(__name__, specification_dir=specification_dir, resolver=RestyResolver(self.project_dir))
         app.add_api(**params)
 
         # Invert the objects, instead connexion with a Flask object, a Flask object with

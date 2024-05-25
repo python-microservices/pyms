@@ -131,7 +131,7 @@ class Microservice(ConfigResource, metaclass=SingletonMeta):
 
         application.root_path = self.path
 
-        # Fix connexion issue https://github.com/zalando/connexion/issues/527
+        # Fix connexion issue https://github.com/spec-first/connexion/issues/527
         application.wsgi_app = ReverseProxied(application.wsgi_app)
 
         return application
