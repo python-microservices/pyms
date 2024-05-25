@@ -4,13 +4,25 @@ from __future__ import print_function, unicode_literals
 import argparse
 import os
 import sys
-from distutils.util import strtobool
 
 from pyms.config import create_conf_file
 from pyms.crypt.fernet import Crypt
 from pyms.flask.services.swagger import merge_swagger_file
 from pyms.utils import check_package_exists, import_from, utils
 
+
+def _asbool(value):
+    """Convert the given String to a boolean object.
+
+    Accepted values are `True` and `1`.
+    """
+    if value is None:
+        return False
+
+    if isinstance(value, bool):
+        return value
+
+    return value.lower() in ("true", "1")
 
 class Command:
     config = None
@@ -146,7 +158,7 @@ class Command:
             utils.colored_text(f'{msg}{"?" if not msg.endswith("?") else ""} [Y/n] :', utils.Colors.BLUE, True)
         )
         try:
-            return strtobool(answer)
+            return _asbool(answer)
         except ValueError:
             self.print_error('Invalid input, Please answer with a "Y" or "n"')
             self.yes_no_input(msg)
