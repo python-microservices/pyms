@@ -2,9 +2,15 @@
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.setuptools.packages.find]
+where = ["pyms/"]
+
 [tool.poetry]
-name = "pyms"
-version = "2.8.1"
+name = "py-ms"
+packages = [
+    {include = "pyms"}
+]
+version = "2.9.0rc1"
 description = "Library of utils to create REST Python Microservices"
 readme = "README.md"
 homepage = "https://python-microservices.github.io/"
