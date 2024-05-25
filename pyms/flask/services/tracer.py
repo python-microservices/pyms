@@ -3,9 +3,8 @@ from typing import Union
 
 from flask import current_app, has_request_context, request
 
-from pyms.config.conf import get_conf
 from pyms.constants import LOGGER_NAME
-from pyms.flask.services.driver import DriverService, get_service_name
+from pyms.flask.services.driver import DriverService
 from pyms.utils import check_package_exists, import_from, import_package
 
 opentracing = None
@@ -32,7 +31,7 @@ def inject_span_in_headers(headers: dict) -> dict:
         if tracer:
             span = tracer.get_span(request=request)
             if not span:  # pragma: no cover
-                span = get_current_span()
+                span = get_current_span
                 if not span:
                     span = tracer.tracer.start_span()
             context = span.context if span else None
@@ -78,11 +77,11 @@ class Service(DriverService):
         host = {}
         if self.host:
             host = {"local_agent": {"reporting_host": self.host}}
-        metrics_config = get_conf(service=get_service_name(service="metrics"), empty_init=True)
+        # metrics_config = get_conf(service=get_service_name(service="metrics"), empty_init=True)
         metrics = ""
-        if metrics_config:
-            service_name = self.component_name.lower().replace("-", "_").replace(" ", "_")
-            metrics = PrometheusMetricsFactory(service_name_label=service_name)
+        # if metrics_config:
+        #     service_name = self.component_name.lower().replace("-", "_").replace(" ", "_")
+        #     metrics = PrometheusMetricsFactory(service_name_label=service_name)
         config = Config(
             config={
                 **{
