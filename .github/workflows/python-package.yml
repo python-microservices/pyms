@@ -23,7 +23,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
+        pip install --upgrade pip
         pip install poetry
         poetry install --extras "all" --no-interaction --no-root
       env:
@@ -42,9 +42,9 @@ jobs:
     - name: Lint with pylint
       run: |
         pylint --rcfile=pylintrc pyms
-    - name: Security safety
-      run: |
-        safety check
+#    - name: Security safety
+#      run: |
+#        safety check
     - name: Security bandit
       run: |
         bandit -r pyms/

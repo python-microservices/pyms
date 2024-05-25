@@ -34,7 +34,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
 flask = "<=2.3.3"
-werkzeug = "<=2.3.7"
+werkzeug = "<=2.3.8"
 python-json-logger = ">=2.0.0"
 pyyaml = ">=6.0.1"
 anyconfig = ">=0.14.0"
